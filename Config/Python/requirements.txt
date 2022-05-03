@@ -1,0 +1,22 @@
+auto-py-to-exe
+flake8
+jsoncomment
+#libsass==0.8.3  # Newer versions may result in the .pyd files not being found in certain host programs
+pyScss
+PILLOW
+ptvsd
+PySide2
+pythonnet; python_version < "3.9"
+pypiwin32
+qtpy
+watchdog
+
+
+# personal repos
+minidelegate
+indev
+
+
+# documentation
+sphinx
+sphinx_rtd_theme

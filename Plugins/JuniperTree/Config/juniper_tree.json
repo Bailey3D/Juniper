@@ -1,0 +1,10 @@
+{
+    "ui":{
+        "default_width": 250,
+        "default_columns": 4,
+
+        "button":{
+            "height":24
+        }
+    }
+}

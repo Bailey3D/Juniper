@@ -1,0 +1,46 @@
+
+// default background
+$background_colour: rgb(45, 45, 45);
+$background_colour-selection: rgb(55, 25, 100);
+$background_colour-alternate: rgb(55, 55, 55);
+$background_colour-disabled: rgb(35, 35, 35);
+
+// default text
+$text_colour: rgb(200, 200, 200);
+$text_colour-disabled: rgb(100, 100, 100);
+$text_colour-selected: rgb(255, 255, 255);
+
+
+QWidget
+{
+    background-color: $background_colour;
+    selection-background-color: $background_colour-selection;
+    alternate-background-color: $background_colour-alternate;
+
+    color: $text_colour;
+    selection-color: $text_colour-selected;
+
+    ::disabled
+    {
+        color: $text_colour-disabled;
+        background-color: $background_colour-disabled;
+    }
+
+    ::hover
+    {
+
+    }
+
+}
+
+QPushButton
+{
+    background-color: $background_colour;
+    color: $text_colour;
+
+    ::disabled
+    {
+        color: $text_colour-disabled;
+    }
+
+}

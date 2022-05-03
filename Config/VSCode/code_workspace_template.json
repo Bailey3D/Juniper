@@ -1,0 +1,78 @@
+{
+    "folders": [
+    ],
+    "settings": {
+        "python.pythonPath": "Y:\\Development\\Game\\tools\\Juniper\\bin\\common\\Python 3.7\\python.exe",
+        "python.linting.enabled": true,
+        "python.linting.flake8Enabled": true,
+        "python.analysis.extraPaths": [
+        ],
+        "python.linting.flake8Args": [
+            "--ignore=W503",
+            "--ignore=E501",
+            "--ignore=E402",
+            "--ignore=F811",
+            "--max-line-length=140",
+            "--max-doc-length=160"
+        ],
+        "python.analysis.diagnosticSeverityOverrides": {
+            "reportMissingImports": "information"
+        },
+        "python.analysis.autoSearchPaths": true,
+        "restructuredtext.confPath": "${workspaceFolder}\\docs",
+    
+        "python.languageServer": "Pylance",
+    
+        "files.associations": {
+            "**/*.local": "json"
+        },
+    
+        "files.exclude": {
+            "**/__pycache__": true,
+            "**/.empty": true,
+            "**/**.pycache": true,
+            "**/**.pyc": true,
+            "**/.vscode":true
+        },
+    
+        "todo-tree.filtering.excludeGlobs": [
+            "**/node_modules",
+            "**/bin/common/Python 3.7/**"
+        ],
+    
+        "search.exclude":{
+            "**/node_modules": true,
+            "**/bower_components": true,
+            "**/*.code-search": true,
+            "**/External/**": true,
+            "**/external/**": true,
+            "**/bin/common/Python**/**":true
+        }
+    },
+    "tasks": [
+        {
+            "label": "Run_In_3DSMax",
+            "type": "shell",
+            "command": "bin/max/MXSPyCom.exe",
+            "args": [
+                "-f",
+                "${file}"
+            ],
+            "presentation": {
+                "reveal": "never",
+                "panel": "new",
+                "clear": true
+            },
+            "options": {
+                "statusbar": {
+                    "label": "ts"
+                },
+                "problemMatcher": []
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
