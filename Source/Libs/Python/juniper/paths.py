@@ -59,6 +59,7 @@ def get_config(path, program=None, module=None):
     :param [<str:program>] The program context (Ie, "Max")
     :param [<str:module>] The module context (Ie, "AssetLibrary")
     """
+    # TODO! Currently broken - needs replacing with a way of getting per-program / per-plugin configs
     return _get_path(path, "config", program=program, module=module)
 
 
@@ -68,6 +69,7 @@ def get_resource(path, program=None, module=None):
     :param [<str:program>] The program context (Ie, "Max")
     :param [<str:module>] The module context (Ie, "AssetLibrary")
     """
+    # TODO! Currently broken - needs replacing with a way of getting per-program / per-plugin resources
     return _get_path(path, "resources", program=program, module=module)
 
 

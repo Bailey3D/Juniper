@@ -11,7 +11,7 @@ class QStandaloneApp(QtWidgets.QApplication):
     def __init__(self):
         super(QStandaloneApp, self).__init__(sys.argv)
 
-        self.set_icon(juniper.paths.get_resource("icons\\standard\\app_default.png"))
+        self.set_icon(os.path.join(juniper.paths.root(), "Resources\\Icons\\Standard\\app_default.png"))
         self.apply_stylesheet()
 
     def set_icon(self, icon_path):
@@ -29,7 +29,6 @@ class QStandaloneApp(QtWidgets.QApplication):
 
         self.setStyle(QtWidgets.QStyleFactory.create("fusion"))
         with open(stylesheet_path, "r") as f:
-            #self.setStyleSheet(sass.compile(string=f.read()))
             self.setStyleSheet(Scss().compile(f.read()))
 
     @property

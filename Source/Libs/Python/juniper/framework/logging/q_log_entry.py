@@ -1,4 +1,5 @@
 import datetime
+import os
 from qtpy import QtWidgets, QtCore, QtGui, uic
 
 import juniper.paths
@@ -56,7 +57,7 @@ class QLogEntry(QtWidgets.QWidget):
         self.ui.lbl_owner.setText(f"""<span style="font-size:11px; font-weight: lighter;">{owning_module}</span>""")
 
         btn_icon_size = 32
-        icon = QtGui.QIcon(juniper.paths.get_resource(f"icons\\standard\\{info_type}.png"))
+        icon = QtGui.QIcon(os.path.join(juniper.paths.root(), f"Resources\\Icons\\Standard\\{info_type}.png"))
         self.ui.btn_icon.setFixedSize(btn_icon_size, btn_icon_size)
         self.ui.btn_icon.setIcon(icon)
         self.ui.btn_icon.setIconSize(QtCore.QSize(btn_icon_size, btn_icon_size))

@@ -1,4 +1,5 @@
 {
     "integration_type":"integrated",
-    "description": "Inbuilt module which adds all tools to menus from their defined categories."
+    "description": "Inbuilt module which adds all tools to menus from their defined categories.",
+    "internal": true
 }

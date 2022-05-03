@@ -1,6 +1,7 @@
 import juniper.paths
 import juniper.framework.types.singleton
 from juniper.framework.tooling import macro
+import juniper.utilities.string as string_utils
 
 import functools
 import glob
@@ -59,6 +60,19 @@ class Plugin(object):
     def enabled(self):
         # TODO!
         return True
+
+    @property
+    @functools.lru_cache()
+    def internal(self):
+        """
+        :return <bool:internal> True if this is an internal (Juniper) plugin - else False
+        """
+        with open(self.jplugin_path, "r") as f:
+            json_data = json.load(f)
+            if("internal" in json_data):
+                return json_data["internal"] == True
+        return False
+        
 
     # ---------------------------------------------------------------------
 

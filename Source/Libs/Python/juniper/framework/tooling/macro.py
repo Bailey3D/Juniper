@@ -111,6 +111,7 @@ class Macro(object):
         """
         possible_path = self.__get_metadata_key("icon")
         if(possible_path):
+            # TODO! Need a way to get relative paths for tools / plugins
             possible_path = juniper.paths.get_resource(possible_path.replace("\\\\", "\\"))
         return possible_path
 

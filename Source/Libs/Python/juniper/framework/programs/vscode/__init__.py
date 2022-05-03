@@ -6,20 +6,21 @@ import os
 
 import juniper.paths
 import juniper.framework.backend.module
+import juniper.framework.backend.plugin
 
 
 def code_workspace_path():
     """
     :return <str:path> The path to the `Juniper.code-workspace` file
     """
-    return os.path.join(juniper.paths.root(), ".vscode\\Juniper.code-workspace")
+    return os.path.join(juniper.paths.root(), "Juniper.code-workspace")
 
 
 def code_workspace_template_path():
     """
     :return <str:path> The path to the `code_workspace_template.json` config file
     """
-    return juniper.paths.get_config("vscode\\code_workspace_template.json")
+    return os.path.join(juniper.paths.root(), "Config\\VSCode\\code_workspace_template.json")
 
 
 def generate_code_workspace():
@@ -35,25 +36,33 @@ def generate_code_workspace():
         "path": juniper.paths.root()
     })
 
-    json_data["folders"].append({
-        "name": "Modules (Internal)",
-        "path": os.path.join(juniper.paths.root(), "modules\\internal")
+    # TODO! Plugin sub-workspaces have been disabled as we cannot use the base code workspace settings when
+    #       running scripts from them. This results in the python.exe for the Juniper workspace not being found!
+    '''json_data["folders"].append({
+        "name": "Plugins (All)",
+        "path": os.path.join(juniper.paths.root(), "Plugins")
     })
 
-    for i in juniper.paths.module_dirs(include_internal=False):
+    for plugin in juniper.framework.backend.plugin.PluginManager():
+        plugin_name = f"Plugin - {plugin.display_name}"
+        if(plugin.internal):
+            plugin_name += " (Internal)"
+
         json_data["folders"].append({
-            "name": f"Module - {os.path.basename(i)}",
-            "path": i
-        })
+            "name": plugin_name,
+            "path": plugin.root
+        })'''
 
     # Overriden python workspace settings
     json_data["settings"]["python.pythonPath"] = os.path.join(
-        juniper.paths.root(), "bin\\common\\Python 3.7\\python.exe"
+        juniper.paths.root(), "Binaries\\Python37\\python.exe"
     )
 
-    for module in juniper.framework.backend.module.ModuleManager:
-        json_data["settings"]["python.analysis.extraPaths"].append(module.python_lib_dir)
-        json_data["settings"]["python.analysis.extraPaths"].append(module.python_lib_external_dir)
+    json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(juniper.paths.root(), "Source\\Libs\\Python"))
+    json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(juniper.paths.root(), "Cached\\PyCache\\Python37"))
+
+    for plugin in juniper.framework.backend.plugin.PluginManager():
+        json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(plugin.root, "Source\\Libs\\Python"))
 
     if(not os.path.isdir(os.path.dirname(code_workspace_path()))):
         os.makedirs(os.path.dirname(code_workspace_path()))

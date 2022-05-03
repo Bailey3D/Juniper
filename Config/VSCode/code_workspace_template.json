@@ -37,23 +37,23 @@
     
         "todo-tree.filtering.excludeGlobs": [
             "**/node_modules",
-            "**/bin/common/Python 3.7/**"
+            "**/binaries/Python37/**"
         ],
     
         "search.exclude":{
             "**/node_modules": true,
             "**/bower_components": true,
             "**/*.code-search": true,
-            "**/External/**": true,
-            "**/external/**": true,
-            "**/bin/common/Python**/**":true
+            "**/Cached/**": true,
+            "**/cached/**": true,
+            "**/binaries/Python**/**":true
         }
     },
     "tasks": [
         {
             "label": "Run_In_3DSMax",
             "type": "shell",
-            "command": "bin/max/MXSPyCom.exe",
+            "command": "binaries/MXSPyCom.exe",
             "args": [
                 "-f",
                 "${file}"

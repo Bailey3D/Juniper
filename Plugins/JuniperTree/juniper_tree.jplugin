@@ -1,4 +1,5 @@
 {
     "integration_type":"integrated",
-    "description": "Inbuilt module which adds an additional menu to the application containing grouped tools."
+    "description": "Inbuilt module which adds an additional menu to the application containing grouped tools.",
+    "internal": true
 }

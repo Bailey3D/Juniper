@@ -1,7 +1,7 @@
 """
 :tool
 :group Abc
-:temp!
+:TODO! delete this test tool
 """
 import juniper
 
