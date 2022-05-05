@@ -1,4 +1,5 @@
 import juniper.paths
+import juniper.framework.metadata
 import juniper.framework.types.singleton
 from juniper.framework.tooling import macro
 import juniper.utilities.string as string_utils
@@ -39,6 +40,15 @@ class Plugin(object):
 
     @property
     @functools.lru_cache()
+    def plugin_metadata(self):
+        """
+        :return <dict:metadata> The jplugin loaded as a dict
+        """
+        with open(self.jplugin_path, "r") as f:
+            return json.load(f)
+
+    @property
+    @functools.lru_cache()
     def root(self):
         return os.path.dirname(self.jplugin_path)
 
@@ -58,7 +68,8 @@ class Plugin(object):
     @property
     @functools.lru_cache()
     def enabled(self):
-        # TODO!
+        if("enabled" in self.plugin_metadata):
+            return self.plugin_metadata["enabled"]
         return True
 
     @property
@@ -123,7 +134,6 @@ class Plugin(object):
     def startup_scripts(self, index=None):
         return self.__get_scripts("Startup", index=index)
 
-    @property
     def install_scripts(self, index=None):
         return self.__get_scripts("Install", index=index)
 
@@ -147,8 +157,10 @@ class Plugin(object):
                             if("category" in json_data):
                                 macro_file_paths.append(file)
                         elif(file.endswith(".py") or (file.endswith(".ms") and juniper.program_context == "max")):
-                            for line in f.readlines():
-                                if(line.startswith(":tool") and file not in macro_file_paths):
+                            if(file not in macro_file_paths):
+                                file_metadata = juniper.framework.metadata.FileMetadata(file)
+                                if(file_metadata.get("type") == "tool"):
+                                    print(":)")
                                     macro_file_paths.append(file)
                                     break
 

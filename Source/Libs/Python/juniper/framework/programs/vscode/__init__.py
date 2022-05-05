@@ -13,7 +13,7 @@ def code_workspace_path():
     """
     :return <str:path> The path to the `Juniper.code-workspace` file
     """
-    return os.path.join(juniper.paths.root(), "Juniper.code-workspace")
+    return os.path.join(juniper.paths.root(), ".vscode\\Juniper.code-workspace")
 
 
 def code_workspace_template_path():
@@ -36,7 +36,7 @@ def generate_code_workspace():
         "path": juniper.paths.root()
     })
 
-    # TODO! Plugin sub-workspaces have been disabled as we cannot use the base code workspace settings when
+    # TODO~ Plugin sub-workspaces have been disabled as we cannot use the base code workspace settings when
     #       running scripts from them. This results in the python.exe for the Juniper workspace not being found!
     '''json_data["folders"].append({
         "name": "Plugins (All)",

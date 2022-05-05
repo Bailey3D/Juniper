@@ -7,12 +7,13 @@
 import textwrap
 
 import juniper
-import juniper.utilities.string as string_utils
 import juniper.framework.backend.plugin
+import juniper.framework.tooling.macro
+import juniper.utilities.string as string_utils
 import juniper.widgets.q_menu_wrapper
 
 
-class ToolsMenu(object):
+class JuniperMenu(object):
     def __init__(self):
         self.program_context = juniper.program_context
 
@@ -49,11 +50,11 @@ class ToolsMenu(object):
                             self.add_action(plugin_menu.menu_object, i)
 
             # core macros
-            # TODO! Juniper should not have any base tools anymore. We need a different way to inject "core macros"
             self.menu_object.add_separator()
-            '''root_module = juniper.framework.backend.module.ModuleManager.get_module("juniper")
-            for i in root_module.get_core_macros():
-                self.add_action(self.menu, i)'''
+
+            for i in juniper.framework.tooling.macro.MacroManager:
+                if(i.module_name == "juniper" and i.is_core_macro):
+                    self.add_action(self.menu, i)
 
             if(self.program_context == "max"):
                 import pymxs
@@ -134,4 +135,4 @@ class ToolsMenu(object):
 
 
 if(juniper.program_context != "python"):
-    tm = ToolsMenu()
+    tm = JuniperMenu()

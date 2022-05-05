@@ -227,7 +227,7 @@ class MaterialWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
 
                 for k, v in export_results.textures.items():
                     for fp in v:
-                        # TODO!: This is just the texture suffix, the metadata needs the actual parameter name
+                        # TODO~: This is just the texture suffix, the metadata needs the actual parameter name
                         texture_suffix = fp.split("_")[-1].split(".")[0]
                         self.__validate_exported_texture(texture_suffix, fp)
                 return True

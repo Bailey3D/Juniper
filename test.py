@@ -1,12 +1,12 @@
-import juniper
-import juniper_tree
-import juniper.widgets as qt_utils
-
-import juniper
+import juniper.framework.tooling.macro
+import juniper.framework.metadata
 
 
-app = qt_utils.get_application()
-juniper_tree.JuniperTreeManager.create_tree(force=True)
+'''for i in juniper.framework.tooling.macro.MacroManager:
+    file_metadata = juniper.framework.metadata.FileMetadata(i.filepath)
+    print(i.filepath)
+    print(file_metadata.get("summary"))
+    break'''
+print("Done")
 
-if(juniper.program_context in ("standalone", "python")):
-    app.exec_()
+#print(juniper.framework.metadata.FileMetadata)

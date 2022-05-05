@@ -1,5 +1,5 @@
 """
-:tool
+:type tool
 :category Project Tools
 :summary Launches the Juniper Tree as a standalone app
 :icon icons\\standard\\app_default.png

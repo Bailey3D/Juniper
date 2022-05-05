@@ -1,12 +1,136 @@
 """
 Standalone module used for various install/startup bootstrap functionality
 """
+import functools
+import glob
+import hashlib
 import importlib
 import json
 import os
+import pathlib
+import subprocess
 import sys
 
 
+def python_version():
+    """
+    Return the python version (Major.Minor ONLY)
+    :return <float:version> Formatted MAJOR.MINOR (Ie, 3.7)
+    """
+    return float(f"{sys.version_info[0]}.{sys.version_info[1]}")
+
+
+def python_version_major():
+    """
+    :return <int:major> Returns the python major version (Ie, 3)
+    """
+    return int(str(python_version()).split(".")[0])
+
+
+def python_version_minor():
+    """
+    :return <int:minor> Returns the python minor version (Ie, 10)
+    """
+    return int(str(python_version()).split(".")[1])
+
+
+def python_exe_path():
+    """
+    Gets the path to the current host Python exe
+    We cannot rely on `sys.executable` as it will return the host application exe when using embedded Python (Ie, unreal.exe)
+    :return <str:path> The path to the exe if found - else None
+    """
+    output = None
+    check_dir = os.path.dirname(os.__file__)
+    while(not output and len(check_dir) > 3):
+        possible_exe_path = os.path.join(check_dir, "python.exe")
+        if(os.path.isfile(possible_exe_path)):
+            output = possible_exe_path
+        else:
+            check_dir = os.path.dirname(check_dir)
+    return output
+
+
+# -------------------------------------------------------
+
+
+def requirements_txt_path():
+    return os.path.join(root(), "Config\\Python\\requirements.txt")
+
+
+def install_pip_packages(force=False):
+    """
+    Installs the pip packages in "Config\\Python\\requirements.txt" for the current host Python version (Major/Minor)
+    Note: We must use `pathlib.Path("Some/Path").resolve()` as pip can fail to install on subst drives
+    """
+    cached_requirements_hash = requirements_hash(cached=True)
+    current_requirements_hash = requirements_hash(cached=False, update=False)
+    site_packages_dir = pathlib.Path(os.path.join(
+        root(),
+        f"Cached\\PyCache\\Python{python_version_major()}{python_version_minor()}"
+    )).resolve()
+
+    if(
+        not cached_requirements_hash or
+        cached_requirements_hash != current_requirements_hash or
+        not os.path.isdir(site_packages_dir) or
+        not len(os.listdir(site_packages_dir)) or
+        force
+    ):
+        python_exe_path_resolved = pathlib.Path(python_exe_path()).resolve()
+        requirements_txt_path_resolved = pathlib.Path(requirements_txt_path()).resolve()
+        pip_whl_path = pathlib.Path(os.path.join(root(), "Binaries\\Python\\py3-none-any.whl"))
+        cmd = f""""{python_exe_path_resolved}" "{pip_whl_path}/pip" install -r "{requirements_txt_path_resolved}" -t "{site_packages_dir}" """.replace("\\", "/")
+        subprocess.call(cmd)
+        requirements_hash(cached=False, update=True)
+
+
+def requirements_hash(cached=False, update=True):
+    """
+    Gets a hash of the requirements.txt - either from the file or cached version
+    :param [<bool:cached>] If true the cached version is retrieved
+    :param [<bool:update>] Should the cache be updated?
+    :return <str:hash> The file hash as a string - None if invalid
+    """
+    output = None
+    python_key = f"Python{python_version_major()}{python_version_minor()}"
+    requirements_hash_cache_path = os.path.join(root(), "Cached\\PyCache\\requirements_hashes.json")
+
+    # get cache json data or an empty version if not set
+    if(os.path.isfile(requirements_hash_cache_path)):
+        with open(requirements_hash_cache_path, "r") as f:
+            json_data = json.load(f)
+    else:
+        json_data = {}
+
+    # if only getting frmo cache, skip the rest
+    if(cached):
+        if(python_key in json_data):
+            output = json_data[python_key]
+
+    # for writing to the cache / updating
+    else:
+        BLOCK_SIZE = 65536
+        file_hash = hashlib.sha256()
+        with open(requirements_txt_path(), 'rb') as f:
+            fb = f.read(BLOCK_SIZE)
+            while len(fb) > 0:
+                file_hash.update(fb)
+                fb = f.read(BLOCK_SIZE)
+        output = str(file_hash.hexdigest())
+        if(update):
+            json_data[python_key] = output
+            if(not os.path.isdir(os.path.dirname(requirements_hash_cache_path))):
+                os.makedirs(os.path.dirname(requirements_hash_cache_path))
+            with open(requirements_hash_cache_path, "w") as f:
+                json.dump(json_data, f)
+
+    return output
+
+# -------------------------------------------------------
+
+
+@functools.lru_cache()
 def root():
     """
     :return <str:dir> The root director of Juniper relative to the bootstrap source file
@@ -31,6 +155,22 @@ def appdata_config_path():
     return os.path.join(appdata_dir(), "config.json")
 
 
+def core_library_paths():
+    """
+    :return <[str]:dirs> The directories to all core/required python libraries
+    """
+    output = []
+
+    output.append(os.path.join(root(), "Source\\Libs\\python"))
+    output.append(
+        os.path.join(root(), f"Cached\\PyCache\\Python{python_version_major()}{python_version_minor()}\\site-packages")
+    )
+
+    return output
+
+# -------------------------------------------------------
+
+
 def initialize_juniper_appdata():
     """
     Adds all required Juniper information to the config file in the users "AppData/Roaming"
@@ -52,18 +192,6 @@ def initialize_juniper_libraries():
         sys.path.insert(0, i)
 
 
-def core_library_paths():
-    """
-    :return <[str]:dirs> The directories to all core/required python libraries
-    """
-    output = []
-
-    output.append(os.path.join(root(), "Source\\Libs\\python"))
-    output.append(os.path.join(root(), "Cached\\PyCache\\Python37\\site-packages"))  # TODO! Current host python version
-
-    return output
-
-
 def set_program_context(context):
     """
     Sets the current host program context
@@ -81,7 +209,7 @@ def get_program_context():
 
 
 def is_program_enabled(context):
-    # TODO!
+    # TODO~ We need a way to enable/disable program integrations + a GUI
     return True
 
 
@@ -116,13 +244,17 @@ def refresh_imports():
 
 # -----------------------------------------------------------------------------
 
+
 def install():
-    # TODO!
+    """
+    Runs the install process for Juniper
+    """
     initialize_juniper_appdata()
     startup("python")
+    juniper_root = root()
 
     for i in get_supported_host_program_names():
-        install_script_path = os.path.join(root(), "Source\\Install", f"__install__.{i}.py")
+        install_script_path = os.path.join(juniper_root, "Source\\Install", f"__install__.{i}.py")
         run_file(install_script_path)
 
     # Plugin install scripting
@@ -138,19 +270,27 @@ def install():
 
 
 def startup(program_context):
-    # TODO!
+    """
+    Runs the startup process for juniper
+    """
     if(is_program_enabled(program_context)):
         initialize_juniper_libraries()
         set_program_context(program_context)
+        install_pip_packages()  # Check pip package hash and update if needed
 
-        refresh_imports()  # from here we can use all base juniper libraries
-
-        # Check pip package hash
-        # ..
+        # From here we can use all base juniper libraries
+        # but the macros / startup process will not be complete
+        refresh_imports()
 
         # Initialize macros before startup so they can be accessed if needed
-        import juniper.framework.backend.plugin
+        import juniper.framework.tooling.macro
+        for file in glob.iglob(os.path.join(juniper.paths.root(), "Source\\Tools\\**"), recursive=True):
+            if(juniper.framework.tooling.macro.MacroManager.check_if_file_is_macro(file)):
+                m = juniper.framework.tooling.macro.Macro(file, module="juniper")
+                m.module = "juniper"
+                juniper.framework.tooling.macro.MacroManager.register_macro(m)
 
+        import juniper.framework.backend.plugin
         for plugin in juniper.framework.backend.plugin.PluginManager():
             if(plugin.enabled):
                 plugin.initialize_libraries()

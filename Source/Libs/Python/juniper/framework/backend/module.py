@@ -10,9 +10,9 @@ import sys
 
 import juniper.framework.backend.program
 import juniper.utilities.script_execution
+import juniper.framework.metadata
 import juniper.framework.tooling.macro
 import juniper.framework.versioning
-import juniper.framework.vscode
 import juniper.paths
 import juniper.utilities.json as json_utils
 import juniper.utilities.string as string_utils
@@ -344,8 +344,10 @@ class Module(object):
                             if("category" in json_data and file not in files):
                                 files.add(file)
                         else:
-                            for line in f.readlines():
-                                if(line.startswith(":tool") and file not in files):
+                            if(file not in files):
+                                file_metadata = juniper.framework.metadata.FileMetadata(file)
+                                if(file_metadata.get("type") == "tool"):
+                                    print(":)")
                                     files.add(file)
 
         for i in files:
@@ -393,8 +395,9 @@ class Module(object):
                             if("category" in json_data and file not in files):
                                 files.add(file)
                         else:
-                            for line in f.readlines():
-                                if(line.startswith(":tool") and file not in files):
+                            if(file not in files):
+                                file_metadata = juniper.framework.metadata.FileMetadata(file)
+                                if(file_metadata.get("type") == "tool"):
                                     files.add(file)
 
         for i in files:
@@ -478,5 +481,3 @@ class ModuleCreator(object):
             if(not os.path.isfile(jmodule_path)):
                 with open(jmodule_path, "w") as f:
                     json.dump(self.jmodule_data, f, sort_keys=True)
-
-            juniper.framework.vscode.update_code_workspace()

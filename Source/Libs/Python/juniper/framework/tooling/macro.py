@@ -139,7 +139,10 @@ class Macro(object):
         """
         :return <str:name> The name of the juniper module this macro is a child of
         """
-        return self.get_module().name
+        module = self.get_module()
+        if(not module):
+            return "juniper"
+        return module.name
 
     def get_module(self):
         """Searches for the module object this macro is a child of
@@ -216,6 +219,22 @@ class __MacroManager(object):
 
     def __init__(self):
         self.registered_macros = {}
+
+    def check_if_file_is_macro(self, file):
+        """
+        :return <bool:is_macro> True if the file path is a valid macro - else False
+        """
+        if(file.endswith((".ms", ".py", ".toolptr"))):
+            with open(file, "r") as f:
+                if(file.endswith(".toolptr")):
+                    json_data = json.load(f)
+                    if("category" in json_data):
+                        return True
+                elif(file.endswith(".py") or (file.endswith(".ms") and juniper.program_context == "max")):
+                    for line in f.readlines():
+                        if(line.rstrip("\n") == ":type tool"):
+                            return True
+        return False
 
     def register_macro(self, macro):
         """Store a macro globally

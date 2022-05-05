@@ -8,11 +8,9 @@ pypiwin32
 qtpy
 watchdog
 
-
 # personal repos
 minidelegate
 indev
-
 
 # documentation
 sphinx

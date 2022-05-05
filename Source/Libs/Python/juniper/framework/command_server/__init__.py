@@ -79,11 +79,13 @@ def run_file(file_path, program_name):
 
 
 class CommandServer(metaclass=juniper.framework.types.singleton.Singleton):
-    def __init__(self):
+    def __init__(self, port):
         """
         A non-blocking listen server object
         :param <int:port> The port to bind this listen server to
         """
+        self.port = port
+
         if(not self.port):
             juniper.log.error(f"Command Server Initialization Failed: No port set for the program {juniper.program_context}", traceback=False)
             self.initialized = False
@@ -179,11 +181,3 @@ class CommandServer(metaclass=juniper.framework.types.singleton.Singleton):
                             exec(compile(data, "-", "exec"))
                         except Exception:
                             pass
-
-    # ----------------------------------------------------------------
-
-    @property
-    @functools.lru_cache()
-    def port(self):
-        program_config_path = juniper.paths.get_config("program.json", program=juniper.program_context)
-        return json_utils.get_property(program_config_path, "listen_port") or None
