@@ -7,11 +7,11 @@ import juniper.utilities.string as string_utils
 
 
 class QLogEntry(QtWidgets.QWidget):
-    def __init__(self, info_string, info_type, owning_module, persistent=False):
+    def __init__(self, info_string, info_type, owning_plugin, persistent=False):
         """A single log entry widget - added as a child to the log holder
         :param <str:info_string> The info / description string for this log entry
         :param <str:info_type> The type of log this is, current options include ["Info", "Success", "Error", "Warning"]. Icons are retrieved from this name.
-        :param <str:owning_module> The name of the owning module (Ie, "Juniper"). Can be overriden for individual tools.
+        :param <str:owning_plugin> The name of the owning plugin (Ie, "Juniper"). Can be overriden for individual tools.
         :param [<bool:persistent>] Does this log persist until manually closed? Or is it swept up in the log holfer update loop?
         """
         super(QLogEntry, self).__init__()
@@ -54,7 +54,7 @@ class QLogEntry(QtWidgets.QWidget):
         self.ui.lbl_description.setText(f"""<span style="font-size:13px">{info_string}</span>""")
         self.ui.lbl_description.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
 
-        self.ui.lbl_owner.setText(f"""<span style="font-size:11px; font-weight: lighter;">{owning_module}</span>""")
+        self.ui.lbl_owner.setText(f"""<span style="font-size:11px; font-weight: lighter;">{owning_plugin}</span>""")
 
         btn_icon_size = 32
         icon = QtGui.QIcon(os.path.join(juniper.paths.root(), f"Resources\\Icons\\Standard\\{info_type}.png"))

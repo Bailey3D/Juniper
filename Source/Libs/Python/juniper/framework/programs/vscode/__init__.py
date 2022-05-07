@@ -5,7 +5,6 @@ import json
 import os
 
 import juniper.paths
-import juniper.framework.backend.module
 import juniper.framework.backend.plugin
 
 

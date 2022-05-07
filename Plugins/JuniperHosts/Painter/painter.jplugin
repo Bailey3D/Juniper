@@ -1,0 +1,5 @@
+{
+    "integration_type":"integrated",
+    "description": "Juniper support for Substance Painter",
+    "internal": true
+}

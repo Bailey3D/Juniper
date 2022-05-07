@@ -10,7 +10,7 @@ def add_plugin(uplugin_path, symlink=True):
     """Adds a plugin to the current uproject"""
     if(os.path.isfile(uplugin_path)):
 
-        client_settings_path = juniper.paths.get_config("client_settings.json")
+        client_settings_path = juniper.paths.find_config("client_settings.json")
         current_plugin_paths = json_utils.get_property(client_settings_path, "programs.ue4.plugin_paths")
         if(uplugin_path not in current_plugin_paths):
             plugin_paths = current_plugin_paths + [uplugin_path]

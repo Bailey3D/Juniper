@@ -30,17 +30,3 @@ def program_names():
         if(i != "common" and os.path.isdir(install_dir)):
             output.append(i.lower())
     return output
-
-
-def is_program_enabled(module_name):
-    """Returns whether a program is enabled\n
-    :param <str:module_name> Name of the module to check\n
-    :return <bool:enabled> True if the module is enabled, false if not\n
-    """
-    if(module_name in ["python", "common"]):
-        return True
-    client_settings_path = juniper.paths.get_config("client_settings.json")
-    if(os.path.isfile(client_settings_path)):
-        enabled = json_utils.get_property(client_settings_path, "programs" + "." + module_name + ".enabled")
-        return not (enabled is False)
-    return True

@@ -1,12 +1,6 @@
-import juniper.framework.tooling.macro
-import juniper.framework.metadata
+import juniper
+import juniper_bootstrap
 
 
-'''for i in juniper.framework.tooling.macro.MacroManager:
-    file_metadata = juniper.framework.metadata.FileMetadata(i.filepath)
-    print(i.filepath)
-    print(file_metadata.get("summary"))
-    break'''
-print("Done")
-
-#print(juniper.framework.metadata.FileMetadata)
+for i in juniper_bootstrap.get_supported_host_program_names():
+    print(i)

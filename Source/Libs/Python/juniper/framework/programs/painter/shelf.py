@@ -1,10 +1,7 @@
 """
 Shelf based functions
 """
-import json
 import winreg
-
-import juniper.paths
 
 
 def add_shelf(shelf_name, shelf_path, shelf_status):
@@ -22,12 +19,8 @@ def add_shelf(shelf_name, shelf_path, shelf_status):
     shelf_status = "false" if shelf_status else "true"
 
     # load the key "reg_name" and build the shelf registry path
-    painter_config = juniper.paths.get_config("program.json", program="painter")
-    painter_reg_name = ""
-
-    with open(painter_config) as j:
-        json_data = json.load(j)
-        painter_reg_name = json_data["reg_name"] + "\\Shelf\\pathInfos"
+    # Note: Is this still under the same key since the switch to Adobe accounts?
+    painter_reg_name = "Software\\Allegorithmic\\Substance Painter\\Shelf\\pathInfos"
 
     #
     reg_connection = winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER)

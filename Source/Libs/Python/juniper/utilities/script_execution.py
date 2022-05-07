@@ -8,7 +8,7 @@ import juniper.paths
 import juniper.utilities.json as json_utils
 
 
-def run_file(file_path, module=None):
+def run_file(file_path, plugin=None):
     """
     Run a tool, this can be from a direct script or a .toolptr filepath
     :param <str:file_path> Path to the script or toolptr to run

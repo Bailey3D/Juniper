@@ -10,6 +10,7 @@ import os
 import pathlib
 import subprocess
 import sys
+from subprocess import PIPE, run
 
 
 def python_version():
@@ -67,7 +68,7 @@ def install_pip_packages(force=False):
     current_requirements_hash = requirements_hash(cached=False, update=False)
     site_packages_dir = pathlib.Path(os.path.join(
         root(),
-        f"Cached\\PyCache\\Python{python_version_major()}{python_version_minor()}"
+        f"Cached\\PyCache\\Python{python_version_major()}{python_version_minor()}\\site-packages"
     )).resolve()
 
     if(
@@ -80,8 +81,17 @@ def install_pip_packages(force=False):
         python_exe_path_resolved = pathlib.Path(python_exe_path()).resolve()
         requirements_txt_path_resolved = pathlib.Path(requirements_txt_path()).resolve()
         pip_whl_path = pathlib.Path(os.path.join(root(), "Binaries\\Python\\py3-none-any.whl"))
+
+        # Setuptools can't be guarenteed to have been installed in all the host contexts
+        # so install this first
+        cmd = f""""{python_exe_path_resolved}" "{pip_whl_path}/pip" install setuptools -t {site_packages_dir}""".replace("\\", "/")
+        result = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+
+        # TODO~ We need a way to prompt the user of an error on pip install
         cmd = f""""{python_exe_path_resolved}" "{pip_whl_path}/pip" install -r "{requirements_txt_path_resolved}" -t "{site_packages_dir}" """.replace("\\", "/")
-        subprocess.call(cmd)
+        result = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+        #print(result.returncode, result.stdout, result.stderr)
+
         requirements_hash(cached=False, update=True)
 
 
@@ -189,7 +199,8 @@ def initialize_juniper_libraries():
     Adds all python libraries to the sys.path
     """
     for i in reversed(core_library_paths()):
-        sys.path.insert(0, i)
+        if(i not in sys.path):
+            sys.path.insert(0, i)
 
 
 def set_program_context(context):
@@ -224,11 +235,13 @@ def run_file(file_path, program_context=None):
 
 def get_supported_host_program_names():
     output = []
-    install_scripts_dir = os.path.join(root(), "Source\\Install")
-    for i in os.listdir(install_scripts_dir):
-        if(i.startswith("__install__.") and i.endswith(".py") and i.count(".") == 2):
-            output.append(i.split(".")[1].lower())
-    return output
+    host_plugins_dir = os.path.join(root(), "Plugins\\JuniperHosts")
+    for i in os.listdir(host_plugins_dir):
+        host_plugin_dir = os.path.join(host_plugins_dir, i)
+        for i in os.listdir(host_plugin_dir):
+            if(i.endswith(".jplugin")):
+                output.append(i.split(".")[0])
+    return sorted(output)
 
 
 def refresh_imports():
@@ -251,13 +264,9 @@ def install():
     """
     initialize_juniper_appdata()
     startup("python")
-    juniper_root = root()
-
-    for i in get_supported_host_program_names():
-        install_script_path = os.path.join(juniper_root, "Source\\Install", f"__install__.{i}.py")
-        run_file(install_script_path)
 
     # Plugin install scripting
+    import juniper
     import juniper.framework.backend.plugin
     import juniper.utilities.script_execution
 
@@ -266,6 +275,7 @@ def install():
             if(plugin.enabled):
                 install_scripts = plugin.install_scripts(i)
                 for script_path in install_scripts:
+                    juniper.log.info(f"Running Install Script: {script_path}", silent=True, context="Install")
                     juniper.utilities.script_execution.run_file(script_path)
 
 
@@ -286,8 +296,8 @@ def startup(program_context):
         import juniper.framework.tooling.macro
         for file in glob.iglob(os.path.join(juniper.paths.root(), "Source\\Tools\\**"), recursive=True):
             if(juniper.framework.tooling.macro.MacroManager.check_if_file_is_macro(file)):
-                m = juniper.framework.tooling.macro.Macro(file, module="juniper")
-                m.module = "juniper"
+                m = juniper.framework.tooling.macro.Macro(file, plugin="juniper")
+                m.plugin = "juniper"
                 juniper.framework.tooling.macro.MacroManager.register_macro(m)
 
         import juniper.framework.backend.plugin
@@ -304,4 +314,5 @@ def startup(program_context):
                 if(plugin.enabled):
                     startup_scripts = plugin.startup_scripts(i)
                     for script_path in startup_scripts:
+                        juniper.log.info(f"Running Script: {script_path}", silent=True, context="Startup")
                         juniper.utilities.script_execution.run_file(script_path)

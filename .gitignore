@@ -3,14 +3,10 @@ Cached/
 Plugins/*
 
 # Juniper - Force include inbuilt modules
-!Plugins/JuniperDeveloper/
-!Plugins/JuniperDeveloper/*
-!Plugins/JuniperTree/
-!Plugins/JuniperTree/*
-!Plugins/JuniperMenu/
-!Plugins/JuniperMenu/*
-!Plugins/JuniperCommandServer/
-!Plugins/JuniperCommandServer/*
+!Plugins/Juniper/
+!Plugins/Juniper/*
+!Plugins/JuniperHosts/
+!Plugins/JuniperHosts/*
 
 *.local
 config/designer/local_shelves/**

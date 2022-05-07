@@ -10,13 +10,13 @@ from juniper.utilities import script_execution
 
 class Macro(object):
     """Contains data on given tools for easy calling / binding"""
-    def __init__(self, filepath, module=None):
+    def __init__(self, filepath, plugin=None):
         self._filepath = filepath
-        self.module = module or "juniper"
+        self.plugin = plugin or "juniper"
 
     def run(self):
         """Run the macro"""
-        script_execution.run_file(self.filepath, module=self.module)
+        script_execution.run_file(self.filepath, plugin=self.plugin)
 
     # ------------------------------------------------------------------------
 
@@ -49,16 +49,16 @@ class Macro(object):
         output = self._filepath
         if(self.is_toolptr):
             toolptr_path = json_utils.get_property(self._filepath, "path", check_local=False)
-            output = juniper.paths.get_path(toolptr_path, self.module)
+            output = juniper.paths.get_path(toolptr_path, self.plugin)
         return output
 
     @property
-    def module_root(self):
-        """Root directory of the module from the name
-        :return <str:module_root> Root directory of the module
+    def plugin_root(self):
+        """Root directory of the plugin from the name
+        :return <str:plugin_root> Root directory of the plugin
         """
-        if(self.module):
-            return juniper.paths.get_module_root(self.module)
+        if(self.plugin):
+            return juniper.paths.get_plugin_root(self.plugin)
         return juniper.paths.root()
 
     # ------------------------------------------------------------------------
@@ -69,7 +69,7 @@ class Macro(object):
         """The friendly name of the macro
         :return <str:name> The name of the macro
         """
-        possible_name = self.__get_metadata_key("name")       
+        possible_name = self.__get_metadata_key("name")
         if(not possible_name):
             if(self.is_toolptr):
                 possible_name = os.path.basename(self._filepath).split(".")[0]
@@ -94,11 +94,7 @@ class Macro(object):
         """Gets the tooltip for this macro
         :return <str:tooltip> The tooltip for this macro
         """
-        output = (
-            self.__get_metadata_key("tooltip") or
-            self.__get_metadata_key("summary") or
-            self.display_name
-        )
+        output = self.__get_metadata_key("tooltip") or self.__get_metadata_key("summary") or self.display_name
         return output
 
     # ------------------------------------------------------------------------
@@ -111,9 +107,8 @@ class Macro(object):
         """
         possible_path = self.__get_metadata_key("icon")
         if(possible_path):
-            # TODO! Need a way to get relative paths for tools / plugins
-            possible_path = juniper.paths.get_resource(possible_path.replace("\\\\", "\\"))
-        return possible_path
+            return juniper.paths.find_resource(possible_path, plugin=self.plugin_name)
+        return None
 
     @property
     @functools.lru_cache()
@@ -135,24 +130,21 @@ class Macro(object):
     # ------------------------------------------------------------------------
 
     @property
-    def module_name(self):
+    def plugin_name(self):
         """
-        :return <str:name> The name of the juniper module this macro is a child of
+        :return <str:name> The name of the juniper plugin this macro is a child of
         """
-        module = self.get_module()
-        if(not module):
+        plugin = self.get_plugin()
+        if(not plugin):
             return "juniper"
-        return module.name
+        return plugin.name
 
-    def get_module(self):
-        """Searches for the module object this macro is a child of
-        :return <Module:module> The module if found - else None
+    def get_plugin(self):
+        """Searches for the plugin object this macro is a child of
+        :return <Plugin:plugin> The plugin if found - else None
         """
-        #import juniper.framework.backend.module
-        #return juniper.framework.backend.module.ModuleManager.get_module(self.module)
         import juniper.framework.backend.plugin
-        return juniper.framework.backend.plugin.PluginManager().find_plugin(self.module)
-
+        return juniper.framework.backend.plugin.PluginManager().find_plugin(self.plugin)
 
     @property
     @functools.lru_cache()
@@ -185,13 +177,13 @@ class Macro(object):
     @functools.lru_cache()
     def parent_category(self):
         """
-        Gets the outer most category for this tool, dependent on its parent module integration type
-        (Ie, "Juniper" for integrated, or the module name for "Standalone" or "Separate")
+        Gets the outer most category for this tool, dependent on its parent plugin integration type
+        (Ie, "Juniper" for integrated, or the plugin name for "Standalone" or "Separate")
         :return <str:category> The target category - defaults to "Juniper" if none is set
         """
-        target_module = self.get_module()
-        if(target_module and target_module.integration_type in ("standalone", "separate")):
-            return target_module.display_name
+        target_plugin = self.get_plugin()
+        if(target_plugin and target_plugin.integration_type in ("standalone", "separate")):
+            return target_plugin.display_name
         return "Juniper"
 
     @property
@@ -242,16 +234,16 @@ class __MacroManager(object):
         """
         found_with_name = False
 
-        if(macro.module in self.registered_macros):
-            for i in self.registered_macros[macro.module]:
-                if(self.registered_macros[macro.module][i].name == macro.name):
+        if(macro.plugin in self.registered_macros):
+            for i in self.registered_macros[macro.plugin]:
+                if(self.registered_macros[macro.plugin][i].name == macro.name):
                     found_with_name = True
 
         if(not found_with_name):
-            if(macro.module in self.registered_macros):
-                self.registered_macros[macro.module][macro.name] = macro
+            if(macro.plugin in self.registered_macros):
+                self.registered_macros[macro.plugin][macro.name] = macro
             else:
-                self.registered_macros[macro.module] = {macro.name: macro}
+                self.registered_macros[macro.plugin] = {macro.name: macro}
 
     @property
     def all_macros(self):
@@ -284,9 +276,9 @@ class __MacroManager(object):
 
     def __iter__(self):
         all_macros = []
-        for module_name in self.registered_macros:
-            for macro_name in self.registered_macros[module_name]:
-                all_macros.append(self.registered_macros[module_name][macro_name])
+        for plugin_name in self.registered_macros:
+            for macro_name in self.registered_macros[plugin_name]:
+                all_macros.append(self.registered_macros[plugin_name][macro_name])
         for i in sorted(all_macros, key=lambda x: x.sort_key):
             yield i
 

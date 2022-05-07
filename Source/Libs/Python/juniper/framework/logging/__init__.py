@@ -17,9 +17,9 @@ class _LogEntry(object):
 
 
 class Log(object):
-    def __init__(self, module="Juniper"):
-        self.indev_log = indev._log.log_class(context=module)
-        self.module = module
+    def __init__(self, plugin="Juniper"):
+        self.indev_log = indev._log.log_class(context=plugin)
+        self.plugin = plugin
 
         self._held_entries = []
         self._holding = False
@@ -127,7 +127,7 @@ class Log(object):
                 juniper.framework.logging.log_manager.LogManager.add_log_entry(
                     log_text,
                     log_type,
-                    context or self.module,
+                    context or self.plugin,
                     persistent=persistent
                 )
         else:

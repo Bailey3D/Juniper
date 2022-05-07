@@ -46,7 +46,7 @@
             "**/*.code-search": true,
             "**/Cached/**": true,
             "**/cached/**": true,
-            "**/binaries/Python**/**":true
+            "**/Binaries/Python/**":true
         }
     },
     "tasks": [

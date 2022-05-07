@@ -1,43 +1,8 @@
 import os
-import socket
 import xml.etree.ElementTree
 
 import juniper
 import juniper.paths
-from juniper.utilities import json as json_utils
-import juniper.framework.command_server
-
-
-def listen_port():
-    """Returns the port that the designer listen server is hosted on\n
-    :return <int:port> Id of the port\n
-    """
-    return json_utils.get_property(juniper.paths.get_config("program.json", program="designer"), "listen_port")
-
-
-def send_command(command):
-    """Takes a python string command and sends it as a request to the listen server
-    :param <str:command> Python command to send
-    """
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect(("localhost", listen_port()))
-    client.send(str(command).encode("utf-8"))
-    client.close()
-
-
-def send_commands(*args):
-    """"""
-    commands = ""
-    for i in args:
-        commands += i + "\n"
-    send_command(commands)
-
-
-def is_open():
-    """Check if the program is open by testing if the listen server is hosted\n
-    :return <bool:open> True if open, false if not\n
-    """
-    return not juniper.framework.command_server.is_free(listen_port())
 
 
 def add_sbsprj(sbsprj_path):
@@ -90,8 +55,8 @@ def create_shelf(shelf_name, shelf_root, display_name=None):
     if(not display_name):
         display_name = shelf_name
 
-    template_shelf_sbsprj_path = juniper.paths.get_config("shelf.sbsprj.template", program="designer")
-    shelf_local_sbsprj_dir = os.path.join(juniper.paths.root(), "config\\designer\\local_shelves")
+    template_shelf_sbsprj_path = os.path.join(juniper.paths.root(), "Config\\Programs\\Designer\\shelf.sbsprj.template")
+    shelf_local_sbsprj_dir = os.path.join(juniper.paths.root(), "Cached\\Designer\\local_shelves")
     shelf_local_sbsprj_path = os.path.join(shelf_local_sbsprj_dir, shelf_name + ".sbsprj")
 
     already_exists = os.path.isfile(shelf_local_sbsprj_path)
