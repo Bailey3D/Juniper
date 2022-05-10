@@ -1,6 +1,5 @@
 import juniper
-import juniper_bootstrap
+import juniper_designer
 
 
-for i in juniper_bootstrap.get_supported_host_program_names():
-    print(i)
+print(juniper_designer.test)

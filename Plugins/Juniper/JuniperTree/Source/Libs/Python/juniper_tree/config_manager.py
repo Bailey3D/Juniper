@@ -1,6 +1,6 @@
 import functools
 
-import juniper.framework.backend.plugin
+import juniper.plugins
 import juniper.paths
 import juniper.utilities.json as json_utils
 

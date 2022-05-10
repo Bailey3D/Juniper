@@ -1,7 +1,7 @@
 import os
 import shutil
 
-import juniper.framework.backend.plugin
+import juniper.plugins
 import juniper.paths
 
 
@@ -12,7 +12,7 @@ if(os.path.isdir(juniper.paths.root())):
         blender_sub_dir = os.path.join(blender_dir, i)
         if(os.path.isdir(blender_sub_dir) and (i.replace(".", "").isdigit())):
             startup_folder = os.path.join(blender_sub_dir, "scripts\\startup")
-            plugin = juniper.framework.backend.plugin.PluginManager().find_plugin("blender")
+            plugin = juniper.plugins.PluginManager().find_plugin("blender")
             startup_script = os.path.join(plugin.root, "Source\\Bootstrap\\__bootstrap__.py")
             if(not os.path.isdir(startup_folder)):
                 os.makedirs(startup_folder)

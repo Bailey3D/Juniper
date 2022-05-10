@@ -1,7 +1,7 @@
 import os
 import shutil
 
-import juniper.framework.backend.plugin
+import juniper.plugins
 import juniper.framework.programs.ue4
 import juniper.paths
 import juniper.utilities.filemgr
@@ -28,7 +28,7 @@ if(os.path.isfile(uproj_path)):
     unreal_project_root = juniper.framework.programs.ue4.unreal_project_dir()
 
     # copy the "programs/unreal/lib/python/install/scripts/__startup__.py/" to the unreal project
-    plugin = juniper.framework.backend.plugin.PluginManager().find_plugin("ue4")
+    plugin = juniper.plugins.PluginManager().find_plugin("ue4")
     startup_script = os.path.join(plugin.root, "Source\\Bootstrap\\__bootstrap__.py")
     target_path = os.path.join(unreal_project_root, "content\\Script\\Editor\\Startup\\Juniper\\juniper.py")
     if(not os.path.isdir(os.path.dirname(target_path))):

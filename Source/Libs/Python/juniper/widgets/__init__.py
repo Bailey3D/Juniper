@@ -1,7 +1,6 @@
 from qtpy import QtWidgets
 
 import juniper.decorators
-import juniper.framework.backend.program
 import juniper.widgets.q_standalone_app
 from juniper.widgets import q_collapsible_widget, q_v_scroll_layout, q_standalone_app
 
@@ -66,8 +65,8 @@ def _get_dcc_main_window():
 
 @get_dcc_main_window.override("designer")
 def _get_dcc_main_window():
-    import juniper.framework.programs.designer.instance
-    return juniper.framework.programs.designer.instance.get_main_qt_window()
+    import juniper_designer.instance
+    return juniper_designer.instance.get_main_qt_window()
 
 
 @get_dcc_main_window.override("houdini")

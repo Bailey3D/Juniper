@@ -1,5 +1,4 @@
-# TODO! Delete file
-'''import os
+import os
 import sd
 from sd.api.sdproperty import SDPropertyCategory
 
@@ -83,4 +82,3 @@ def export_textures(graph, material_name, export_directory):
         export_data = None
 
     return export_data
-'''

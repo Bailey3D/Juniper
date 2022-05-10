@@ -1,8 +1,8 @@
 import os
 
 import juniper
-import juniper.framework.programs.designer
-import juniper.framework.backend.plugin
+import juniper_designer
+import juniper.plugins
 
 
 class DesignerInstaller(object):
@@ -18,7 +18,7 @@ class DesignerInstaller(object):
         # Copy the startup script to the dir
         local_sbsprj_scripts_dir = os.path.join(self.local_sbsprj_dir, "scripts")
         local_sbsprj_script_path = os.path.join(local_sbsprj_scripts_dir, "__startup__.py")
-        plugin = juniper.framework.backend.plugin.PluginManager().find_plugin("designer")
+        plugin = juniper.plugins.PluginManager().find_plugin("designer")
         designer_startup_script_path = os.path.join(plugin.root, "Source\\Bootstrap\\__bootstrap__.py")
         if(not os.path.isdir(os.path.join(local_sbsprj_scripts_dir))):
             os.makedirs(local_sbsprj_scripts_dir)
@@ -38,7 +38,7 @@ class DesignerInstaller(object):
         with open(self.local_sbsprj_path, "w+") as f:
             f.writelines(shelf_lines)
 
-        juniper.framework.programs.designer.add_sbsprj(self.local_sbsprj_path)
+        juniper_designer.add_sbsprj(self.local_sbsprj_path)
 
     @property
     def sbsprj_template_path(self):

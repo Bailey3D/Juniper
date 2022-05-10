@@ -4,7 +4,7 @@ Base module for the Juniper Command Server plugin
 import socket
 import textwrap
 
-import juniper.framework.backend.plugin
+import juniper.plugins
 import juniper.framework.programs
 
 import juniper_command_server.command_server

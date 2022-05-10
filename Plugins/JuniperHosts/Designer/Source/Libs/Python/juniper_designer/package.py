@@ -1,5 +1,4 @@
-# TODO! Delete file
-'''import os
+import os
 import sd
 
 import juniper.utilities.pathing as path_utils
@@ -108,4 +107,3 @@ def export_sbsar(package, output_dir=None):
     if(os.path.isfile(sbsar_path)):
         return sbsar_path
     return None
-'''

@@ -18,7 +18,7 @@ class Install(object):
     def juniper_bootstrap_module(self):
         bootstrap_path = os.path.abspath(os.path.join(
             os.path.dirname(self.file),
-            "..\\..\\Source\\Libs\\Python\\juniper_bootstrap.py"
+            "..\\..\\Source\\Libs\\Python\\juniper\\bootstrap.py"
         ))
         return SourceFileLoader("juniper_bootstrap", bootstrap_path).load_module()
 

@@ -1,4 +1,4 @@
-import juniper.framework.backend.program
+import juniper
 
 
 def program_context(context):
@@ -14,7 +14,7 @@ def program_context(context):
     """
     def decorator(func):
         def wrapper(*args, **kwargs):
-            if(juniper.framework.backend.program.program_context() == context):
+            if(juniper.program_context == context):
                 return func(*args, **kwargs)
             else:
                 assert False, (f"{__file__}: The method \"{func.__name__}\" cannot be called outside of {context}")
@@ -49,7 +49,7 @@ def virtual_method(func):
 
     def __override(target_program_context):
         def __override_decorator(override_func):
-            if(target_program_context == juniper.framework.backend.program.program_context()):
+            if(target_program_context == juniper.program_context):
                 def __override_wrapper(*args, **kwargs):
                     return override_func(*args, **kwargs)
                 setattr(func, "__juniper_override__", override_func)

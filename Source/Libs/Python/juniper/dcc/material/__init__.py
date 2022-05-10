@@ -66,14 +66,14 @@ class MaterialWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
 
     @get_name.override("designer")
     def _get_name(self):
-        import juniper.framework.programs.designer.package
+        import juniper_designer.package
         output = self.native_object.getIdentifier()
 
         if("{package}" in output):
             # It would be nice to follow the same $(key) format as substance internally
             # but it doesn't allow for the characters "$" "(" and ")" in graph names.
             # We'll just the "{key}" format like python fstrings instead
-            package_name = juniper.framework.programs.designer.package.get_name(
+            package_name = juniper_designer.package.get_name(
                 package=self.native_object.getPackage()
             )
             output = output.replace("{package}", package_name)
@@ -116,7 +116,7 @@ class MaterialWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
 
     @get_base_name.override("designer")
     def _get_base_name(self):
-        return juniper.framework.programs.designer.package.get_name(
+        return juniper_designer.package.get_name(
             package=self.native_object.getPackage()
         )
 
@@ -235,10 +235,10 @@ class MaterialWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
 
     @__export.override("designer")
     def __export(self):
-        import juniper.framework.programs.designer.graph
+        import juniper_designer.graph
 
         if(self.asset_interface.get_metadata_key("#export:output_dir")):
-            export_data = juniper.framework.programs.designer.graph.export_textures(
+            export_data = juniper_designer.graph.export_textures(
                 self.native_object, material_name=self.name_only, export_directory=self.asset_interface.get_metadata_key("#export:textures_output_dir")
             )
             if(export_data):

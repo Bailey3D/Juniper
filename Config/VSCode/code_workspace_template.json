@@ -39,6 +39,7 @@
             "**/node_modules",
             "**/binaries/Python37/**"
         ],
+        "search.useIgnoreFiles": false,
     
         "search.exclude":{
             "**/node_modules": true,

@@ -1,4 +1,4 @@
-import juniper.framework.backend.program
+import juniper
 
 
 def run_standalone(dialog_class, title=None, position=None):
@@ -9,7 +9,7 @@ def run_standalone(dialog_class, title=None, position=None):
     """
     import juniper.widgets as qt_utils
 
-    program_context = juniper.framework.backend.program.program_context()
+    program_context = juniper.program_context
 
     if(program_context in ["standalone", "python"]):
         app = qt_utils.get_application()

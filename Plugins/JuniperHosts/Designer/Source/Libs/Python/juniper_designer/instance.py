@@ -1,5 +1,4 @@
-# TODO! Delete file
-'''import os
+import os
 import sd
 
 
@@ -59,4 +58,3 @@ def get_main_qt_window():
     app = sd.getContext().getSDApplication()
     uiMgr = app.getQtForPythonUIMgr()
     return uiMgr.getMainWindow()
-'''

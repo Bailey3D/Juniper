@@ -143,8 +143,8 @@ class Macro(object):
         """Searches for the plugin object this macro is a child of
         :return <Plugin:plugin> The plugin if found - else None
         """
-        import juniper.framework.backend.plugin
-        return juniper.framework.backend.plugin.PluginManager().find_plugin(self.plugin)
+        import juniper.plugins
+        return juniper.plugins.PluginManager().find_plugin(self.plugin)
 
     @property
     @functools.lru_cache()

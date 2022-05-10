@@ -1,9 +1,6 @@
 """
 
 """
-import os
-
-import juniper.paths
 import juniper_bootstrap
 
 

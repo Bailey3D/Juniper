@@ -5,7 +5,7 @@ import json
 import os
 
 import juniper.paths
-import juniper.framework.backend.plugin
+import juniper.plugins
 
 
 def code_workspace_path():
@@ -42,7 +42,7 @@ def generate_code_workspace():
         "path": os.path.join(juniper.paths.root(), "Plugins")
     })
 
-    for plugin in juniper.framework.backend.plugin.PluginManager():
+    for plugin in juniper.plugins.PluginManager():
         plugin_name = f"Plugin - {plugin.display_name}"
         if(plugin.internal):
             plugin_name += " (Internal)"
@@ -60,7 +60,7 @@ def generate_code_workspace():
     json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(juniper.paths.root(), "Source\\Libs\\Python"))
     json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(juniper.paths.root(), "Cached\\PyCache\\Python37"))
 
-    for plugin in juniper.framework.backend.plugin.PluginManager():
+    for plugin in juniper.plugins.PluginManager():
         json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(plugin.root, "Source\\Libs\\Python"))
 
     if(not os.path.isdir(os.path.dirname(code_workspace_path()))):

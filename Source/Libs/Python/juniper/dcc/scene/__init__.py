@@ -23,8 +23,8 @@ def get_current():
 
 @get_current.override("designer")
 def _get_current():
-    import juniper.framework.programs.designer.graph
-    current_graph = juniper.framework.programs.designer.graph.current()
+    import juniper_designer.graph
+    current_graph = juniper_designer.graph.current()
     if(current_graph):
         return SceneWrapper(current_graph)
     return None
@@ -66,8 +66,8 @@ def load(scene_path):
 
 @load.override("designer")
 def _load(scene_path):
-    import juniper.framework.programs.designer.instance
-    package_manager = juniper.framework.programs.designer.instance.package_manager
+    import juniper_designer.instance
+    package_manager = juniper_designer.instance.package_manager
 
     if((os.path.isfile(scene_path)) and (scene_path.endswith(".sbs"))):
         package_manager.loadUserPackage(scene_path.replace("\\", "/"), True, True)

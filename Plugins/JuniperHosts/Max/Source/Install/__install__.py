@@ -1,7 +1,7 @@
 import os
 import shutil
 
-import juniper.framework.backend.plugin
+import juniper.plugins
 import juniper.paths
 
 
@@ -15,7 +15,7 @@ for i in range(2021, 2026):
         appdata_dir = os.path.join("c:\\users\\", os.getlogin(), f"appdata\\local\\autodesk\\3dsmax\\{i} - 64bit")
         if(os.path.isdir(appdata_dir)):
             startup_folder = os.path.join(appdata_dir, "ENU\\scripts\\startup")
-            plugin = juniper.framework.backend.plugin.PluginManager().find_plugin("max")
+            plugin = juniper.plugins.PluginManager().find_plugin("max")
             startup_script_py = os.path.join(plugin.root, "Source\\Bootstrap\\__bootstrap__.py")
             if(not os.path.isdir(startup_folder)):
                 os.mkdir(startup_folder)

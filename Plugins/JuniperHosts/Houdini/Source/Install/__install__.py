@@ -4,7 +4,7 @@ import shlex
 import winreg
 
 import juniper
-import juniper.framework.backend.plugin
+import juniper.plugins
 import juniper.paths
 
 
@@ -23,7 +23,7 @@ try:
     )
 
     if(os.path.isdir(juniper.paths.root())):
-        plugin = juniper.framework.backend.plugin.PluginManager().find_plugin("houdini")
+        plugin = juniper.plugins.PluginManager().find_plugin("houdini")
         startup_script = os.path.join(plugin.root, "Source\\Bootstrap\\__bootstrap__.py")
         if(not os.path.isdir(h_python_scripts_dir)):
             os.mkdir(h_python_scripts_dir)

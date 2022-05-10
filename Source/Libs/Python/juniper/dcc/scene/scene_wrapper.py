@@ -157,10 +157,10 @@ class SceneWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
     @get_materials.override("designer")
     def _get_materials(self):
         import sd
-        import juniper.framework.programs.designer.package
+        import juniper_designer.package
         output = []
-        current_package = juniper.framework.programs.designer.package.current()
-        for i in juniper.framework.programs.designer.package.child_graphs(package=current_package):
+        current_package = juniper_designer.package.current()
+        for i in juniper_designer.package.child_graphs(package=current_package):
             if(isinstance(i, sd.api.sbs.sdsbscompgraph.SDSBSCompGraph)):
                 output.append(juniper.dcc.material.MaterialWrapper(i))
         return output

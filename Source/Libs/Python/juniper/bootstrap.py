@@ -1,5 +1,6 @@
 """
 Standalone module used for various install/startup bootstrap functionality
+Note: This module should not depend on any external/third-party libraries until after `startup()` has ran (including Juniper)
 """
 import functools
 import glob
@@ -8,7 +9,6 @@ import importlib
 import json
 import os
 import pathlib
-import subprocess
 import sys
 from subprocess import PIPE, run
 
@@ -147,7 +147,7 @@ def root():
     """
     return os.path.abspath(os.path.join(
         os.path.dirname(__file__),
-        "../../../"
+        "..\\..\\..\\..\\"
     ))
 
 
@@ -211,14 +211,6 @@ def set_program_context(context):
     juniper_globals.set("program_context", context or "python")
 
 
-def get_program_context():
-    """
-    Gets the current host program context
-    """
-    import juniper_globals
-    return juniper_globals.get("program_context")
-
-
 def is_program_enabled(context):
     # TODO~ We need a way to enable/disable program integrations + a GUI
     return True
@@ -267,15 +259,15 @@ def install():
 
     # Plugin install scripting
     import juniper
-    import juniper.framework.backend.plugin
+    import juniper.plugins
     import juniper.utilities.script_execution
 
     for i in (None, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10):
-        for plugin in juniper.framework.backend.plugin.PluginManager():
+        for plugin in juniper.plugins.PluginManager():
             if(plugin.enabled):
                 install_scripts = plugin.install_scripts(i)
                 for script_path in install_scripts:
-                    juniper.log.info(f"Running Install Script: {script_path}", silent=True, context="Install")
+                    juniper.log.info(f"Running Install Script: {script_path}", silent=True, context="Juniper - Install")
                     juniper.utilities.script_execution.run_file(script_path)
 
 
@@ -300,19 +292,22 @@ def startup(program_context):
                 m.plugin = "juniper"
                 juniper.framework.tooling.macro.MacroManager.register_macro(m)
 
-        import juniper.framework.backend.plugin
-        for plugin in juniper.framework.backend.plugin.PluginManager():
+        import juniper.plugins
+        for plugin in juniper.plugins.PluginManager():
             if(plugin.enabled):
                 plugin.initialize_libraries()
                 plugin.initialize_macros()
+
+        import juniper
+        juniper.initialize_log()
 
         # Plugin startup scripting
         import juniper.utilities.script_execution
 
         for i in (None, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10):
-            for plugin in juniper.framework.backend.plugin.PluginManager():
+            for plugin in juniper.plugins.PluginManager():
                 if(plugin.enabled):
                     startup_scripts = plugin.startup_scripts(i)
                     for script_path in startup_scripts:
-                        juniper.log.info(f"Running Script: {script_path}", silent=True, context="Startup")
+                        juniper.log.info(f"Running Script: {script_path}", silent=True, context="Juniper - Startup")
                         juniper.utilities.script_execution.run_file(script_path)

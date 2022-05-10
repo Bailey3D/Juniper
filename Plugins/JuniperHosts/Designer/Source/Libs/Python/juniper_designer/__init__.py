@@ -1,5 +1,4 @@
-# TODO! Delete file
-'''import os
+import os
 import xml.etree.ElementTree
 
 import juniper
@@ -88,4 +87,3 @@ def create_shelf(shelf_name, shelf_root, display_name=None):
 
     if(not already_exists):
         add_sbsprj(shelf_local_sbsprj_path)
-'''

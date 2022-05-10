@@ -7,7 +7,7 @@
 import textwrap
 
 import juniper
-import juniper.framework.backend.plugin
+import juniper.plugins
 import juniper.framework.tooling.macro
 import juniper.utilities.string as string_utils
 import juniper.widgets.q_menu_wrapper
@@ -26,7 +26,7 @@ class JuniperMenu(object):
 
             # add all "integrated" macros
             integrated_macros = set()
-            for plugin in juniper.framework.backend.plugin.PluginManager():
+            for plugin in juniper.plugins.PluginManager():
                 if(plugin.enabled and plugin.integration_type == "integrated"):
                     for macro in plugin.macros:
                         integrated_macros.add(macro)
@@ -34,12 +34,12 @@ class JuniperMenu(object):
 
             # add all "separate" macros / groups
             # self.menu_object.add_separator()
-            for plugin in juniper.framework.backend.plugin.PluginManager():
+            for plugin in juniper.plugins.PluginManager():
                 if(plugin.enabled and plugin.integration_type == "separate"):
                     self.append_menu(self.menu, branches=None, macros=plugin.macros, submenu=plugin.display_name)
 
             # add all "standalone" macros / groups as new menus
-            for plugin in juniper.framework.backend.plugin.PluginManager():
+            for plugin in juniper.plugins.PluginManager():
                 if(plugin.enabled and plugin.integration_type == "standalone"):
                     plugin_menu = juniper.widgets.q_menu_wrapper.QMenuWrapper(plugin.name, plugin.display_name)
                     self.append_menu(plugin_menu.menu_object, branches=None, macros=plugin.macros)

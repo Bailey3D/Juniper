@@ -15,6 +15,8 @@ class PluginManager(object, metaclass=juniper.framework.types.singleton.Singleto
     def __init__(self):
         self.plugin_cache = []
 
+        # Initialize all avaliable plugins
+        # TODO~ Add in a system to enable/disable plugins (with a GUI for user setting)
         plugins_root = os.path.join(juniper.paths.root(), "Plugins")
         for plugin_group in os.listdir(plugins_root):
             plugin_group_dir = os.path.join(plugins_root, plugin_group)
@@ -26,6 +28,30 @@ class PluginManager(object, metaclass=juniper.framework.types.singleton.Singleto
                             if(i.endswith(".jplugin")):
                                 jplugin_path = os.path.join(plugin_dir, i)
                                 self.plugin_cache.append(Plugin(jplugin_path))
+
+        # Sort all avaliable plugins to ensure order of execution is adhered to:
+        # 1) Juniper plugins should always come first so any worksplace additions are initialized
+        # 2) Juniper host plugins second
+        # 3) All other plugins should come last
+        juniper_plugins = []
+        juniper_host_plugins = []
+        other_plugins = []
+
+        for i in self.plugin_cache:
+            if("\\juniper\\" in i.root.lower()):
+                juniper_plugins.append(i)
+            elif("\\juniperhosts\\" in i.root.lower()):
+                juniper_host_plugins.append(i)
+            else:
+                other_plugins.append(i)
+
+        self.plugin_cache = juniper_plugins + juniper_host_plugins + other_plugins
+
+        # Add all plugin python roots to the `__path__` for this module so they can be accessed via `juniper.plugins.plugin_name`
+        '''for i in self.plugin_cache:
+            sys.modules[__name__].__path__.append(
+                os.path.join(i.root, "Source\\Libs\\Python")
+            )'''
 
     def __iter__(self):
         for i in self.plugin_cache:
@@ -42,6 +68,9 @@ class PluginManager(object, metaclass=juniper.framework.types.singleton.Singleto
 class Plugin(object):
     def __init__(self, jplugin_path):
         self.jplugin_path = jplugin_path
+
+    def __repr__(self):
+        return f"Plugin(\"{self.jplugin_path}\")"
 
     @property
     @functools.lru_cache()

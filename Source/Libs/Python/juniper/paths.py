@@ -27,9 +27,9 @@ def get_override_path(filepath, override):
 
 
 def __find_file(subdir, relative_path, override=None, plugin=None):
-    import juniper.framework.backend.plugin
+    import juniper.plugins
     output = None
-    plugin = None if not plugin else juniper.framework.backend.plugin.PluginManager().find_plugin(plugin)
+    plugin = None if not plugin else juniper.plugins.PluginManager().find_plugin(plugin)
 
     # Plugin + Override / Plugin - Override
     if(plugin):
