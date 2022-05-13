@@ -5,7 +5,17 @@ import juniper.framework.logging.log_manager
 
 class _LogEntry(object):
     """A log entry object - contains all data on a single log entry"""
-    def __init__(self, log_text="", log_type="Info", silent=True, context=None, traceback=False, traceback_stack=None, persistent=False, log_func=indev.log.info):
+    def __init__(
+        self,
+        log_text="",
+        log_type="Info",
+        silent=True,
+        context=None,
+        traceback=False,
+        traceback_stack=None,
+        persistent=False,
+        log_func=indev.log.info
+    ):
         self.log_text = log_text
         self.log_type = log_type
         self.silent = silent
@@ -96,7 +106,16 @@ class Log(object):
             self._holding = False
             for i in self._held_entries:
                 silent = force_silent or i.silent
-                self.__do_log(i.log_text, i.log_type, silent=silent, context=i.context, traceback=i.traceback, traceback_stack=i.traceback_stack, persistent=i.persistent, log_func=i.log_func)
+                self.__do_log(
+                    i.log_text,
+                    i.log_type,
+                    silent=silent,
+                    context=i.context,
+                    traceback=i.traceback,
+                    traceback_stack=i.traceback_stack,
+                    persistent=i.persistent,
+                    log_func=i.log_func
+                )
                 log_counts[i.log_type] += 1
 
             if(log_counts["Error"] > 0):
@@ -120,11 +139,21 @@ class Log(object):
 
     # -------------------------------------------------------------------------
 
-    def __do_log(self, log_text, log_type, silent=False, context=None, traceback=True, traceback_stack=None, log_func=None, persistent=False):
+    def __do_log(
+        self,
+        log_text,
+        log_type,
+        silent=False,
+        context=None,
+        traceback=True,
+        traceback_stack=None,
+        log_func=None,
+        persistent=False
+    ):
         if(not self.holding):
             log_func(log_text, context=context, traceback=traceback, traceback_stack=traceback_stack)
             if(not silent):
-                juniper.framework.logging.log_manager.LogManager.add_log_entry(
+                juniper.framework.logging.log_manager.LogManager().add_log_entry(
                     log_text,
                     log_type,
                     context or self.plugin,
@@ -144,13 +173,48 @@ class Log(object):
             self._held_entries.append(log_entry)
 
     def error(self, log_text, silent=False, context=None, traceback=True, traceback_stack=None, persistent=False):
-        self.__do_log(log_text, "Error", silent=silent, context=context, traceback=traceback, traceback_stack=traceback_stack, log_func=self.indev_log.error, persistent=persistent)
+        self.__do_log(
+            log_text, "Error",
+            silent=silent,
+            context=context,
+            traceback=traceback,
+            traceback_stack=traceback_stack,
+            log_func=self.indev_log.error,
+            persistent=persistent
+        )
 
     def warning(self, log_text, silent=False, context=None, traceback=True, traceback_stack=None, persistent=False):
-        self.__do_log(log_text, "Warning", silent=silent, context=context, traceback=traceback, traceback_stack=traceback_stack, log_func=self.indev_log.warning, persistent=persistent)
+        self.__do_log(
+            log_text,
+            "Warning",
+            silent=silent,
+            context=context,
+            traceback=traceback,
+            traceback_stack=traceback_stack,
+            log_func=self.indev_log.warning,
+            persistent=persistent
+        )
 
     def info(self, log_text, silent=False, context=None, persistent=False):
-        self.__do_log(log_text, "Info", silent=silent, context=context, traceback=False, traceback_stack=None, log_func=self.indev_log.info, persistent=persistent)
+        self.__do_log(
+            log_text,
+            "Info",
+            silent=silent,
+            context=context,
+            traceback=False,
+            traceback_stack=None,
+            log_func=self.indev_log.info,
+            persistent=persistent
+        )
 
     def success(self, log_text, silent=False, context=None, persistent=False):
-        self.__do_log(log_text, "Success", silent=silent, context=context, traceback=False, traceback_stack=None, log_func=self.indev_log.info, persistent=persistent)
+        self.__do_log(
+            log_text,
+            "Success",
+            silent=silent,
+            context=context,
+            traceback=False,
+            traceback_stack=None,
+            log_func=self.indev_log.info,
+            persistent=persistent
+        )

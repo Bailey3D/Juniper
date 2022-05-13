@@ -1,12 +1,12 @@
 import functools
 
+import juniper.framework.types.singleton
 import juniper.plugins
 import juniper.paths
 import juniper.utilities.json as json_utils
 
 
-class __ConfigManager(object):
-    __instance__ = None
+class ConfigManager(object, metaclass=juniper.framework.types.singleton.Singleton):
 
     def __init__(self):
         pass
@@ -35,8 +35,3 @@ class __ConfigManager(object):
     @property
     def default_columns(self):
         return self.__get_config_property("ui.default_columns")
-
-
-if(not __ConfigManager.__instance__):
-    __ConfigManager.__instance__ = __ConfigManager()
-ConfigManager = __ConfigManager.__instance__

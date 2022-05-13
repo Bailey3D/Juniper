@@ -43,8 +43,8 @@ def _get_current():
 @get_current.override("max")
 def _get_current():
     import pymxs
-    import juniper.framework.programs.max.scene
-    current_scene_path = juniper.framework.programs.max.scene.path()
+    import juniper_max.scene
+    current_scene_path = juniper_max.scene.path()
     # max does not have a scene object type
     # so just store the file name so we have something to compare against
     # if it is unsaved then it will wrap None, which should still work

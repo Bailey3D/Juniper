@@ -1,5 +1,5 @@
 import juniper.decorators
-import juniper.dcc.scene.object_wrapper
+import juniper_dcc.scene.object_wrapper
 
 
 class SelectionSetWrapper(object):
@@ -25,7 +25,7 @@ class SelectionSetWrapper(object):
         output = []
         objects = [x for x in self.native_object]
         for i in objects:
-            object_wrapper = juniper.dcc.scene.object_wrapper.ObjectWrapper(i)
+            object_wrapper = juniper_dcc.scene.object_wrapper.ObjectWrapper(i)
             output.append(object_wrapper)
         return output
 
@@ -76,10 +76,10 @@ class SelectionSetWrapper(object):
     @add_object.override("max")
     def __add_object(self, object_):
         import pymxs
-        import juniper.framework.programs.max.maxscript
+        import juniper_max.maxscript
         current_nodes = [x for x in self.native_object]
         current_nodes.append(object_.native_object)
-        current_nodes = juniper.framework.programs.max.maxscript.python_to_maxscript_array(current_nodes)
+        current_nodes = juniper_max.maxscript.python_to_maxscript_array(current_nodes)
         pymxs.runtime.selectionSets[self.name] = current_nodes
 
     # ----------------------------------------------------------------

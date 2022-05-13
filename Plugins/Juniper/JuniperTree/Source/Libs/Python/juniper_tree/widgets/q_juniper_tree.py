@@ -14,8 +14,8 @@ class QJuniperTreeWidget(QtWidgets.QWidget):
 
         # base properties
         self.__initialized = False
-        self.__width = ConfigManager.default_width
-        self.__default_columns = ConfigManager.default_columns  # may need to functionize if adding in compact mode
+        self.__width = ConfigManager().default_width
+        self.__default_columns = ConfigManager().default_columns  # may need to functionize if adding in compact mode
 
         #
         self.__child_widgets = []

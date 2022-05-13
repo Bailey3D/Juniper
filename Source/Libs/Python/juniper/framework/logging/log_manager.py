@@ -1,8 +1,9 @@
+import juniper.framework.types.singleton
 import juniper.widgets as qt_utils
 from juniper.framework.logging import q_log_entry, q_log_holder
 
 
-class __LogManager(object):
+class LogManager(object, metaclass=juniper.framework.types.singleton.Singleton):
     """Manager class used for various logging tasks"""
     def __init__(self):
         """"""
@@ -22,7 +23,7 @@ class __LogManager(object):
     def add_log_entry(self, info_string, info_type, owning_module="Juniper", persistent=False):
         """Adds a new log entry
         :param <str:info_string> The info / description string for this log entry
-        :param <str:info_type> The type of log this is, current options include ["Info", "Success", "Error", "Warning"]. Icons are retrieved from this name.
+        :param <str:info_type> The type of log this is, current options include ["Info", "Success", "Error", "Warning"]
         :param [<str:owning_module>] The name of the owning module (Ie, "Juniper"). Can be overriden for individual tools.
         :param [<bool:persistent>] Does this log persist until manually closed? Or is it swept up in the log holfer update loop?
         """
@@ -34,7 +35,6 @@ class __LogManager(object):
         )
         self.log_holder_widget.addWidget(log_entry)
         self.log_holder_widget.refresh_position()
-        #self.__update_log_holder()
         return log_entry
 
     '''def __update_log_holder(self):
@@ -60,10 +60,3 @@ class __LogManager(object):
             log_width_height[0],
             log_width_height[1]
         ) '''
-
-    __instance__ = None
-
-
-if(not __LogManager.__instance__):
-    __LogManager.__instance__ = __LogManager()
-LogManager = __LogManager.__instance__

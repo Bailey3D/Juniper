@@ -1,13 +1,13 @@
 import juniper.decorators
-import juniper.framework.wrappers.type_wrapper
+import juniper.framework.types.type_wrapper
 from juniper.math.vector import Vector3
 
 
-class ObjectWrapperManager(juniper.framework.wrappers.type_wrapper.TypeWrapperManager):
+class ObjectWrapperManager(juniper.framework.types.type_wrapper.TypeWrapperManager):
     pass
 
 
-class ObjectWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
+class ObjectWrapper(juniper.framework.types.type_wrapper.TypeWrapper):
     __manager__ = ObjectWrapperManager
 
     # -------------------------------------------------------
@@ -119,8 +119,8 @@ class ObjectWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
         """
         Focus this object in the viewport
         """
-        import juniper.dcc.viewport
-        juniper.dcc.viewport.focus(self)
+        import juniper_dcc.viewport
+        juniper_dcc.viewport.focus(self)
 
     # -------------------------------------------------------
 
@@ -134,8 +134,8 @@ class ObjectWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
 
     @copy.override("max")
     def _copy(self):
-        import juniper.framework.programs.max.scene
-        copy = juniper.framework.programs.max.scene.clone(self.native_object, copy=True, deep_clone=True)
+        import juniper_max.scene
+        copy = juniper_max.scene.clone(self.native_object, copy=True, deep_clone=True)
         if(len(copy)):
             return ObjectWrapper(copy[0])
         return None
@@ -150,8 +150,8 @@ class ObjectWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
 
     @instance.override("max")
     def _instance(self):
-        import juniper.framework.programs.max.scene
-        instance = juniper.framework.programs.max.scene.clone(self.native_object, instance=True, deep_clone=True)
+        import juniper_max.scene
+        instance = juniper_max.scene.clone(self.native_object, instance=True, deep_clone=True)
         if(len(instance)):
             return ObjectWrapper(instance[0])
         return None
@@ -166,8 +166,8 @@ class ObjectWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
 
     @reference.override("max")
     def _reference(self):
-        import juniper.framework.programs.max.scene
-        reference = juniper.framework.programs.max.scene.clone(self.native_object, reference=True, deep_clone=True)
+        import juniper_max.scene
+        reference = juniper_max.scene.clone(self.native_object, reference=True, deep_clone=True)
         if(len(reference)):
             return ObjectWrapper(reference[0])
         return None
@@ -246,8 +246,8 @@ class ObjectWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
     @set_rotation.override("max")
     def _set_rotation(self, value):
         import pymxs
-        import juniper.framework.programs.max.wrappers
-        with juniper.framework.programs.max.wrappers.CoordSys("local"):
+        import juniper_max.wrappers
+        with juniper_max.wrappers.CoordSys("local"):
             import pymxs
             self.native_object.rotation = pymxs.runtime.eulerAngles(
                 value.x,

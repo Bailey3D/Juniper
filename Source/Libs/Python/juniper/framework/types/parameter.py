@@ -1,6 +1,8 @@
 import functools
 from enum import Enum
 
+import juniper.framework.types.singleton
+
 
 class ParameterTypes(Enum):
     """Enum containing the names of all valid parameter types"""
@@ -17,20 +19,17 @@ class ParameterTypes(Enum):
     texture = 10
 
 
-class __ParameterManager(object):
+class ParameterManager(object, metaclass=juniper.framework.types.singleton.Singleton):
     """Singleton manager class for parameters"""
-    __instance__ = None
-
-
     def get_parameter_type(self, value):
         """Takes an input parameter of X type and finds the type"""
         if(type(value) in [list, tuple]):
             if(all(isinstance(x, int) for x in value)):
-                t = "int"
+                type_ = "int"
             else:
-                t = "float"
-            l = "" if len(value) == 1 else str(len(value))
-            return ParameterTypes[t + l]
+                type_ = "float"
+            length = "" if len(value) == 1 else str(len(value))
+            return ParameterTypes[type_ + length]
 
         elif(value in [True, False, "true", "false", "True", "False"]):
             return ParameterTypes["bool"]
@@ -41,11 +40,6 @@ class __ParameterManager(object):
         elif(type(value) == int):
             return ParameterTypes["int"]
         return ParameterTypes["unknown"]
-
-
-if(__ParameterManager.__instance__ is None):
-    __ParameterManager.__instance__ = __ParameterManager()
-ParameterManager = __ParameterManager.__instance__
 
 
 class Parameter(object):
@@ -62,16 +56,16 @@ class Parameter(object):
     @functools.lru_cache()
     def type(self):
         """get the type for this parameter fro the rest of its stored data"""
-        return ParameterManager.get_parameter_type(self.value)
+        return ParameterManager().get_parameter_type(self.value)
 
     @staticmethod
     def from_dict(data):
         """generate a parameter from an input data dict"""
         return Parameter(
-            name = data["name"] if "name" in data else "",
-            description = data["description"] if "description" in data else "",
-            default = data["default"] if "default" in data else "",
-            group = data["group"] if "group" in data else "",
-            min = data["min"] if "min" in data else "",
-            max = data["max"] if "max" in data else ""
+            name=data["name"] if "name" in data else "",
+            description=data["description"] if "description" in data else "",
+            default=data["default"] if "default" in data else "",
+            group=data["group"] if "group" in data else "",
+            min=data["min"] if "min" in data else "",
+            max=data["max"] if "max" in data else ""
         )

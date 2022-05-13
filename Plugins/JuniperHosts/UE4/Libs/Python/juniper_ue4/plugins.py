@@ -3,7 +3,7 @@ import os
 import juniper.paths
 import juniper.utilities.json as json_utils
 import juniper.utilities.filemgr
-import juniper.framework.programs.ue4
+import juniper_ue4
 
 
 def add_plugin(uplugin_path, symlink=True):
@@ -20,5 +20,5 @@ def add_plugin(uplugin_path, symlink=True):
         plugin_dir_name = os.path.basename(plugin_dir)
         juniper.utilities.filemgr.create_junction(
             plugin_dir,
-            os.path.join(juniper.framework.programs.ue4.unreal_project_dir(), "plugins", plugin_dir_name)
+            os.path.join(juniper_ue4.unreal_project_dir(), "plugins", plugin_dir_name)
         )

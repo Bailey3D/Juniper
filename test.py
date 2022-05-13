@@ -1,5 +1,3 @@
 import juniper
-import juniper_designer
-
-
-print(juniper_designer.test)
+import juniper_dcc
+print(juniper_dcc)

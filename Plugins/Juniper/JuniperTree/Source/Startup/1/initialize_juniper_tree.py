@@ -6,4 +6,4 @@
 import juniper_tree
 
 
-juniper_tree.JuniperTreeManager.create_tree()
+juniper_tree.JuniperTreeManager().create_tree()

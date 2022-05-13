@@ -2,7 +2,7 @@ import os
 import shutil
 
 import juniper.plugins
-import juniper.framework.programs.ue4
+import juniper_ue4
 import juniper.paths
 import juniper.utilities.filemgr
 import juniper.utilities.json as json_utils
@@ -12,7 +12,7 @@ import juniper.utilities.json as json_utils
 uproj_path = juniper.utilities.filemgr.pick_file(
     title="Select Target Unreal Project",
     file_types="Unreal Project (*.uproject)",
-    start=juniper.framework.programs.ue4.unreal_project_dir()
+    start=juniper_ue4.unreal_project_dir()
 )
 
 uproj_path = uproj_path.replace("/", "\\")
@@ -25,7 +25,7 @@ if(os.path.isfile(uproj_path)):
         local=True
     )
 
-    unreal_project_root = juniper.framework.programs.ue4.unreal_project_dir()
+    unreal_project_root = juniper_ue4.unreal_project_dir()
 
     # copy the "programs/unreal/lib/python/install/scripts/__startup__.py/" to the unreal project
     plugin = juniper.plugins.PluginManager().find_plugin("ue4")

@@ -7,9 +7,10 @@ from qtpy import QtWidgets, QtGui, QtCore
 import juniper
 import juniper.decorators
 import juniper.framework.logging
-import juniper.framework.tooling.macro
+import juniper.framework.types.script
 import juniper.math.color
 import juniper.utilities.json as json_utils
+import juniper.framework.types.singleton
 import juniper.widgets.q_dock_widget_wrapper
 
 from juniper_tree.widgets import q_juniper_tree
@@ -44,22 +45,22 @@ class JuniperTree(object):
             self.q_juniper_tree_widget,
             identifier="juniper.juniper_tree",
             title="Juniper Tree",
-            minimum_width=ConfigManager.default_width,
+            minimum_width=ConfigManager().default_width,
             allowed_areas=(QtCore.Qt.LeftDockWidgetArea | QtCore.Qt.RightDockWidgetArea),
             features=(QtWidgets.QDockWidget.DockWidgetClosable | QtWidgets.QDockWidget.DockWidgetFloatable),
             stylesheet="QDockWidget > QWidget{border:1px solid rgba(0, 0, 0, 50);}",
             close_event=self.closeEvent
         )
 
-        all_macros = juniper.framework.tooling.macro.MacroManager.all_macros
+        all_macros = juniper.framework.types.script.ScriptManager().get_all_of_type("tool")
 
         # sort into categories alphabetically (juniper first)
         macros_categories = {}
-        for macro in juniper.framework.tooling.macro.MacroManager:
-            if(macro.parent_category not in macros_categories):
-                macros_categories[macro.parent_category] = [macro]
+        for script in all_macros:
+            if(script.parent_category not in macros_categories):
+                macros_categories[script.parent_category] = [script]
             else:
-                macros_categories[macro.parent_category].append(macro)
+                macros_categories[script.parent_category].append(script)
         macros_categories = OrderedDict(sorted(macros_categories.items()))
         if("Juniper" in macros_categories):
             macros_categories.move_to_end("Juniper", last=False)
@@ -108,7 +109,7 @@ class JuniperTree(object):
                         macro_button.setText(macro.display_name)
                         macro_button.setToolTip(macro.tooltip)
                         macro_button.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-                        macro_button.setFixedHeight(ConfigManager.button_height)
+                        macro_button.setFixedHeight(ConfigManager().button_height)
                         macro_button.clicked.connect(macro.run)
 
                         # for rendering in the group / titlebar
@@ -145,9 +146,7 @@ class JuniperTree(object):
         )
 
 
-class __JuniperTreeManager(object):
-    __instance__ = None
-
+class JuniperTreeManager(object, metaclass=juniper.framework.types.singleton.Singleton):
     def __init__(self):
         self.juniper_tree = None
 
@@ -156,7 +155,7 @@ class __JuniperTreeManager(object):
         output = json_utils.get_property(
             juniper_tree_user_config_path(),
             f"programs.{juniper.program_context}.enabled"
-        ) == True
+        ) is True
         output = output and juniper.program_context not in ("python", "standalone")
         return output
 
@@ -169,8 +168,3 @@ class __JuniperTreeManager(object):
         if(self.juniper_tree):
             category_widget = self.juniper_tree.q_juniper_tree_widget.add_category_widget(tool_name, tab_content=False, tint=groups_colour)
             category_widget.addWidget(widget)
-
-
-if(not __JuniperTreeManager.__instance__):
-    __JuniperTreeManager.__instance__ = __JuniperTreeManager()
-JuniperTreeManager = __JuniperTreeManager.__instance__

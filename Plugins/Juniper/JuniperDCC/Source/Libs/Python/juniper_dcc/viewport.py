@@ -1,7 +1,7 @@
 """
 Viewport based functions
 """
-import juniper.dcc.scene
+import juniper_dcc.scene
 import juniper.decorators
 import juniper.utilities.array
 
@@ -32,11 +32,11 @@ def focus(*args):
     :param <[ObjectWrapper]:*args> The objects to focus - either a single object array of objects, or *args of objects
     """
     if(len(args)):
-        selection_cache = juniper.dcc.scene.get_selection()
+        selection_cache = juniper_dcc.scene.get_selection()
         for i in juniper.utilities.array.consolidate_array(args):
             i.select()
 
         __focus_selection()
-        juniper.dcc.scene.set_selection(selection_cache)
+        juniper_dcc.scene.set_selection(selection_cache)
     else:
         __focus_selection()

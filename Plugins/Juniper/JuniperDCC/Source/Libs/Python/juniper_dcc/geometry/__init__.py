@@ -15,20 +15,20 @@ TODO~:
 """
 import os
 
-import juniper.dcc.scene
-import juniper.dcc.scene.selection_set_wrapper
-import juniper.dcc.scene.object_wrapper
+import juniper_dcc.scene
+import juniper_dcc.scene.selection_set_wrapper
+import juniper_dcc.scene.object_wrapper
 import juniper.decorators
 import juniper.framework.types.asset_interface
-import juniper.framework.wrappers.type_wrapper
+import juniper.framework.types.type_wrapper
 import juniper.utilities.string as string_utils
 
 
-class GeometryWrapperManager(juniper.framework.wrappers.type_wrapper.TypeWrapperManager):
+class GeometryWrapperManager(juniper.framework.types.type_wrapper.TypeWrapperManager):
     pass
 
 
-class GeometryWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
+class GeometryWrapper(juniper.framework.types.type_wrapper.TypeWrapper):
     __manager__ = GeometryWrapperManager
 
     def __init__(self, native_object, asset_data_path=None):
@@ -76,7 +76,7 @@ class GeometryWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
     def __validate_name(self, input_):
         output = input_
         if("{package}" in output):
-            current_scene = juniper.dcc.scene.get_current()
+            current_scene = juniper_dcc.scene.get_current()
             if(current_scene):
                 # TODO~: Export validation - we should not be able to export in this situation without a saved file
                 current_scene_name = current_scene.name
@@ -120,8 +120,8 @@ class GeometryWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
 
     @get_path.override("max")
     def _get_path(self):
-        import juniper.dcc.scene
-        current_scene = juniper.dcc.scene.get_current()
+        import juniper_dcc.scene
+        current_scene = juniper_dcc.scene.get_current()
         if(current_scene):
             return current_scene.path
         return None
@@ -159,7 +159,7 @@ class GeometryWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
 
     @__export.override("max")
     def __export(self):
-        import juniper.framework.programs.max.export as max_export
+        import juniper_max.export as max_export
 
         success = False
 
@@ -168,21 +168,21 @@ class GeometryWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
         export_output_path = os.path.join(export_output_dir, export_filename_override or self.name)
 
         # Export: From SceneWrapper
-        if(isinstance(self.native_object, juniper.dcc.scene.SceneWrapper)):
+        if(isinstance(self.native_object, juniper_dcc.scene.SceneWrapper)):
             success = max_export.export_nodes(
                 [x.native_object for x in self.native_object.objects],
                 export_output_path
             )
 
         # Export: From SelectionSetWrapper
-        elif(isinstance(self.native_object, juniper.dcc.scene.selection_set_wrapper.SelectionSetWrapper)):
+        elif(isinstance(self.native_object, juniper_dcc.scene.selection_set_wrapper.SelectionSetWrapper)):
             success = max_export.export_nodes(
                 [x.native_object for x in self.native_object.objects],
                 export_output_path
             )
 
         # Export: From ObjectWrapper
-        elif(isinstance(self.native_object, juniper.dcc.scene.object_wrapper.ObjectWrapper)):
+        elif(isinstance(self.native_object, juniper_dcc.scene.object_wrapper.ObjectWrapper)):
             success = max_export.export_nodes([self.native_object])
 
         else:

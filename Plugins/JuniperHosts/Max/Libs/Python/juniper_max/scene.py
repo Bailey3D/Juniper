@@ -2,7 +2,7 @@ import os
 import pymxs
 
 import juniper
-import juniper.framework.programs.max.sdk as max_sdk
+import juniper_max.sdk as max_sdk
 import juniper.utilities.pathing as pathing_utils
 
 

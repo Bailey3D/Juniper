@@ -1,19 +1,19 @@
 import os
 
 import juniper
-import juniper.dcc.scene
+import juniper_dcc.scene
 import juniper.decorators
-import juniper.framework.programs.ue4
+import juniper_ue4
 import juniper.framework.types.asset_interface
-import juniper.framework.wrappers.type_wrapper
+import juniper.framework.types.type_wrapper
 import juniper.utilities.string as string_utils
 
 
-class MaterialWrapperManager(juniper.framework.wrappers.type_wrapper.TypeWrapperManager):
+class MaterialWrapperManager(juniper.framework.types.type_wrapper.TypeWrapperManager):
     pass
 
 
-class MaterialWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
+class MaterialWrapper(juniper.framework.types.type_wrapper.TypeWrapper):
     __manager__ = MaterialWrapperManager
 
     def __init__(self, native_object, asset_data_path=None):
@@ -83,7 +83,7 @@ class MaterialWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
     @get_name.override("painter")
     def _get_name(self):
         output = str(self.native_object)
-        package_name = juniper.dcc.scene.get_current().name
+        package_name = juniper_dcc.scene.get_current().name
         output = output.replace("{package}", package_name)
         return output
 
@@ -112,7 +112,7 @@ class MaterialWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
 
     @get_base_name.override("painter")
     def _get_base_name(self):
-        return juniper.dcc.scene.get_current().name
+        return juniper_dcc.scene.get_current().name
 
     @get_base_name.override("designer")
     def _get_base_name(self):
@@ -139,7 +139,7 @@ class MaterialWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
 
     @get_path.override("painter")
     def _get_path(self):
-        return juniper.dcc.scene.get_current().path
+        return juniper_dcc.scene.get_current().path
 
     # ---------------------------------------------------
 
@@ -154,7 +154,7 @@ class MaterialWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
         # (Ie, `{package}` -> the current scene name)
         # currently only supports `{package}` keyword
         old_fp = texture_path.replace("/", "\\")
-        new_fp = old_fp.replace("{package}", juniper.dcc.scene.get_current().name)
+        new_fp = old_fp.replace("{package}", juniper_dcc.scene.get_current().name)
         file_function = os.rename if not os.path.isfile(new_fp) else os.replace
         file_function(old_fp, new_fp)
 
@@ -169,7 +169,7 @@ class MaterialWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
         # make relative to the current unreal project if it is under it and a parent was not set ..
         relative_exported_texture_path = string_utils.remove_prefix(
             relative_exported_texture_path,
-            os.path.join(juniper.framework.programs.ue4.unreal_project_dir(), "content")
+            os.path.join(juniper_ue4.unreal_project_dir(), "content")
         )
         relative_exported_texture_path = relative_exported_texture_path.lstrip("\\")
 
@@ -211,14 +211,14 @@ class MaterialWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
         export_output_dir = self.asset_interface.get_metadata_key("#export:output_dir")
         export_preset_name = self.asset_interface.get_metadata_key("export:preset", subgroup="painter")
         if(export_output_dir and export_preset_name):
-            import juniper.framework.programs.painter.shelf
-            import juniper.framework.programs.painter.export_config
+            import juniper_painter.shelf
+            import juniper_painter.export_config
 
-            export_preset_resource = juniper.framework.programs.painter.shelf.find_resource(export_preset_name, max_retries=4)
+            export_preset_resource = juniper_painter.shelf.find_resource(export_preset_name, max_retries=4)
             if(export_preset_resource):
                 # TODO~: Should the exportParameters be stored in the .material file?
                 # will still need a way to set this from within Painter though
-                export_config = juniper.framework.programs.painter.export_config.ExportConfig(
+                export_config = juniper_painter.export_config.ExportConfig(
                     export_preset_resource.url(),
                     self.asset_interface.get_metadata_key("#export:textures_output_dir"),
                     texture_sets=str(self.native_object)

@@ -1,12 +1,12 @@
 # TODO~: Implementation
-import juniper.framework.wrappers.type_wrapper
+import juniper.framework.types.type_wrapper
 
 
-class TextureWrapperManager(juniper.framework.wrappers.type_wrapper.TypeWrapperManager):
+class TextureWrapperManager(juniper.framework.types.type_wrapper.TypeWrapperManager):
     pass
 
 
-class TextureWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
+class TextureWrapper(juniper.framework.types.type_wrapper.TypeWrapper):
     __manager__ = TextureWrapperManager
 
     def __init__(self, native_object, asset_path=None):

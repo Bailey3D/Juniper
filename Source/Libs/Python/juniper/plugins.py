@@ -1,7 +1,7 @@
 import juniper.paths
 import juniper.framework.metadata
 import juniper.framework.types.singleton
-from juniper.framework.tooling import macro
+from juniper.framework.types import script
 import juniper.utilities.string as string_utils
 
 import functools
@@ -102,6 +102,11 @@ class Plugin(object):
     @property
     @functools.lru_cache()
     def enabled(self):
+        # If this is a host plugin (Ie, max, designer), and we're not in the context
+        # the plugin should be disabled
+        if("\\juniperhosts\\" in self.root.lower()):
+            if(self.name != juniper.program_context):
+                return False
         if("enabled" in self.plugin_metadata):
             return self.plugin_metadata["enabled"]
         return True
@@ -223,49 +228,42 @@ class Plugin(object):
         :return <[Macro]:macros> All macros registered for this plugin
         """
         output = []
-        macro_file_paths = []
+        if(self.enabled):
+            macro_file_paths = []
 
-        tools_root_dir = os.path.join(self.root, "Source\\Tools")
-        for file in glob.iglob(tools_root_dir + "\\**", recursive=True):
-            if(file.endswith((".ms", ".py", ".toolptr"))):
-                if(file not in macro_file_paths):
-                    with open(file, "r") as f:
-                        if(file.endswith(".toolptr")):
-                            json_data = json.load(f)
-                            if("category" in json_data):
-                                macro_file_paths.append(file)
-                        elif(file.endswith(".py") or (file.endswith(".ms") and juniper.program_context == "max")):
-                            if(file not in macro_file_paths):
-                                file_metadata = juniper.framework.metadata.FileMetadata(file)
-                                if(file_metadata.get("type") == "tool"):
-                                    macro_file_paths.append(file)
-
-        for file in macro_file_paths:
-            m = macro.Macro(file, plugin=self.name)
-            m.plugin = self.name
-            macro.MacroManager.register_macro(m)
-            output.append(m)
+            tools_root_dir = os.path.join(self.root, "Source\\Tools")
+            for file in glob.iglob(tools_root_dir + "\\**\\*.*", recursive=True):
+                if(file.endswith((".ms", ".py", ".toolptr"))):
+                    new_script = script.Script(file, plugin_name=self.name)
+                    if(new_script.type == "tool" and new_script.is_supported_in_current_host):
+                        output.append(new_script)
+                    else:
+                        script.ScriptManager().unregister(new_script)
 
         return output
 
     @property
     def core_macros(self):
         output = []
-        for i in macro.MacroManager:
-            if(i.plugin_name == self.name and i.is_core_macro):
+        for i in script.ScriptManager():
+            if(i.type == "tool" and i.plugin_name == self.name and i.is_core):
                 output.append(i)
         return output
 
     @property
     def macros(self):
         output = []
-        for i in macro.MacroManager:
-            if(i.plugin_name == self.name and not i.is_core_macro):
+        for i in script.ScriptManager():
+            if(i.type == "tool" and i.plugin_name == self.name and not i.is_core):
                 output.append(i)
         return output
 
     def initialize_libraries(self):
         sys.path.append(os.path.join(self.root, "Source\\Libs\\Python"))
+
+    @property
+    def is_host_plugin(self):
+        return "\\juniperhosts\\" in self.root.lower()
 
 
 # TODO~ Plugin Creator

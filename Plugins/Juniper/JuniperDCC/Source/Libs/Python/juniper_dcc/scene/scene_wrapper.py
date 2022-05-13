@@ -2,17 +2,17 @@ import os
 import subprocess
 
 import juniper.decorators
-import juniper.dcc.material
-import juniper.dcc.scene.object_wrapper
-import juniper.dcc.scene.selection_set_wrapper
-import juniper.framework.wrappers.type_wrapper
+import juniper_dcc.material
+import juniper_dcc.scene.object_wrapper
+import juniper_dcc.scene.selection_set_wrapper
+import juniper.framework.types.type_wrapper
 
 
-class SceneWrapperManager(juniper.framework.wrappers.type_wrapper.TypeWrapperManager):
+class SceneWrapperManager(juniper.framework.types.type_wrapper.TypeWrapperManager):
     pass
 
 
-class SceneWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
+class SceneWrapper(juniper.framework.types.type_wrapper.TypeWrapper):
     """
     A wrapper class for the current scene depending on the current DCC application
     """
@@ -71,8 +71,8 @@ class SceneWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
 
     @get_name.override("max")
     def _get_name(self):
-        import juniper.framework.programs.max.scene
-        output = juniper.framework.programs.max.scene.name()
+        import juniper_max.scene
+        output = juniper_max.scene.name()
         if(output not in ("", None)):
             return output
         return None
@@ -151,7 +151,7 @@ class SceneWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
         import substance_painter.textureset
         output = []
         for i in substance_painter.textureset.all_texture_sets():
-            output.append(juniper.dcc.material.MaterialWrapper(i))
+            output.append(juniper_dcc.material.MaterialWrapper(i))
         return output
 
     @get_materials.override("designer")
@@ -162,7 +162,7 @@ class SceneWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
         current_package = juniper_designer.package.current()
         for i in juniper_designer.package.child_graphs(package=current_package):
             if(isinstance(i, sd.api.sbs.sdsbscompgraph.SDSBSCompGraph)):
-                output.append(juniper.dcc.material.MaterialWrapper(i))
+                output.append(juniper_dcc.material.MaterialWrapper(i))
         return output
 
     # -------------------------------------------------------
@@ -184,7 +184,7 @@ class SceneWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
         import pymxs
         output = []
         for i in pymxs.runtime.objects:
-            node = juniper.dcc.scene.object_wrapper.ObjectWrapper(i)
+            node = juniper_dcc.scene.object_wrapper.ObjectWrapper(i)
             output.append(node)
         return output
 
@@ -206,5 +206,5 @@ class SceneWrapper(juniper.framework.wrappers.type_wrapper.TypeWrapper):
         import pymxs
         output = []
         for i in pymxs.runtime.selectionSets:
-            output.append(juniper.dcc.scene.selection_set_wrapper.SelectionSetWrapper(i))
+            output.append(juniper_dcc.scene.selection_set_wrapper.SelectionSetWrapper(i))
         return output

@@ -1,6 +1,8 @@
 """
-Singleton based logic 
+Singleton based logic
 """
+
+
 class Singleton(type):
     """
     Base class for a singleton type
