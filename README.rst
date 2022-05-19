@@ -1,4 +1,5 @@
-# Juniper
+Juniper
+===========
 
 .. image:: https://raw.githubusercontent.com/Juniper3d/Juniper/main/Resources/Icons/Standard/app_default.png
    :align: center
