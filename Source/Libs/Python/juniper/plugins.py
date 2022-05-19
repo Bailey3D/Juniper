@@ -1,7 +1,7 @@
 import juniper.paths
 import juniper.framework.metadata
-import juniper.framework.types.singleton
-from juniper.framework.types import script
+import juniper.types.framework.singleton
+from juniper.types.framework import script
 import juniper.utilities.string as string_utils
 
 import functools
@@ -11,7 +11,7 @@ import os
 import sys
 
 
-class PluginManager(object, metaclass=juniper.framework.types.singleton.Singleton):
+class PluginManager(object, metaclass=juniper.types.framework.singleton.Singleton):
     def __init__(self):
         self.plugin_cache = []
 

@@ -8,7 +8,7 @@ import textwrap
 
 import juniper
 import juniper.plugins
-import juniper.framework.types.script
+import juniper.types.framework.script
 import juniper.utilities.string as string_utils
 import juniper.widgets.q_menu_wrapper
 
@@ -52,7 +52,7 @@ class JuniperMenu(object):
             # core macros
             self.menu_object.add_separator()
 
-            for i in juniper.framework.types.script.ScriptManager():
+            for i in juniper.types.framework.script.ScriptManager():
                 if(i.type == "tool" and i.plugin_name == "juniper" and i.is_core):
                     self.add_action(self.menu, i)
 
@@ -83,8 +83,8 @@ class JuniperMenu(object):
             )
             action.set_label(string_utils.snake_to_name(macro.display_name))
             command_string = textwrap.dedent(f"""
-                import juniper.framework.types.script
-                script = juniper.framework.types.script.ScriptManager().find("{macro.name}", plugin_name="{macro.plugin_name}")
+                import juniper.types.framework.script
+                script = juniper.types.framework.script.ScriptManager().find("{macro.name}", plugin_name="{macro.plugin_name}")
                 if(script):
                     script.run()
             """)

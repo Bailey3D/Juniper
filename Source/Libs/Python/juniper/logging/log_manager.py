@@ -1,9 +1,9 @@
-import juniper.framework.types.singleton
+import juniper.types.framework.singleton
 import juniper.widgets as qt_utils
-from juniper.framework.logging import q_log_entry, q_log_holder
+from juniper.logging import q_log_entry, q_log_holder
 
 
-class LogManager(object, metaclass=juniper.framework.types.singleton.Singleton):
+class LogManager(object, metaclass=juniper.types.framework.singleton.Singleton):
     """Manager class used for various logging tasks"""
     def __init__(self):
         """"""

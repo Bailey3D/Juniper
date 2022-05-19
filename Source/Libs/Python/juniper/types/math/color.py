@@ -2,7 +2,7 @@
 Wrapper for a simple colour type
 """
 import juniper.decorators
-import juniper.math.math as jmath
+import juniper.math
 
 
 class Color(object):
@@ -22,7 +22,7 @@ class Color(object):
             self._data = (args[0], args[1], args[2], args[3])
         else:
             raise AttributeError
-        self._data = [jmath.saturate(x) for x in self._data]
+        self._data = [juniper.math.saturate(x) for x in self._data]
 
     def _from_hex_value(self, hex_value):
         hex_value = hex_value.lstrip('#')
@@ -66,7 +66,7 @@ class Color(object):
 
     @r.setter
     def r(self, value):
-        self._data[0] = jmath.saturate(value)
+        self._data[0] = juniper.math.saturate(value)
 
     @property
     def g(self):
@@ -74,7 +74,7 @@ class Color(object):
 
     @g.setter
     def g(self, value):
-        self._data[1] = jmath.saturate(value)
+        self._data[1] = juniper.math.saturate(value)
 
     @property
     def b(self):
@@ -82,7 +82,7 @@ class Color(object):
 
     @b.setter
     def b(self, value):
-        self._data[2] = jmath.saturate(value)
+        self._data[2] = juniper.math.saturate(value)
 
     @property
     def a(self):
@@ -90,7 +90,7 @@ class Color(object):
 
     @a.setter
     def a(self, value):
-        self._data[3] = jmath.saturate(value)
+        self._data[3] = juniper.math.saturate(value)
 
     # ------------------------------------------------------------
 

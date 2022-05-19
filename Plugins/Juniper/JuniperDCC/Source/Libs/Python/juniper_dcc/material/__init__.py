@@ -4,16 +4,16 @@ import juniper
 import juniper_dcc.scene
 import juniper.decorators
 import juniper_ue4
-import juniper.framework.types.asset_interface
-import juniper.framework.types.type_wrapper
+import juniper.types.data.asset_interface
+import juniper.types.wrappers.type_wrapper
 import juniper.utilities.string as string_utils
 
 
-class MaterialWrapperManager(juniper.framework.types.type_wrapper.TypeWrapperManager):
+class MaterialWrapperManager(juniper.types.wrappers.type_wrapper.TypeWrapperManager):
     pass
 
 
-class MaterialWrapper(juniper.framework.types.type_wrapper.TypeWrapper):
+class MaterialWrapper(juniper.types.wrappers.type_wrapper.TypeWrapper):
     __manager__ = MaterialWrapperManager
 
     def __init__(self, native_object, asset_data_path=None):
@@ -34,12 +34,12 @@ class MaterialWrapper(juniper.framework.types.type_wrapper.TypeWrapper):
         :param [<str:asset_data_path>] The path to the asset file
         """
         if(asset_data_path):
-            self.asset_interface = juniper.framework.types.asset_interface.AssetInterface(
+            self.asset_interface = juniper.types.data.asset_interface.AssetInterface(
                 asset_data_path,
                 create_if_invalid=True
             )
         else:
-            self.asset_interface = juniper.framework.types.asset_interface.AssetInterface("", create_if_invalid=False)
+            self.asset_interface = juniper.types.data.asset_interface.AssetInterface("", create_if_invalid=False)
 
     # ---------------------------------------------------
 

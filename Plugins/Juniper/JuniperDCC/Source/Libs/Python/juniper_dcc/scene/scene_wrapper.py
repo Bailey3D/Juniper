@@ -5,14 +5,14 @@ import juniper.decorators
 import juniper_dcc.material
 import juniper_dcc.scene.object_wrapper
 import juniper_dcc.scene.selection_set_wrapper
-import juniper.framework.types.type_wrapper
+import juniper.types.wrappers.type_wrapper
 
 
-class SceneWrapperManager(juniper.framework.types.type_wrapper.TypeWrapperManager):
+class SceneWrapperManager(juniper.types.wrappers.type_wrapper.TypeWrapperManager):
     pass
 
 
-class SceneWrapper(juniper.framework.types.type_wrapper.TypeWrapper):
+class SceneWrapper(juniper.types.wrappers.type_wrapper.TypeWrapper):
     """
     A wrapper class for the current scene depending on the current DCC application
     """

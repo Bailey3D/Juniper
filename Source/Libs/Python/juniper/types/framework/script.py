@@ -2,14 +2,14 @@ import os
 import functools
 import json
 
-import juniper.framework.types.singleton
+import juniper.types.framework.singleton
 import juniper.paths
 import juniper.plugins
 import juniper.utilities.string as string_utils
 from juniper.utilities import script_execution
 
 
-class ScriptManager(object, metaclass=juniper.framework.types.singleton.Singleton):
+class ScriptManager(object, metaclass=juniper.types.framework.singleton.Singleton):
     def __init__(self):
         self.registered_macros = []
         # TODO! Finish

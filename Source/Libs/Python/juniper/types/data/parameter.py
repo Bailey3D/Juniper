@@ -1,7 +1,7 @@
 import functools
 from enum import Enum
 
-import juniper.framework.types.singleton
+import juniper.types.framework.singleton
 
 
 class ParameterTypes(Enum):
@@ -19,7 +19,7 @@ class ParameterTypes(Enum):
     texture = 10
 
 
-class ParameterManager(object, metaclass=juniper.framework.types.singleton.Singleton):
+class ParameterManager(object, metaclass=juniper.types.framework.singleton.Singleton):
     """Singleton manager class for parameters"""
     def get_parameter_type(self, value):
         """Takes an input parameter of X type and finds the type"""

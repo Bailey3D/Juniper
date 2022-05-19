@@ -1,6 +1,6 @@
 import indev
 
-import juniper.framework.logging.log_manager
+import juniper.logging.log_manager
 
 
 class _LogEntry(object):
@@ -153,7 +153,7 @@ class Log(object):
         if(not self.holding):
             log_func(log_text, context=context, traceback=traceback, traceback_stack=traceback_stack)
             if(not silent):
-                juniper.framework.logging.log_manager.LogManager().add_log_entry(
+                juniper.logging.log_manager.LogManager().add_log_entry(
                     log_text,
                     log_type,
                     context or self.plugin,

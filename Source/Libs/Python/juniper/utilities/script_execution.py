@@ -28,8 +28,8 @@ def run_file(file_path, plugin=None):
 
         if(file_path.endswith(".toolptr")):
             file_path = json_utils.get_property(file_path, "path")
-            if(module):
-                file_path = os.path.join(juniper.paths.get_module_root(module))
+            if(plugin):
+                file_path = os.path.join(juniper.paths.get_module_root(plugin))
             else:
                 file_path = os.path.join(juniper.paths.root(), file_path)
 

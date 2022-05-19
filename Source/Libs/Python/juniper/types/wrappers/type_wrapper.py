@@ -5,7 +5,7 @@ Type wrappers are used to wrap native object types from various DCC applications
 Each wrapper includes a base class for functionality, and a manager class for caching and retrieving initialized wrapper objects.
 """
 import juniper.decorators
-from juniper.framework.types.singleton import Singleton
+from juniper.types.framework.singleton import Singleton
 
 
 class TypeWrapperManager(object, metaclass=Singleton):

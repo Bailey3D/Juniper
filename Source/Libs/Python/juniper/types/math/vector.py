@@ -151,7 +151,7 @@ class _VectorType(object):
         """
         Gets a version of this as the native type for the current DCC
 
-        Note:   When overriding this in child classes the `get_native_object` method must be defined 
+        Note:   When overriding this in child classes the `get_native_object` method must be defined
                 in the class body just so we have access to an instance of the function to override
 
         :return <value:native_type> The native type where possible - else None

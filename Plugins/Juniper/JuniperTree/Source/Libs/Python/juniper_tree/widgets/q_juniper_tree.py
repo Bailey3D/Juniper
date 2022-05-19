@@ -4,7 +4,7 @@ from juniper.widgets import q_v_scroll_layout
 
 from juniper_tree.widgets import q_tree_group
 from juniper_tree.config_manager import ConfigManager
-from juniper.framework.tooling.macro import MacroManager
+from juniper.types.framework.macro import MacroManager
 
 
 class QJuniperTreeWidget(QtWidgets.QWidget):

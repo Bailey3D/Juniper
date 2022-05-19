@@ -6,19 +6,19 @@ from qtpy import QtWidgets, QtGui, QtCore
 
 import juniper
 import juniper.decorators
-import juniper.framework.logging
-import juniper.framework.types.script
-import juniper.math.color
+import juniper.logging
+import juniper.types.framework.script
+import juniper.types.math.color
 import juniper.utilities.json as json_utils
-import juniper.framework.types.singleton
+import juniper.types.framework.singleton
 import juniper.widgets.q_dock_widget_wrapper
 
 from juniper_tree.widgets import q_juniper_tree
 from juniper_tree.config_manager import ConfigManager
 
 
-log = juniper.framework.logging.Log(plugin="Juniper Tree")
-groups_colour = juniper.math.color.Color(0.0, 0.0, 0.0, 0.05)
+log = juniper.logging.Log(plugin="Juniper Tree")
+groups_colour = juniper.types.math.color.Color(0.0, 0.0, 0.0, 0.05)
 
 
 def juniper_tree_user_config_path():
@@ -52,7 +52,7 @@ class JuniperTree(object):
             close_event=self.closeEvent
         )
 
-        all_macros = juniper.framework.types.script.ScriptManager().get_all_of_type("tool")
+        all_macros = juniper.types.framework.script.ScriptManager().get_all_of_type("tool")
 
         # sort into categories alphabetically (juniper first)
         macros_categories = {}
@@ -146,7 +146,7 @@ class JuniperTree(object):
         )
 
 
-class JuniperTreeManager(object, metaclass=juniper.framework.types.singleton.Singleton):
+class JuniperTreeManager(object, metaclass=juniper.types.framework.singleton.Singleton):
     def __init__(self):
         self.juniper_tree = None
 

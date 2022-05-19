@@ -1,13 +1,13 @@
 import juniper.decorators
-import juniper.framework.types.type_wrapper
-from juniper.math.vector import Vector3
+import juniper.types.wrappers.type_wrapper
+from juniper.types.math.vector import Vector3
 
 
-class ObjectWrapperManager(juniper.framework.types.type_wrapper.TypeWrapperManager):
+class ObjectWrapperManager(juniper.types.wrappers.type_wrapper.TypeWrapperManager):
     pass
 
 
-class ObjectWrapper(juniper.framework.types.type_wrapper.TypeWrapper):
+class ObjectWrapper(juniper.types.wrappers.type_wrapper.TypeWrapper):
     __manager__ = ObjectWrapperManager
 
     # -------------------------------------------------------

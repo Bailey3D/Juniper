@@ -285,15 +285,9 @@ def startup(program_context):
         refresh_imports()
 
         # Initialize macros before startup so they can be accessed if needed
-        import juniper.framework.types.script
-        #import juniper.framework.tooling.macro
+        import juniper.types.framework.script
         for file in glob.iglob(os.path.join(juniper.paths.root(), "Source\\Tools\\**\\*.*"), recursive=True):
-            juniper.framework.types.script.Script(file)
-            '''if(script.type == "tool"):
-            #if(juniper.framework.tooling.macro.MacroManager.check_if_file_is_macro(file)):
-                m = juniper.framework.tooling.macro.Macro(file, plugin="juniper")
-                m.plugin = "juniper"
-                juniper.framework.tooling.macro.MacroManager.register_macro(m)'''
+            juniper.types.framework.script.Script(file)
 
         import juniper.plugins
         for plugin in juniper.plugins.PluginManager():

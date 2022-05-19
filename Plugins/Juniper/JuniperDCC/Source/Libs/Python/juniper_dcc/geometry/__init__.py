@@ -19,16 +19,16 @@ import juniper_dcc.scene
 import juniper_dcc.scene.selection_set_wrapper
 import juniper_dcc.scene.object_wrapper
 import juniper.decorators
-import juniper.framework.types.asset_interface
-import juniper.framework.types.type_wrapper
+import juniper.types.data.asset_interface
+import juniper.types.wrappers.type_wrapper
 import juniper.utilities.string as string_utils
 
 
-class GeometryWrapperManager(juniper.framework.types.type_wrapper.TypeWrapperManager):
+class GeometryWrapperManager(juniper.types.wrappers.type_wrapper.TypeWrapperManager):
     pass
 
 
-class GeometryWrapper(juniper.framework.types.type_wrapper.TypeWrapper):
+class GeometryWrapper(juniper.types.wrappers.type_wrapper.TypeWrapper):
     __manager__ = GeometryWrapperManager
 
     def __init__(self, native_object, asset_data_path=None):
@@ -53,12 +53,12 @@ class GeometryWrapper(juniper.framework.types.type_wrapper.TypeWrapper):
         :param [<str:asset_data_path>] The path to the asset file
         """
         if(asset_data_path):
-            self.asset_interface = juniper.framework.types.asset_interface.AssetInterface(
+            self.asset_interface = juniper.types.data.asset_interface.AssetInterface(
                 asset_data_path,
                 create_if_invalid=True
             )
         else:
-            self.asset_interface = juniper.framework.types.asset_interface.AssetInterface("", create_if_invalid=False)
+            self.asset_interface = juniper.types.data.asset_interface.AssetInterface("", create_if_invalid=False)
 
     # ----------------------------------------------------------------
 

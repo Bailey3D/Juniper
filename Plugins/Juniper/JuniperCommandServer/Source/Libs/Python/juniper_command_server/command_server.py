@@ -6,7 +6,7 @@ import socket
 
 import juniper
 import juniper.decorators
-import juniper.framework.types.singleton
+import juniper.types.framework.singleton
 import juniper.paths
 import juniper_globals
 
@@ -26,7 +26,7 @@ def is_free(port):
     return False
 
 
-class CommandServer(metaclass=juniper.framework.types.singleton.Singleton):
+class CommandServer(metaclass=juniper.types.framework.singleton.Singleton):
     def __init__(self, port):
         """
         A non-blocking listen server object
