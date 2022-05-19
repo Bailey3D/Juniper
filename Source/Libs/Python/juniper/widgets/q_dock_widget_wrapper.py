@@ -1,7 +1,5 @@
 """
 Wrappers / helpers for Dock Widgets in the different DCC Contexts
-TODO?:   This could be wrapped as a QWidget, but we need a workaround for the fact some
-         DCC contexts wrap them as QWidget and some wrap as QDockWidget ..
 """
 from qtpy import QtWidgets, QtCore
 

@@ -12,7 +12,6 @@ from juniper.utilities import script_execution
 class ScriptManager(object, metaclass=juniper.types.framework.singleton.Singleton):
     def __init__(self):
         self.registered_macros = []
-        # TODO! Finish
 
     def register(self, script):
         if(script not in self.registered_macros):
