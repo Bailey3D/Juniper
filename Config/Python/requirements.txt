@@ -4,6 +4,7 @@ PILLOW
 ptvsd
 PySide2
 pythonnet; python_version < "3.9"
+pythonnet==3.0.0a2; python_version >= "3.9"
 pypiwin32
 qtpy
 watchdog

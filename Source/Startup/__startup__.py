@@ -5,12 +5,20 @@
 """
 from importlib.machinery import SourceFileLoader
 import os
+import sys
 
 
 class Startup(object):
     def __init__(self):
         bootstrap = self.juniper_bootstrap_module
-        bootstrap.startup(__program_context__)
+        bootstrap.startup(self.program_context)
+
+    @property
+    def program_context(self):
+        for i in sys.argv:
+            if(i.startswith("juniper:program_context=")):
+                return i.split("=")[1].lower()
+        return "python"
 
     @property
     def juniper_bootstrap_module(self):

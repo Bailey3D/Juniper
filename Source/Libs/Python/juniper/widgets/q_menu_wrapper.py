@@ -83,6 +83,6 @@ class QMenuWrapper(object):
     def _add_separator(self):
         import unreal
         action = unreal.ToolMenuEntry(
-            type=unreal.MultiBlockType.SEPARATOR, 
+            type=unreal.MultiBlockType.SEPARATOR,
             insert_position=unreal.ToolMenuInsert("", unreal.ToolMenuInsertType.DEFAULT))
         self.menu_object.add_menu_entry("Juniper", action)

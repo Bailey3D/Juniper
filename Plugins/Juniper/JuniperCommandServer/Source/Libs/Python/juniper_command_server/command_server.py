@@ -36,7 +36,7 @@ class CommandServer(metaclass=juniper.types.framework.singleton.Singleton):
 
         if(not self.port):
             juniper.log.error(
-                f"Command Server Initialization Failed: No port set for the program {juniper.program_context}",
+                f"Command Server Initialization Failed: No port set for the program \"{juniper.program_context}\"",
                 traceback=False
             )
             self.initialized = False

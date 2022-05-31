@@ -8,9 +8,9 @@ import juniper
 import juniper.decorators
 import juniper.logging
 import juniper.types.framework.script
+import juniper.types.framework.singleton
 import juniper.types.math.color
 import juniper.utilities.json as json_utils
-import juniper.types.framework.singleton
 import juniper.widgets.q_dock_widget_wrapper
 
 from juniper_tree.widgets import q_juniper_tree
@@ -156,7 +156,7 @@ class JuniperTreeManager(object, metaclass=juniper.types.framework.singleton.Sin
             juniper_tree_user_config_path(),
             f"programs.{juniper.program_context}.enabled"
         ) is True
-        output = output and juniper.program_context not in ("python", "standalone")
+        output = output and juniper.program_context not in ("python",)
         return output
 
     def create_tree(self, force=False):

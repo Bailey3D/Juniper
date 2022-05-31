@@ -1,0 +1,5 @@
+{
+    "integration_type":"integrated",
+    "description": "Standalone hub application for Juniper which runs in the system tray",
+    "internal": true  
+}

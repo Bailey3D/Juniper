@@ -29,7 +29,7 @@ def get_property(file_path, value, check_local=True):
                     json_data = json.load(j)
                     output = eval("json_data" + exec_str)
                     return output
-            except:
+            except Exception:
                 pass
     return ""
 
@@ -95,10 +95,11 @@ def set_file_property(file_path, property_name, property_value, local=False):
         file_path = file_path + ".local"
 
     if(not os.path.isfile(file_path)):
-        with open(file_path, "w+") as f:
-            json_data = {}
+        json_data = {}
+        with open(file_path, "w") as f:
+            json.dump(f, {})
     else:
-        with open(file_path) as j:
+        with open(file_path, "r") as j:
             json_data = json.load(j)
 
     json_data = set_property(json_data, property_name, property_value)

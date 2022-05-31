@@ -13,5 +13,5 @@ import juniper
 app = qt_utils.get_application()
 juniper_tree.JuniperTreeManager().create_tree(force=True)
 
-if(juniper.program_context in ("standalone", "python")):
+if(juniper.program_context in ("python",)):
     app.exec_()

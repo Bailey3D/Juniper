@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 
 
 def start_plugin():
@@ -12,6 +13,6 @@ def start_plugin():
                 globals_ = globals()
                 globals_["__file__"] = startup_path
                 globals_["__package__"] = os.path.dirname(startup_path)
-                globals_["__program_context__"] = "painter"
+                sys.argv.append("juniper:program_context=painter")
                 with open(startup_path, "r") as f:
                     exec(f.read(), globals_)

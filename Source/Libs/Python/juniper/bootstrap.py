@@ -221,7 +221,6 @@ def run_file(file_path, program_context=None):
     globals_ = globals()
     globals_["__file__"] = path_
     globals_["__package__"] = os.path.dirname(file_path)
-    globals_["__program_context__"] = program_context or "python"
     exec(open(path_).read(), globals_)
 
 
@@ -264,7 +263,9 @@ def install():
 
     for i in (None, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10):
         for plugin in juniper.plugins.PluginManager():
-            if(plugin.enabled):
+            #if(plugin.enabled):
+            if(True):
+                plugin.initialize_libraries()
                 install_scripts = plugin.install_scripts(i)
                 for script_path in install_scripts:
                     juniper.log.info(f"Running Install Script: {script_path}", silent=True, context="Juniper - Install")

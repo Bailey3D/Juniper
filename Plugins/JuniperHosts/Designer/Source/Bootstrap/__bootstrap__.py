@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 
 
 def initializeSDPlugin():
@@ -12,7 +13,8 @@ def initializeSDPlugin():
                 globals_ = globals()
                 globals_["__file__"] = startup_path
                 globals_["__package__"] = os.path.dirname(startup_path)
-                globals_["__program_context__"] = "designer"
+                sys.argv.append("juniper:program_context=designer")
+                print("This is the juniper startup bootpstrap")
                 with open(startup_path, "r") as f:
                     exec(f.read(), globals_)
 

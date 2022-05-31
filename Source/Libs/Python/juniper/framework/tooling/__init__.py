@@ -11,7 +11,7 @@ def run_standalone(dialog_class, title=None, position=None):
 
     program_context = juniper.program_context
 
-    if(program_context in ["standalone", "python"]):
+    if(program_context in ("python",)):
         app = qt_utils.get_application()
         dialog = qt_utils.create_dialog(dialog_class, title=title)
         dialog.show()

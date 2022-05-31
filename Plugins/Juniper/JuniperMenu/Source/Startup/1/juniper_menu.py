@@ -2,7 +2,7 @@
 :script
 :type startup
 :desc Startup script used to initialize a tools menu in the current host program
-:supported ["max", "ue4", "blender", "designer", "painter"]
+:supported ["max", "ue4", "blender", "designer", "painter", "juniper_hub"]
 """
 import textwrap
 
@@ -17,9 +17,11 @@ class JuniperMenu(object):
     def __init__(self):
         self.program_context = juniper.program_context
 
-        self.exclude_hosts = ["houdini"]
+        # TODO~ This should be read from the file metadata
+        self.include_hosts = ["max", "ue4", "blender", "designer", "painter", "juniper_hub"]
+        # self.exclude_hosts = ["houdini"]
 
-        if(self.program_context not in self.exclude_hosts):
+        if(self.program_context in self.include_hosts):
             self.menu_object = juniper.widgets.q_menu_wrapper.QMenuWrapper("juniper", "Juniper")
             self.menu = self.menu_object.menu_object
             self.menus = [self.menu]
