@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 
@@ -18,11 +19,17 @@ uproj_path = juniper.utilities.filemgr.pick_file(
 uproj_path = uproj_path.replace("/", "\\")
 
 if(os.path.isfile(uproj_path)):
+    user_settings_path = os.path.join(juniper.paths.root(), "Cached\\UserConfig\\user_settings.json")
+    if(not os.path.isfile(user_settings_path)):
+        os.makedirs(os.path.dirname(user_settings_path))
+        with open(user_settings_path, "w") as f:
+            json.dump({}, f)
+
     json_utils.set_file_property(
         os.path.join(juniper.paths.root(), "Cached\\UserConfig\\user_settings.json"),
         "unreal_project_path",
         uproj_path,
-        local=True
+        local=False
     )
 
     unreal_project_root = juniper_ue4.unreal_project_dir()

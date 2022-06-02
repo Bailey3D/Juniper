@@ -3,11 +3,13 @@ import xml.etree.ElementTree
 
 import juniper
 import juniper.paths
+import juniper.utilities.xml as xml_utils
 
 
 def add_sbsprj(sbsprj_path):
-    """Adds a new sbsprj to the designer library
-    :param <str:sbsprj_path> Path to the sbsprj to add
+    """
+    Adds a new sbsprj to the designer library\n
+    :param <str:sbsprj_path> Path to the sbsprj to add\n
     """
     if(os.path.isfile(sbsprj_path)):
         sbsprj_set = False
@@ -45,45 +47,55 @@ def add_sbsprj(sbsprj_path):
             f.write(xml.etree.ElementTree.tostring(xml_config_root, encoding="unicode", method="xml"))
 
 
-def create_shelf(shelf_name, shelf_root, display_name=None):
-    """Creates a Substance Designer shelf and adds it to the program search paths
-    :param <str:shelf_name> Code name of the shelf to add
-    :param <str:shelf_root> Real path to the root of the shelf
-    :param [<str:display_name>] Display name of the shelf - defaults to the shelf name if left as default
+def add_shelf(shelf_name, shelf_root):
     """
-    shelf_root = shelf_root.replace("\\", "/")
-    if(not display_name):
-        display_name = shelf_name
+    Adds a named shelf to the current designer project\n
+    Note: this adds to the local juniper sbsprj - not the global configs\n
+    :param <str:shelf_name> The name of the shelf to add / update\n
+    :param <str:shelf_root> The root directory of this shelf\n
+    """
+    juniper_sbsprj_path = os.path.join(
+        juniper.paths.root(),
+        "Cached\\Programs\\Designer\\juniper.sbsprj"
+    )
 
-    template_shelf_sbsprj_path = os.path.join(juniper.paths.root(), "Config\\Programs\\Designer\\shelf.sbsprj.template")
-    shelf_local_sbsprj_dir = os.path.join(juniper.paths.root(), "Cached\\Designer\\local_shelves")
-    shelf_local_sbsprj_path = os.path.join(shelf_local_sbsprj_dir, shelf_name + ".sbsprj")
+    xml_sbsprj_tree = xml.etree.ElementTree.parse(juniper_sbsprj_path)
+    xml_sbsprj_root = xml_sbsprj_tree.getroot()
 
-    already_exists = os.path.isfile(shelf_local_sbsprj_path)
+    xml_config_watchedpaths = xml_sbsprj_root.find("./preferences/library/watchedpaths")
+    xml_config_watchedpaths_size = xml_sbsprj_root.find("./preferences/library/watchedpaths/size")
+    num_watched_shelves = int(xml_config_watchedpaths_size.text)
 
-    if(os.path.isfile(template_shelf_sbsprj_path)):
-        if(not os.path.isdir(shelf_local_sbsprj_dir)):
-            os.makedirs(shelf_local_sbsprj_dir)
+    # Create new data
+    new_num_watched_shelves = num_watched_shelves
+    xml_target_root_node = None
 
-        shelf_lines = []
-        with open(template_shelf_sbsprj_path, "r") as f:
-            shelf_lines = f.readlines()
+    # Search for already existing shelf w/ this name
+    for i in xml_config_watchedpaths:
+        if(i.tag.startswith("_")):  # Entries are "_" and then an index (Ie, "_5")
+            id_elem = i.find("id")
+            if(id_elem is not None and shelf_name == id_elem.text):
+                xml_target_root_node = i
+                break
 
-        for i in range(len(shelf_lines)):
-            line = shelf_lines[i]
-            if("$(SHELF_PATH)" in line):
-                shelf_lines[i] = line.replace(
-                    "$(SHELF_PATH)",
-                    shelf_root
-                )
-            elif("$(SHELF_NAME)" in line):
-                shelf_lines[i] = line.replace(
-                    "$(SHELF_NAME)",
-                    display_name
-                )
+    # If no shelf w/ this name exists - we should create a new one
+    if(not xml_target_root_node):
+        new_num_watched_shelves += 1
+        xml_target_root_node = xml.etree.ElementTree.SubElement(xml_config_watchedpaths, f"_{new_num_watched_shelves}")
 
-        with open(shelf_local_sbsprj_path, "w+") as f:
-            f.writelines(shelf_lines)
+    # Get / create keys in the new node
+    xelem_url = xml_utils.get_or_create_sub_element(xml_target_root_node, "url")
+    xelem_id = xml_utils.get_or_create_sub_element(xml_target_root_node, "id")
+    xelem_isrecursive = xml_utils.get_or_create_sub_element(xml_target_root_node, "isrecursive")
+    xelem_isenabled = xml_utils.get_or_create_sub_element(xml_target_root_node, "isenabled")
 
-    if(not already_exists):
-        add_sbsprj(shelf_local_sbsprj_path)
+    # Set data
+    xml_target_root_node.set("prefix", "_")
+    xelem_url.text = "file:///" + shelf_root.replace("\\", "/")
+    xelem_id.text = shelf_name
+    xelem_isrecursive.text = "true"
+    xelem_isenabled.text = "true"
+    xml_config_watchedpaths_size.text = str(new_num_watched_shelves)
+
+    with open(juniper_sbsprj_path, "w+") as f:
+        f.write(xml.etree.ElementTree.tostring(xml_sbsprj_root, encoding="unicode", method="xml"))

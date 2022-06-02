@@ -52,7 +52,7 @@ class DesignerInstaller(object):
         """
         :return <str:dir> The directory containing all generated data for the substance integration
         """
-        return os.path.join(juniper.paths.root(), "Cached\\BoilerPlate\\Designer\\JuniperShelf")
+        return os.path.join(juniper.paths.root(), "Cached\\Programs\\Designer")
 
     @property
     def local_sbsprj_path(self):

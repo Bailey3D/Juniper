@@ -1,6 +1,5 @@
 """
-:script
-:type install
+:type tool
 :desc Generates / updates the vscode workspace found under `//juniper/.vscode/Juniper.code-workspace`
 """
 import juniper.framework.programs.vscode
