@@ -30,7 +30,7 @@ def initialize_dcc_window_parenting(widget):
     pass
 
 
-@initialize_dcc_window_parenting.override("ue4")
+@initialize_dcc_window_parenting.override("unreal")
 def _initialize_dcc_window_parenting(widget):
     import unreal
     unreal.parent_external_window_to_slate(
@@ -65,8 +65,8 @@ def _get_dcc_main_window():
 
 @get_dcc_main_window.override("designer")
 def _get_dcc_main_window():
-    import juniper_designer.instance
-    return juniper_designer.instance.get_main_qt_window()
+    import sd.juniper.instance
+    return sd.juniper.instance.get_main_qt_window()
 
 
 @get_dcc_main_window.override("houdini")

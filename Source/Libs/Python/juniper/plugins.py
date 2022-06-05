@@ -30,22 +30,22 @@ class PluginManager(object, metaclass=juniper.types.framework.singleton.Singleto
                                 self.plugin_cache.append(Plugin(jplugin_path))
 
         # Sort all avaliable plugins to ensure order of execution is adhered to:
-        # 1) Juniper plugins should always come first so any worksplace additions are initialized
-        # 2) Juniper host plugins second
+        # 1) Juniper host plugins should always be first - as these have the most control over the workspace
+        # 2) Juniper plugins should always come after host plugins so any worksplace additions are initialized
         # 3) All other plugins should come last
         juniper_plugins = []
         juniper_host_plugins = []
         other_plugins = []
 
         for i in self.plugin_cache:
-            if("\\juniper\\" in i.root.lower()):
-                juniper_plugins.append(i)
-            elif("\\juniperhosts\\" in i.root.lower()):
+            if("\\juniperhosts\\" in i.root.lower()):
                 juniper_host_plugins.append(i)
+            elif("\\juniper\\" in i.root.lower()):
+                juniper_plugins.append(i)
             else:
                 other_plugins.append(i)
 
-        self.plugin_cache = juniper_plugins + juniper_host_plugins + other_plugins
+        self.plugin_cache = juniper_host_plugins + juniper_plugins + other_plugins
 
         # Add all plugin python roots to the `__path__` for this module so they can be accessed via `juniper.plugins.plugin_name`
         '''for i in self.plugin_cache:

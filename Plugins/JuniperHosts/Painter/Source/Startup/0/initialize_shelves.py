@@ -8,12 +8,12 @@ import juniper
 import juniper.paths
 import juniper.plugins
 
-import juniper_painter.shelf
+import substance_painter.juniper.shelf
 
 
 for plugin in juniper.plugins.PluginManager():
     if(plugin.enabled):
         shelf_dir = os.path.join(plugin.root, "Resources\\Shelves\\Painter")
         if(os.path.isdir(shelf_dir)):
-            juniper_painter.shelf.add_shelf(plugin.name, shelf_dir)
+            substance_painter.juniper.shelf.add_shelf(plugin.name, shelf_dir)
             juniper.log.info(f"Registered shelf for plugin: {plugin.name}")

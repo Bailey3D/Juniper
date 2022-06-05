@@ -7,7 +7,7 @@ def program_context(context):
 
     Example Usage
     ```
-    @juniper.decorators.program_context("ue4")
+    @juniper.decorators.program_context("unreal")
     def example_function():
         pass
     ```
@@ -25,7 +25,7 @@ def program_context(context):
 def virtual_method(func):
     """
     Decorator for a Juniper method which supports overrides for the different
-    program contexts (Ie, ue4, max, python)
+    program contexts (Ie, unreal, max, python)
 
     Example Usage
     ```
@@ -33,7 +33,7 @@ def virtual_method(func):
     def some_method():
         print("Base implementation of this method - ran when there is no override")
 
-    @some_method.override("ue4"):
+    @some_method.override("unreal"):
     def __some_method():
         print("This will be overriden when ran from Unreal!")
     ```

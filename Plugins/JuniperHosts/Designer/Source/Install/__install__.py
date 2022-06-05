@@ -1,7 +1,7 @@
 import os
 
 import juniper
-import juniper_designer
+import sd.juniper
 import juniper.plugins
 
 
@@ -38,7 +38,7 @@ class DesignerInstaller(object):
         with open(self.local_sbsprj_path, "w+") as f:
             f.writelines(shelf_lines)
 
-        juniper_designer.add_sbsprj(self.local_sbsprj_path)
+        sd.juniper.add_sbsprj(self.local_sbsprj_path)
 
     @property
     def sbsprj_template_path(self):

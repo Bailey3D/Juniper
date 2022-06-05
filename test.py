@@ -14,8 +14,19 @@ tray = juniper_hub.juniper_hub.JuniperHub()
 sys.exit(app.exec_())
 '''
 import juniper
-import juniper_designer
+import juniper.types.framework.script
 
 
-juniper_designer.add_shelf("", "")
-print("Done!")
+for i in juniper.types.framework.script.ScriptManager():
+    if(i.description):
+        pass
+    else:
+        print(i.name)
+        print(i.path)
+
+import os
+juniper.__path__ = [os.path.join(juniper.paths.root(), "Plugins\\JuniperHosts\\Designer\\Source\\Libs\\Python")]
+
+
+import juniper.sd.juniper
+juniper.sd.juniper

@@ -46,7 +46,7 @@ class QMenuWrapper(object):
         uimgr.newMenu(self.display_name, self.name)
         self.menu_object = uimgr.findMenuFromObjectName(self.name)
 
-    @__initialize_menu.override("ue4")
+    @__initialize_menu.override("unreal")
     def _initialize_menu(self):
         import unreal
         menus = unreal.ToolMenus.get()
@@ -79,7 +79,7 @@ class QMenuWrapper(object):
         if(self.menu_object):
             self.menu_object.addSeparator()
 
-    @add_separator.override("ue4")
+    @add_separator.override("unreal")
     def _add_separator(self):
         import unreal
         action = unreal.ToolMenuEntry(

@@ -340,7 +340,7 @@ class Vector3(_VectorType):
 
     # -----------------------------------------------------
 
-    @juniper.decorators.program_context("ue4")
+    @juniper.decorators.program_context("unreal")
     def as_linear_color(self):
         import unreal
         return unreal.LinearColor(r=self.x, g=self.y, b=self.z, a=1.0)
@@ -369,7 +369,7 @@ class Vector4(_VectorType):
         import pymxs
         return pymxs.runtime.Point4(self.x, self.y, self.z, self.w)
 
-    @juniper.decorators.program_context("ue4")
+    @juniper.decorators.program_context("unreal")
     def as_linear_color(self):
         import unreal
         return unreal.LinearColor(r=self.x, g=self.y, b=self.z, a=self.w)
