@@ -1,32 +1,4 @@
-'''import sys
-sys.argv.append("juniper:program_context=juniper_hub")
-
 import juniper
-import juniper.widgets
-import juniper_hub.juniper_hub
-import juniper_hub.hub_finder
-
-
-
-app = juniper.widgets.get_application()
-juniper_hub.hub_finder.find_and_close()
-tray = juniper_hub.juniper_hub.JuniperHub()
-sys.exit(app.exec_())
-'''
-import juniper
-import juniper.types.framework.script
-
-
-for i in juniper.types.framework.script.ScriptManager():
-    if(i.description):
-        pass
-    else:
-        print(i.name)
-        print(i.path)
-
-import os
-juniper.__path__ = [os.path.join(juniper.paths.root(), "Plugins\\JuniperHosts\\Designer\\Source\\Libs\\Python")]
-
-
-import juniper.sd.juniper
-juniper.sd.juniper
+import sys
+for i in sys.path:
+    print(i)

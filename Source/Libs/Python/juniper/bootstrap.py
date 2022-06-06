@@ -198,9 +198,10 @@ def initialize_juniper_libraries():
     """
     Adds all python libraries to the sys.path
     """
-    for i in reversed(core_library_paths()):
-        if(i not in sys.path):
-            sys.path.insert(0, i)
+    # Insert the base juniper libraries so they are first found (before any bootstrap libraries)
+    sys.path.insert(0, os.path.join(root(), "Source\\Libs\\python"))
+    # Insert to the end, to ensure any inbuilt libraries are prioritised over Juniper pip installs
+    sys.path.append(os.path.join(root(), f"Cached\\PyCache\\Python{python_version_major()}{python_version_minor()}\\site-packages"))
 
 
 def set_program_context(context):
@@ -263,7 +264,7 @@ def install():
 
     for i in (None, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10):
         for plugin in juniper.plugins.PluginManager():
-            #if(plugin.enabled):
+            # if(plugin.enabled):
             if(True):
                 plugin.initialize_libraries()
                 install_scripts = plugin.install_scripts(i)
