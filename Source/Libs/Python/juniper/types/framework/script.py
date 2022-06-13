@@ -31,7 +31,7 @@ class ScriptManager(object, metaclass=juniper.types.framework.singleton.Singleto
                     return i
         return None
 
-    def run(self, script_name):
+    def run(self, script_name, force=False):
         for i in self.registered_macros:
             if(i.name == script_name):
                 i.run

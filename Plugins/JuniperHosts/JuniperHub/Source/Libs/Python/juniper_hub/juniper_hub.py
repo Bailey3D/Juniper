@@ -1,11 +1,12 @@
 import os
 from qtpy import QtWidgets, QtGui, QtCore
 
-import juniper.paths
 import juniper
+import juniper.paths
+import juniper.types.framework.singleton
 
 
-class JuniperHub(object):
+class JuniperHub(metaclass=juniper.types.framework.singleton.Singleton):
     def __init__(self):
         self.parent_widget = QtWidgets.QWidget()
 
@@ -14,9 +15,9 @@ class JuniperHub(object):
         self.system_tray_widget.setToolTip("Juniper Hub")
 
         self.menu = QtWidgets.QMenu(self.parent_widget)
-        self.quit_action = self.menu.addAction("Quit")
+        #self.quit_action = self.menu.addAction("Quit")
         self.system_tray_widget.setContextMenu(self.menu)
-        self.quit_action.triggered.connect(self.shutdown)
+        #self.quit_action.triggered.connect(self.shutdown)
 
         self.system_tray_widget.show()
 

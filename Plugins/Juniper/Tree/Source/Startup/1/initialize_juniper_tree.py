@@ -1,5 +1,4 @@
 """
-:script
 :type startup
 :desc Initializes the juniper tree widget/tool for the current DCC
 """

@@ -1,5 +1,4 @@
 """
-:script
 :type install
 :desc Generates / updates the vscode workspace found under `//juniper/.vscode/Juniper.code-workspace`
 """

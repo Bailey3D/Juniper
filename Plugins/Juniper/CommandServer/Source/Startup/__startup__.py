@@ -1,7 +1,6 @@
 import juniper
 import juniper.widgets
 import juniper.plugins
-import juniper.framework.programs
 
 import juniper_command_server
 from juniper_command_server import command_server

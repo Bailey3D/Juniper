@@ -1,5 +1,5 @@
 {
-    "integration_type":"integrated",
+    "integration_type":"separate",
     "description": "Inbuilt module containing various developer specific functionality.",
     "internal": true
 }

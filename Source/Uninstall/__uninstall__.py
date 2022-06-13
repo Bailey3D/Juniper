@@ -1,5 +1,4 @@
 """
-:script
 :type uninstall
 :desc Uninstall the core juniper components
 """

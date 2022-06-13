@@ -1,5 +1,4 @@
 """
-:script
 :type startup
 :desc Runs all startup files in the startup folder hierarchies
 """

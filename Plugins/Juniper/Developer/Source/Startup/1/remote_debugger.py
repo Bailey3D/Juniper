@@ -1,5 +1,4 @@
 """
-:script
 :type startup
 :desc Attaches a PTVSD remote debugger to the port 7720
 """

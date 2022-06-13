@@ -79,10 +79,10 @@ def python_exe_path():
 
 
 def site_packages_dir():
-    import juniper.framework.versioning
+    import juniper.utilities.versioning
     return os.path.join(
         juniper.paths.root(),
-        f"lib\\external\\python{juniper.framework.versioning.python_version()}\\site-packages"
+        f"lib\\external\\python{juniper.utilities.versioning.python_version()}\\site-packages"
     )
 
 

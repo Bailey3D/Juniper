@@ -1,5 +1,4 @@
 /*
-:script
 :type startup
 :desc This is a hacky workaround to adding in a Qt based menu on Max startup
 :desc it seems like the security changes now remove any python/maxscript menus added during the base startup initialization

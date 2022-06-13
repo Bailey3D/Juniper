@@ -27,6 +27,13 @@ class QMenuWrapper(object):
     def __initialize_menu(self):
         raise NotImplementedError
 
+    @__initialize_menu.override("juniper_hub")
+    def _initialize_menu(self):
+        import juniper_hub.juniper_hub
+        menu = juniper_hub.juniper_hub.JuniperHub().menu
+        self.menu_object = menu
+        return menu
+
     @__initialize_menu.override("painter")
     def _initialize_menu(self):
         import substance_painter.ui

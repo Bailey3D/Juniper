@@ -1,5 +1,4 @@
 """
-:script
 :type install
 :desc Runs all tools initialization files in the install folders
 """

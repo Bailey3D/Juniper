@@ -5,7 +5,6 @@ import socket
 import textwrap
 
 import juniper.plugins
-import juniper.framework.programs
 
 import juniper_command_server.command_server
 

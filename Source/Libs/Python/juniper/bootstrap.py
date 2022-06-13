@@ -85,12 +85,13 @@ def install_pip_packages(force=False):
         # Setuptools can't be guarenteed to have been installed in all the host contexts
         # so install this first
         cmd = f""""{python_exe_path_resolved}" "{pip_whl_path}/pip" install setuptools -t {site_packages_dir}""".replace("\\", "/")
-        result = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+        _ = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
 
         # TODO~ We need a way to prompt the user of an error on pip install
-        cmd = f""""{python_exe_path_resolved}" "{pip_whl_path}/pip" install -r "{requirements_txt_path_resolved}" -t "{site_packages_dir}" """.replace("\\", "/")
-        result = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
-        #print(result.returncode, result.stdout, result.stderr)
+        cmd = f""""{python_exe_path_resolved}" "{pip_whl_path}/pip" install -r "{requirements_txt_path_resolved}" -t "{site_packages_dir}" """
+        cmd = cmd.replace("\\", "/")
+        _ = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+        #  print(result.returncode, result.stdout, result.stderr)
 
         requirements_hash(cached=False, update=True)
 

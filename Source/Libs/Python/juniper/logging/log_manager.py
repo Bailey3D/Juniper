@@ -1,6 +1,6 @@
 import juniper.types.framework.singleton
 import juniper.widgets as qt_utils
-from juniper.logging import q_log_entry, q_log_holder
+from juniper.logging.widgets import q_log_entry, q_log_holder
 
 
 class LogManager(object, metaclass=juniper.types.framework.singleton.Singleton):

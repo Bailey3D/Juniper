@@ -3,7 +3,6 @@ import os
 import juniper
 import juniper_dcc.scene
 import juniper.decorators
-import unreal.juniper
 import juniper.types.data.asset_interface
 import juniper.types.wrappers.type_wrapper
 import juniper.utilities.string as string_utils

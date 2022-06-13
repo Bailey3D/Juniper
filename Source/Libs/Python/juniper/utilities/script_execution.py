@@ -39,7 +39,6 @@ def run_file(file_path, plugin=None):
             globals_["__package__"] = os.path.dirname(file_path)
             globals_["__name__"] = "__main__"
             juniper_globals.set("__juniper_exec_file_path__", file_path)
-
             exec(open(file_path).read(), globals_)
 
 

@@ -5,6 +5,8 @@ Ie, instances of tool windows use 'inspect.getfile' which fails when created thr
 'juniper.utilities.script_execution.run_tool' due to the standalone tool module
 being seen as an in-built class. So we must cache the *actual* path to be retrieved later on in the classes creation
 """
+
+
 class __GlobalsManager(object):
     __instance__ = None
 
