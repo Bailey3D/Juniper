@@ -25,6 +25,11 @@ class Color(object):
         self._data = [juniper.math.saturate(x) for x in self._data]
 
     def _from_hex_value(self, hex_value):
+        """
+        Creates a colour from a hex value
+        :param <str:hex_value> The hex value to convert
+        :return <Color:color> The colour object
+        """
         hex_value = hex_value.lstrip('#')
         lv = len(hex_value)
         output = list(int(hex_value[i:i + lv // 3], 16) / 255.0 for i in range(0, lv, lv // 3))

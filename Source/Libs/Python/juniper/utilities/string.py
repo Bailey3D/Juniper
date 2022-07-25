@@ -1,5 +1,6 @@
 def snake_to_name(input):
-    """Convert a snake_based string into a friendly name
+    """
+    Convert a snake_based string into a friendly name
     :param <str:input> The input string
     :return <str:out> Formatted string
     """
@@ -26,7 +27,8 @@ def friendly_to_code(input_, preserve_case=False):
 
 
 def remove_substrings(target, *args):
-    """Remove a list of substrings from a target string
+    """
+    Remove a list of substrings from a target string
     :param <str:target> Target string to work on
     :param <*args:args> Substrings to remove
     :return <str:string> Cleaned string
@@ -38,7 +40,8 @@ def remove_substrings(target, *args):
 
 
 def remove_prefix(target, prefix):
-    """Removes a prefix from a target string
+    """
+    Removes a prefix from a target string
     :param <str:target> Target string to work on
     :param <str:prefix> Prefix to remove
     :return <str:string> Formatted string
@@ -49,7 +52,8 @@ def remove_prefix(target, prefix):
 
 
 def truncate(string, max_chars, do_ellipsis=False):
-    """Truncates a string to be of a max character count
+    """
+    Truncates a string to be of a max character count
     :param <str:string> The string to truncate
     :param <int:max_chars> Maximum amount of characters (including whitespaces)
     :param [<bool:do_ellipsis>] If true then a ".." is added to the end if the string is truncated

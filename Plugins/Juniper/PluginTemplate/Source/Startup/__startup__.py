@@ -1,5 +1,6 @@
 """
 :type startup
+:callbacks [startup]
 :desc This is an example of a startup script
 :desc This will be ran whenever Juniper is initialized - so long as the plugin is enabled!
 """

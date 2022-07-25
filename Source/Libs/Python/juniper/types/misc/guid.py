@@ -5,7 +5,8 @@ import secrets
 
 class Guid(object):
     def __init__(self, seed=None, guid=None):
-        """Generates a random guid string
+        """
+        Generates a random guid string
         :param [<object:seed>] The object to seed from - this is converted to a string and used
         :param [<str:guid>] Optional guid to force set as
         """
@@ -25,7 +26,8 @@ class Guid(object):
 
     @staticmethod
     def __generate_from_seed(seed):
-        """Generates a guid string from an input seed
+        """
+        Generates a guid string from an input seed
         :param <str:seed> The seed for the guid
         :return <str:guid> The guid string
         """
@@ -38,7 +40,8 @@ class Guid(object):
 
     @staticmethod
     def __generate_random():
-        """Generates a guid string at random
+        """
+        Generates a guid string at random
         :return <str:guid> The guid string
         """
         return Guid.__generate_from_seed(secrets.token_hex(nbytes=16))

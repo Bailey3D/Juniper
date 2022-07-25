@@ -1,6 +1,3 @@
-"""
-Class used for interfacing with asset metadata files (Ie, .geometry, .material, etc)
-"""
 import json
 import os
 
@@ -9,6 +6,11 @@ import juniper.types.misc.guid
 
 class AssetInterface(object):
     def __init__(self, asset_path, create_if_invalid=False):
+        """
+        Class used for interfacing with asset metadata files (Ie, .geometry, .material, etc)
+        :param <str:asset_path> The path to the asset file
+        :param [<bool:create_if_invalid>] If True, then the file will be created if it doesn't exist
+        """
         self.__asset_path = asset_path
         self.__create_if_invalid = create_if_invalid
 
@@ -162,10 +164,16 @@ class AssetInterface(object):
 
     @property
     def asset_guid(self):
+        """
+        :return <str:guid> The guid as stored in the asset json
+        """
         return self.get_metadata_key("asset_guid")
 
     @property
     def revision_guid(self):
+        """
+        :return <str:guid> The revision guid as stored in the asset json
+        """
         if(not self.get_metadata_key("revision_guid")):
             self.update_revision_guid()
         return self.get_metadata_key("revision_guid")

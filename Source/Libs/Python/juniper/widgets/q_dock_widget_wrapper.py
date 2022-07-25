@@ -6,7 +6,10 @@ from qtpy import QtWidgets, QtCore
 import juniper.widgets
 
 
-def create_dock_widget(child_widget, identifier="", title="Dock", minimum_width=None, allowed_areas=None, features=None, stylesheet=None, close_event=None):
+def create_dock_widget(
+    child_widget, identifier="", title="Dock", minimum_width=None,
+    allowed_areas=None, features=None, stylesheet=None, close_event=None
+):
     """
     Adds a Qt based dock widget to the current application (Qt support dependent)
     :param <QWidget:child_widget> The widget to add to the dock
@@ -28,6 +31,7 @@ def create_dock_widget(child_widget, identifier="", title="Dock", minimum_width=
     if(close_event):
         setattr(output, "nativeCloseEvent", output.closeEvent)
         setattr(output, "overrideCloseEvent", close_event)
+
         def __closeEventWrapper(event):
             output.overrideCloseEvent(event)
             output.nativeCloseEvent(event)

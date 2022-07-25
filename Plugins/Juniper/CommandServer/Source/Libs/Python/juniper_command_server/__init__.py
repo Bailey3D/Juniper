@@ -4,7 +4,8 @@ Base module for the Juniper Command Server plugin
 import socket
 import textwrap
 
-import juniper.plugins
+import juniper.engine
+import juniper.engine.types.plugin
 
 import juniper_command_server.command_server
 
@@ -15,7 +16,7 @@ def listen_port(program_name):
     :param <str:program_name> The name of the program to get the port for
     :return <int:port> Id of the port - None if it is not set in the config
     """
-    supported_hosts = juniper.supported_hosts()
+    supported_hosts = juniper.engine.JuniperEngine().supported_hosts
     if(program_name in supported_hosts):
         return 9810 + supported_hosts.index(juniper.program_context)
     return None

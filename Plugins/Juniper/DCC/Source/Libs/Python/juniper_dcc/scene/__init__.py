@@ -51,6 +51,15 @@ def _get_current():
     # just without any file IO logic
     return SceneWrapper(current_scene_path)
 
+
+@get_current.override("blender")
+def _get_current():
+    import bpy
+    path = bpy.data.filepath
+    if(path and os.path.isfile(path)):
+        return SceneWrapper(path)
+    return None
+
 # --------------------------------------------------------------
 
 

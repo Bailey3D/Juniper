@@ -4,64 +4,102 @@
 import textwrap
 
 import juniper
-import juniper.plugins
+import juniper.engine
+import juniper.engine.types.plugin
 import juniper.types.framework.script
 import juniper.types.framework.singleton
 import juniper.utilities.string as string_utils
 import juniper.widgets.q_menu_wrapper
 
 
+class __MenuGroup(object):
+    def __init__(self, group_name):
+        self.group_name = group_name
+        self.macros = []
+        self.additional_macros_grouped = {}
+        self.core_macros = []
+
+    def add_macro(self, macro):
+        if(macro not in self.macros):
+            self.macros.append(macro)
+
+    def add_core_macro(self, macro):
+        if(macro not in self.core_macros):
+            self.core_macros.append(macro)
+
+    def add_grouped_macro(self, macro, macro_group):
+        if(macro_group not in self.additional_macros_grouped):
+            self.additional_macros_grouped[macro_group] = []
+        if(macro not in self.additional_macros_grouped[macro_group]):
+            self.additional_macros_grouped[macro_group].append(macro)
+
+
 class JuniperMenu(metaclass=juniper.types.framework.singleton.Singleton):
     def __init__(self):
         self.program_context = juniper.program_context
 
-        # TODO~ This should be read from the file metadata
-        self.include_hosts = ["max", "unreal", "blender", "designer", "painter", "juniper_hub"]
-        # self.exclude_hosts = ["houdini"]
+        #
+        self.supported_hosts = [
+            "blender",
+            "designer",
+            "juniper_hub",
+            "max",
+            "painter",
+            "unreal",
+        ]
 
-        if(self.program_context in self.include_hosts):
-            self.menu_object = juniper.widgets.q_menu_wrapper.QMenuWrapper("juniper", "Juniper")
-            self.menu = self.menu_object.menu_object
-            self.menus = [self.menu]
+        if(juniper.program_context in self.supported_hosts):
+            #self.menu_object = juniper.widgets.q_menu_wrapper.QMenuWrapper("juniper", "Juniper")
+            #self.menu = self.menu_object.menu_object
+            #self.menus = [self.menu]
+            self.menus = []
 
-            # add all "integrated" macros
-            integrated_macros = set()
-            for plugin in juniper.plugins.PluginManager():
-                if(plugin.enabled and plugin.integration_type == "integrated"):
-                    for macro in plugin.macros:
-                        integrated_macros.add(macro)
-            self.append_menu(self.menu, branches=None, macros=integrated_macros)
+            engine = juniper.engine.JuniperEngine()
 
-            # add all "separate" macros / groups
-            # self.menu_object.add_separator()
-            for plugin in juniper.plugins.PluginManager():
-                if(plugin.enabled and plugin.integration_type == "separate"):
-                    branches = self.append_menu(self.menu, branches=None, macros=plugin.macros, submenu=plugin.display_name)
-                    if(len(plugin.core_macros)):
-                        self.menu_object.add_separator()
-                        self.append_menu(self.menu, branches=branches, macros=plugin.core_macros, submenu=plugin.display_name)
-                        '''self.menu_object.add_separator()
-                        for i in plugin.core_macros:
-                            self.add_action(self.menu, i)'''
+            menu_groups = {
+                "Juniper": []  # Add "Juniper" first to ensure the menu is added first
+            }
 
-            # add all "standalone" macros / groups as new menus
-            for plugin in juniper.plugins.PluginManager():
-                if(plugin.enabled and plugin.integration_type == "standalone"):
-                    plugin_menu = juniper.widgets.q_menu_wrapper.QMenuWrapper(plugin.name, plugin.display_name)
-                    self.append_menu(plugin_menu.menu_object, branches=None, macros=plugin.macros)
-                    self.menus.append(plugin_menu.menu_object)
-                    if(len(plugin.core_macros)):
-                        plugin_menu.add_separator()
-                        for i in plugin.core_macros:
-                            self.add_action(plugin_menu.menu_object, i)
+            for i in engine.tools:
+                top_level_group = i.category.split("|")[0]
+                if(top_level_group not in menu_groups):
+                    menu_groups[top_level_group] = []
+                menu_groups[top_level_group].append(i)
 
-            # core macros
-            self.menu_object.add_separator()
+            for i in menu_groups:
+                menu_object = juniper.widgets.q_menu_wrapper.QMenuWrapper(i, i)
+                menu = menu_object.menu_object
+                self.menus.append(menu)
 
-            for i in juniper.types.framework.script.ScriptManager():
-                if(i.type == "tool" and i.plugin_name == "juniper" and i.is_core):
-                    self.add_action(self.menu, i)
+                # 1) Integrated
+                integrated_scripts = []
+                for script in menu_groups[i]:
+                    if(not script.is_core and script.integration_type != "separate"):
+                        integrated_scripts.append(script)
+                integrated_scripts_sorted = sorted(integrated_scripts, key=lambda x: x.category + "|z_" + x.display_name)
+                self.append_menu(menu, branches=None, macros=integrated_scripts_sorted)
 
+                # 2) Separate
+                separate_scripts = []
+                for script in menu_groups[i]:
+                    if(script.integration_type == "separate" and not script.is_core):
+                        separate_scripts.append(script)
+                separate_scripts_sorted = sorted(separate_scripts, key=lambda x: x.category + "|z_" + x.display_name)
+                if(len(separate_scripts_sorted)):
+                    menu_object.add_separator()
+                self.append_menu(menu, branches=None, macros=separate_scripts_sorted)
+
+                # 3) Core
+                core_scripts = []
+                for script in menu_groups[i]:
+                    if(script.is_core):
+                        core_scripts.append(script)
+                core_scripts_sorted = sorted(core_scripts, key=lambda x: "z|z_" + x.display_name)
+                if(len(core_scripts_sorted)):
+                    menu_object.add_separator()
+                self.append_menu(menu, branches=None, macros=core_scripts_sorted)
+
+            #
             if(self.program_context == "max"):
                 import pymxs
                 pymxs.runtime.execute("global g_juniperMenus")
@@ -76,11 +114,15 @@ class JuniperMenu(metaclass=juniper.types.framework.singleton.Singleton):
         """
         action = None
 
-        if(self.program_context not in ["unreal"]):
+        if(self.program_context not in ["unreal", "blender"]):
             action = parent.addAction(macro.display_name)
             action.triggered.connect(macro.run)
-            action.setToolTip(macro.tooltip)
+            action.setToolTip(macro.summary)
+        elif(self.program_context == "blender"):
+            pass  # TODO! Blender: Actions for blender menus
         elif(self.program_context == "unreal"):
+            # TODO~ There's some issue with the unreal menu builder which messes up the order of 
+            # adding actions
             import unreal
             action = unreal.ToolMenuEntry(
                 name=macro.display_name,
@@ -89,8 +131,8 @@ class JuniperMenu(metaclass=juniper.types.framework.singleton.Singleton):
             )
             action.set_label(string_utils.snake_to_name(macro.display_name))
             command_string = textwrap.dedent(f"""
-                import juniper.types.framework.script
-                script = juniper.types.framework.script.ScriptManager().find("{macro.name}", plugin_name="{macro.plugin_name}")
+                import juniper.engine
+                script = juniper.engine.JuniperEngine().find_tool("{macro.name}")
                 if(script):
                     script.run()
             """)
@@ -101,39 +143,39 @@ class JuniperMenu(metaclass=juniper.types.framework.singleton.Singleton):
             parent.add_menu_entry("Juniper", action)
         return action
 
-    def append_menu(self, parent, branches=None, macros=[], submenu=None):
+    def append_menu(self, parent, branches=None, macros=[]):
         """Add a list of macros to the menu
         :param [<dict:branches>] Current branches dict
         :param [<[Macros]:macros>] The macros to add
         """
+        if(self.program_context == "blender"):  # TODO!
+            return {"_menu":parent}
         if(not branches):
             branches = {"_menu": parent}
 
         for macro in macros:
             prev_key = branches
-            if(submenu):
-                base_category = submenu + "|" + macro.category
-            else:
-                base_category = macro.category
 
-            if(macro.category == "Core"):
-                base_category = submenu
+            if(macro.is_core):
+                base_category = ""
+            else:
+                base_category = macro.category.split("|", 1)[1]
 
             category_split = base_category.split("|")
-            category_split = category_split[-1:] if category_split[0] == "juniper" else category_split
             for subcategory in category_split:
                 display_name = string_utils.snake_to_name(subcategory)
 
-                if(subcategory not in prev_key):
+                if(subcategory != ""):
+                    if(subcategory not in prev_key):
 
-                    if(self.program_context == "unreal"):
-                        # Unreal is non-qt based
-                        prev_key[subcategory] = {"_menu": prev_key["_menu"].add_sub_menu("Tools", subcategory, display_name, display_name)}
-                    else:
-                        # Qt based menus
-                        prev_key[subcategory] = {"_menu": prev_key["_menu"].addMenu(display_name)}
+                        if(self.program_context == "unreal"):
+                            # Unreal is non-qt based
+                            prev_key[subcategory] = {"_menu": prev_key["_menu"].add_sub_menu("Tools", subcategory, display_name, display_name)}
+                        else:
+                            # Qt based menus
+                            prev_key[subcategory] = {"_menu": prev_key["_menu"].addMenu(display_name)}
 
-                prev_key = prev_key[subcategory]
+                    prev_key = prev_key[subcategory]
 
                 # add tool
                 if(subcategory == category_split[-1]):

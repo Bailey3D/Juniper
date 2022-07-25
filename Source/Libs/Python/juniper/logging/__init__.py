@@ -4,7 +4,9 @@ import juniper.logging.log_manager
 
 
 class _LogEntry(object):
-    """A log entry object - contains all data on a single log entry"""
+    """
+    A log entry object - contains all data on a single log entry
+    """
     def __init__(
         self,
         log_text="",
@@ -38,18 +40,23 @@ class Log(object):
 
     @property
     def holding(self):
-        """:return <bool:holding> True if we're currently holding log outputs - else False"""
+        """
+        :return <bool:holding> True if we're currently holding log outputs - else False
+        """
         return self._holding
 
     def hold(self):
-        """Begin holding log entries - supresses outupt until released"""
+        """
+        Begin holding log entries - supresses outupt until released
+        """
         if(not self.holding):
             self._holding = True
 
     # -------------------------------------------------------------------------
 
     def __get_num_held_entries_of_type(self, type_):
-        """Gets the number of held log entries of a given type
+        """
+        Gets the number of held log entries of a given type
         :param <str:type_> The type of entries to get the count for
         :return <int:count> Number of held entries of the input type
         """
@@ -61,28 +68,32 @@ class Log(object):
 
     @property
     def num_held_errors(self):
-        """Gets the number of held errors
+        """
+        Gets the number of held errors
         :return <int:count> Number of held errors
         """
         return self.__get_num_held_entries_of_type("Error")
 
     @property
     def num_held_warnings(self):
-        """Gets the number of held errors
+        """
+        Gets the number of held errors
         :return <int:count> Number of held warnings
         """
         return self.__get_num_held_entries_of_type("Warning")
 
     @property
     def num_held_infos(self):
-        """Gets the number of held errors
+        """
+        Gets the number of held errors
         :return <int:count> Number of held infos
         """
         return self.__get_num_held_entries_of_type("Info")
 
     @property
     def num_held_successes(self):
-        """Gets the number of held errors
+        """
+        Gets the number of held errors
         :return <int:count> Number of held successes
         """
         return self.__get_num_held_entries_of_type("Success")
@@ -90,7 +101,8 @@ class Log(object):
     # -------------------------------------------------------------------------
 
     def release(self, success_text="", warning_text="", error_text="", info_text="", force_silent=True):
-        """Releases log holding and outputs all held outputs
+        """
+        Releases log holding and outputs all held outputs
         :param [<str:release_text>] Optional release text for the batch output
         :param [<bool:force_silent>] If True then all popups will be suppressed - except for the release popup
         :return <bool:success> True if logs were successfully released - else False

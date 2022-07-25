@@ -7,21 +7,27 @@ import juniper.paths
 
 
 class QStandaloneApp(QtWidgets.QApplication):
-    """A Juniper base QApplication with custom styling"""
     def __init__(self):
+        """
+        A Juniper base QApplication with custom styling
+        """
         super(QStandaloneApp, self).__init__(sys.argv)
 
         self.set_icon(os.path.join(juniper.paths.root(), "Resources\\Icons\\Standard\\app_default.png"))
         self.apply_stylesheet()
 
     def set_icon(self, icon_path):
-        """Set the application icon"""
+        """
+        Set the application icon
+        :param <str:icon_path> Absolute path to the icon
+        """
         self.icon = QtGui.QIcon()
         self.icon.addFile(icon_path)
         self.setWindowIcon(self.icon)
 
     def apply_stylesheet(self, stylesheet_path=None):
-        """Initialize the styling for the application
+        """
+        Initialize the styling for the application
         :param [<str:stylesheet_path>] Absolute path to the stylesheet to apply
         """
         if(not stylesheet_path):
@@ -33,7 +39,8 @@ class QStandaloneApp(QtWidgets.QApplication):
 
     @property
     def main_window(self):
-        """Searches / returns the first QMainWindow for the application
+        """
+        Searches / returns the first QMainWindow for the application
         :return <QMainWindow:main_window> The main window if found - else None
         """
         for i in self.topLevelWidgets():

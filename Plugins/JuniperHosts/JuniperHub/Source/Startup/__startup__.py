@@ -1,5 +1,6 @@
 """
 :type startup
+:callbacks [startup]
 :desc Initializes the JuniperHub application in the system tray
 """
 import juniper.widgets

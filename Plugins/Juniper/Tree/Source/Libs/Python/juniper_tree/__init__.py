@@ -107,7 +107,7 @@ class JuniperTree(object):
 
                         macro_button = button_class()
                         macro_button.setText(macro.display_name)
-                        macro_button.setToolTip(macro.tooltip)
+                        macro_button.setToolTip(macro.summary)
                         macro_button.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
                         macro_button.setFixedHeight(ConfigManager().button_height)
                         macro_button.clicked.connect(macro.run)

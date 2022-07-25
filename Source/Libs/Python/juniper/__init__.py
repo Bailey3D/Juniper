@@ -1,22 +1,8 @@
 import juniper_globals
+
+
+# stubs for global variables
+# these are initialized in JuniperEngine
+# and are set as properties on the module
 program_context = juniper_globals.get("program_context")
-
-import sys
-
-
-def initialize_log():
-    import juniper.logging
-    log = juniper.logging.Log(plugin="Juniper")
-    setattr(sys.modules[__name__], "log", log)
-
-
-def supported_hosts():
-    """
-    :return <[str]:hosts> The names of all supported hosts (in the "Plugins\\JuniperHosts\\" directory)
-    """
-    import juniper.plugins
-    output = []
-    for i in juniper.plugins.PluginManager():
-        if(i.is_host_plugin):
-            output.append(i.name)
-    return sorted(output)
+log = juniper_globals.get("log")

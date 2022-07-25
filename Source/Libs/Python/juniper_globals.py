@@ -20,10 +20,20 @@ GlobalsManager = __GlobalsManager.__instance__
 
 
 def get(key):
+    """
+    Gets a Juniper global
+    :param <str:key> The key to get
+    :return <object:value> The value
+    """
     if(key in GlobalsManager.GLOBALS):
         return GlobalsManager.GLOBALS[key]
     return None
 
 
 def set(key, value):
+    """
+    Sets a Juniper global
+    :param <str:key> The name of the key to set
+    :param <object:value> The vaule to set
+    """
     GlobalsManager.GLOBALS[key] = value

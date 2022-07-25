@@ -6,7 +6,8 @@ import json
 
 
 def get_property(file_path, value, check_local=True):
-    """Gets a property in a json file multi layer deep\n
+    """
+    Gets a property in a json file multi layer deep\n
     :param <str:file_path> Path to the json file\n
     :param <str:value> The value to search for (Ie, "parent.child")\n
     :return <value:out> Value as stored in the json file, "" if not found\n
@@ -35,7 +36,8 @@ def get_property(file_path, value, check_local=True):
 
 
 def has_property(file_path, value):
-    """Returns whether a json file contains a property\n
+    """
+    Returns whether a json file contains a property\n
     :path <str:file_path> The value to search for (Ie, "parent.child")\n
     :param <str:value> The value to search for (Ie, "parent.child")\n
     :return <bool:out> True if found, false if not\n
@@ -53,7 +55,8 @@ def has_property(file_path, value):
 
 
 def get_property_recursive(file_paths, value):
-    """The same as get_property() but searches recursively through a list of json files until found or complete\n
+    """
+    The same as get_property() but searches recursively through a list of json files until found or complete\n
     :param <[str]:file_paths> List of file paths to search\n
     :param <str:value> The value to search for (Ie, "parent.child")\n
     :return <value:out> Value as stored in the json file, "" if not found\n
@@ -65,7 +68,8 @@ def get_property_recursive(file_paths, value):
 
 
 def set_property(json_data, property_name, property_value):
-    """Sets a property in a json object\n
+    """
+    Sets a property in a json object\n
     :param <jsonobject:json_data> The json data to set it on\n
     :param <str:property_name> The name of the property to set\n
     :param <str:property_value> The value of the property to set\n

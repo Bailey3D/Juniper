@@ -2,7 +2,8 @@ import juniper
 
 
 def run_standalone(dialog_class, title=None, position=None):
-    """Runs a juniper tool as a standalone dialog
+    """
+    Runs a juniper tool as a standalone dialog
     :param <class:dialog_class> Dialog class of the tool, inherits QWidget
     :param [<str:title>] Title of the dialog
     :return <QDialog:dialog> The created dialog, contains the child tool widget nested inside

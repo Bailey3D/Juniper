@@ -1,7 +1,7 @@
 import functools
 
 import juniper.types.framework.singleton
-import juniper.plugins
+import juniper.engine.types.plugin
 import juniper.paths
 import juniper.utilities.json as json_utils
 

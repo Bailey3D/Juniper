@@ -78,7 +78,9 @@ class CommandServer(metaclass=juniper.types.framework.singleton.Singleton):
         self.bind_tick()
 
     def close(self):
-        """Close the listen server"""
+        """
+        Close the listen server
+        """
         self.server_socket.close()
 
     # ----------------------------------------------------------------
@@ -117,7 +119,9 @@ class CommandServer(metaclass=juniper.types.framework.singleton.Singleton):
         pass
 
     def tick(self):
-        """Update the listen server and check for calls"""
+        """
+        Update the listen server and check for calls
+        """
         if(self.initialized):
             readable, writable, errored = select.select(self.read_list, [], [])
             for s in readable:

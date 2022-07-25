@@ -1,8 +1,6 @@
 """
 Math based helper functions
 """
-#from juniper.types.math.vector import Vector2, Vector3, Vector4
-#from juniper.types.math.color import Color
 
 
 def clamp(number, min_, max_):

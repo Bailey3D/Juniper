@@ -8,7 +8,8 @@ import juniper.utilities.string as string_utils
 
 class QLogEntry(QtWidgets.QWidget):
     def __init__(self, info_string, info_type, owning_plugin, persistent=False):
-        """A single log entry widget - added as a child to the log holder
+        """
+        A single log entry widget - added as a child to the log holder
         :param <str:info_string> The info / description string for this log entry
         :param <str:info_type> The type of log this is, current options include ["Info", "Success", "Error", "Warning"]. Icons are retrieved from this name.
         :param <str:owning_plugin> The name of the owning plugin (Ie, "Juniper"). Can be overriden for individual tools.

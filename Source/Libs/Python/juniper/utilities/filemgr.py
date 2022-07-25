@@ -18,14 +18,16 @@ kernel32 = ctypes.WinDLL('kernel32')
 
 
 def remove_readonly(src):
-    """Remove the read only flag froma path
+    """
+    Remove the read only flag froma path
     :param <str:src> Source file/directory
     """
     os.chmod(src, stat.S_IWRITE)
 
 
 def resolve_path(target):
-    """Return the real path for an input path
+    """
+    Return the real path for an input path
     Currently this has to be used as PYthon3.7 doesn't return the correctly
     resolved path for subst drives when using os.path.realpath
     :param <str:target> Target path to resolve
@@ -35,7 +37,8 @@ def resolve_path(target):
 
 
 def show_in_explorer(path):
-    """Reveal a file in windows explorer
+    """
+    Reveal a file in windows explorer
     :param <str:path> The absolute path to the file
     """
     if(os.path.isdir(path)):
@@ -45,7 +48,8 @@ def show_in_explorer(path):
 
 
 def makedir(path):
-    """Creates a folder if it doesn't already exist\n
+    """
+    Creates a folder if it doesn't already exist\n
     :param <str:path> The path of the directory to make\n
     """
     if(not os.path.isdir(path)):
@@ -53,7 +57,8 @@ def makedir(path):
 
 
 def makesubdirs(folder_dir, *subdirs):
-    """Makes a list of subdirectories inside an input directory\n
+    """
+    Makes a list of subdirectories inside an input directory\n
     :param <str:folder_dir> The parent directory\n
     :param <[str]:subdirs> Names of the child subdirectories to create\n
     """
@@ -68,7 +73,8 @@ def makesubdirs(folder_dir, *subdirs):
 
 
 def pick_folder(title="Pick Folder..", start="C:\\"):
-    """Open a basic Qt based folder picker dialog\n
+    """
+    Open a basic Qt based folder picker dialog\n
     :param <str:title> Title of the folder picker window\n
     :param <str:start> Starting directory of the folder picker\n
     :return <str:path> The pack to the picked directory\n
@@ -86,7 +92,8 @@ def pick_folder(title="Pick Folder..", start="C:\\"):
 
 
 def pick_file(title="Pick File..", start="C:\\", file_types=""):
-    """Open a basic Qt based file picker dialog\n
+    """
+    Open a basic Qt based file picker dialog\n
     :param <str:title> Title of the file picker window\n
     :param <str:start> Starting directory of the file picker\n
     :param <str:file_types> Standard windows file type constructor (Ie, "Text Files (*.txt), *.txt"\n
@@ -104,7 +111,8 @@ def pick_file(title="Pick File..", start="C:\\", file_types=""):
 
 
 def pick_files(title="Pick Files..", start="C:\\", file_types=""):
-    """Open a basic Qt based file picker dialog\n
+    """
+    Open a basic Qt based file picker dialog\n
     :param <str:title> Title of the file picker window\n
     :param <str:start> Starting directory of the file picker\n
     :param <str:file_types> Standard windows file type constructor (Ie, "Text Files (*.txt), *.txt"\n
@@ -122,7 +130,8 @@ def pick_files(title="Pick Files..", start="C:\\", file_types=""):
 
 
 def symlink(src, dest):
-    """Create a symlink between 2 paths\n
+    """
+    Create a symlink between 2 paths\n
     :param <str:src> Source file path\n
     :param <str:dest> Destination file path\n
     """
@@ -198,3 +207,11 @@ def create_junction(src, dest):
             juniper.log.error(f"Junction Creation Failed: {error}", traceback_stack=tb)
     else:
         juniper.log.info("Junction Creation Created Successfully")
+
+
+def remove_read_only(path):
+    """
+    Removes the read only flag from a file
+    :param <str:path> The path to edit
+    """
+    os.chmod(path, stat.S_IWRITE)

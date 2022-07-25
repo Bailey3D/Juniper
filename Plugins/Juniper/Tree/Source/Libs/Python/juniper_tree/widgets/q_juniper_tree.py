@@ -110,7 +110,7 @@ class QJuniperTreeWidget(QtWidgets.QWidget):
             macros_to_add = sorted(macros_to_add, key=lambda x: x.name.lower())
             for macro in macros_to_add:
                 item = QtWidgets.QListWidgetItem(macro.display_name)
-                item.setToolTip(macro.tooltip)
+                item.setToolTip(macro.summary)
                 setattr(item, "macro", macro)
                 self.q_search_list.addItem(item)
             self.q_search_list.show()

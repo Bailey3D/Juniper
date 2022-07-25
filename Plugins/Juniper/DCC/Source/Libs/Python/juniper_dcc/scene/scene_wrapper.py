@@ -46,6 +46,11 @@ class SceneWrapper(juniper.types.wrappers.type_wrapper.TypeWrapper):
         import substance_painter.project
         return substance_painter.project.file_path()
 
+    @get_path.override("blender")
+    def _get_path(self):
+        import bpy
+        return bpy.data.filepath
+
     # -------------------------------------------------------
 
     @property
@@ -76,6 +81,10 @@ class SceneWrapper(juniper.types.wrappers.type_wrapper.TypeWrapper):
         if(output not in ("", None)):
             return output
         return None
+
+    @get_name.override("blender")
+    def _get_name(self):
+        return os.path.basename(self.path).split(".")[0]
 
     # -------------------------------------------------------
 
@@ -123,7 +132,7 @@ class SceneWrapper(juniper.types.wrappers.type_wrapper.TypeWrapper):
         Closes the current scene
         :param [<bool:force>] If True then the scene will be force closed without saving - else a save will be attempted
         """
-        raise NotImplemented
+        raise NotImplementedError
 
     @close.override("painter")
     def _close(self, force=False):

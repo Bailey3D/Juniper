@@ -8,6 +8,9 @@ import juniper.widgets as qt_utils
 
 class QLogHolder(QtWidgets.QWidget):
     def __init__(self):
+        """
+        Container class / widget used for displaying / holding log entries
+        """
         super(QLogHolder, self).__init__(parent=qt_utils.get_dcc_main_window())
 
         self.setWindowFlags(QtCore.Qt.Tool | QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)
@@ -39,7 +42,8 @@ class QLogHolder(QtWidgets.QWidget):
         self.timer_update_geometry.start(self.timer_update_geometry_interval_seconds * 1000)
 
     def addWidget(self, widget):
-        """Adds a widget to the holder - this should only be log entries!
+        """
+        Adds a widget to the holder - this should only be log entries!
         :param <QLogEntry:widget> The widget to add
         """
         self._layout.addWidget(widget)
@@ -48,7 +52,10 @@ class QLogHolder(QtWidgets.QWidget):
         self.refresh()
 
     def sizeHint(self):
-        """Overrides sizeHint to take into account the contents"""
+        """
+        Overrides sizeHint to take into account the contents
+        :return <QSize:size> The size hint
+        """
         width = 0
         height = 0
 
@@ -62,7 +69,9 @@ class QLogHolder(QtWidgets.QWidget):
         return QtCore.QSize(width, height)
 
     def refresh(self):
-        """Updates the log holder and contents"""
+        """
+        Updates the log holder and contents
+        """
         # check for outdated widgets
         current_time = datetime.datetime.now()
         num_deleted = 0
@@ -86,7 +95,9 @@ class QLogHolder(QtWidgets.QWidget):
         self.refresh_position(force=True)
 
     def refresh_position(self, force=False):
-        """Updates the log holder widget to be in the bottom right of the main window"""
+        """
+        Updates the log holder widget to be in the bottom right of the main window
+        """
         if(not self.__have_cached_parent_hwnd_data):
             self.__dwmapi = ctypes.WinDLL("dwmapi")
             self.__parent_hwnd = qt_utils.get_dcc_hwnd()

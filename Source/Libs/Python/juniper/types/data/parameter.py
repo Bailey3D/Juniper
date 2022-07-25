@@ -5,7 +5,9 @@ import juniper.types.framework.singleton
 
 
 class ParameterTypes(Enum):
-    """Enum containing the names of all valid parameter types"""
+    """
+    Enum containing the names of all valid parameter types
+    """
     unknown = 0
     float = 1
     float2 = 2
@@ -20,9 +22,15 @@ class ParameterTypes(Enum):
 
 
 class ParameterManager(object, metaclass=juniper.types.framework.singleton.Singleton):
-    """Singleton manager class for parameters"""
+    """
+    Singleton manager class for parameters
+    """
+
     def get_parameter_type(self, value):
-        """Takes an input parameter of X type and finds the type"""
+        """
+        Takes an input parameter of X type and finds the type
+        :param <object:value> The value to get the type for
+        """
         if(type(value) in [list, tuple]):
             if(all(isinstance(x, int) for x in value)):
                 type_ = "int"
@@ -43,8 +51,17 @@ class ParameterManager(object, metaclass=juniper.types.framework.singleton.Singl
 
 
 class Parameter(object):
-    """Class for a generic parameter type"""
     def __init__(self, name="", description="", value="", default="", min="", max="", group=""):
+        """
+        Class for a generic parameter type
+        :param [<str:name>] The name of the parameter
+        :param [<str:description>] Description of the parameter
+        :param [<object:value>] The value to set (must be JSON serializeable)
+        :param [<object:default>] The default value (must be JSON serializeable)
+        :param [<object:min>] The minimum value (where applicable - Ie, floats)
+        :param [<object:max>] The maximum value (where applicable - Ie, floats)
+        :param [<str:group>] The name of the group for this parameter (Ie, for parameter editors)
+        """
         self.name = name
         self.value = value
         self.description = description
@@ -55,12 +72,18 @@ class Parameter(object):
     @property
     @functools.lru_cache()
     def type(self):
-        """get the type for this parameter fro the rest of its stored data"""
+        """
+        get the type for this parameter fro the rest of its stored data
+        """
         return ParameterManager().get_parameter_type(self.value)
 
     @staticmethod
     def from_dict(data):
-        """generate a parameter from an input data dict"""
+        """
+        generate a parameter from an input data dict
+        :param <dict:data> The dict to convert
+        :return <Parameter:param> The dict as a parameter
+        """
         return Parameter(
             name=data["name"] if "name" in data else "",
             description=data["description"] if "description" in data else "",

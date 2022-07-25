@@ -4,15 +4,17 @@ from juniper.logging.widgets import q_log_entry, q_log_holder
 
 
 class LogManager(object, metaclass=juniper.types.framework.singleton.Singleton):
-    """Manager class used for various logging tasks"""
     def __init__(self):
-        """"""
+        """
+        Manager class used for various logging tasks
+        """
         self._q_log_holder = None
         self.main_window = qt_utils.get_dcc_main_window()
 
     @property
     def log_holder_widget(self):
-        """Gets the current QLogHolder widget, creates it if it doesn't already exist
+        """
+        Gets the current QLogHolder widget, creates it if it doesn't already exist
         :return <QLogHolder:log_holder> The log holder widget
         """
         if(not self._q_log_holder):
@@ -21,7 +23,8 @@ class LogManager(object, metaclass=juniper.types.framework.singleton.Singleton):
         return self._q_log_holder
 
     def add_log_entry(self, info_string, info_type, owning_module="Juniper", persistent=False):
-        """Adds a new log entry
+        """
+        Adds a new log entry
         :param <str:info_string> The info / description string for this log entry
         :param <str:info_type> The type of log this is, current options include ["Info", "Success", "Error", "Warning"]
         :param [<str:owning_module>] The name of the owning module (Ie, "Juniper"). Can be overriden for individual tools.

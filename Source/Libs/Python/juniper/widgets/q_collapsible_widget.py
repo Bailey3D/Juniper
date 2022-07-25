@@ -95,8 +95,20 @@ class _QTitleFrame(QtWidgets.QFrame):
 
 
 class QCollapsibleWidget(QtWidgets.QWidget):
-    """A collapsible QWidget"""
-    def __init__(self, parent=None, title=None, collapsed=True, tint=None, show_border=True, height=DEFAULT_HEIGHT, tab_content=False, tab_multiplier=1.0):
+    def __init__(
+        self, parent=None, title=None, collapsed=True, tint=None, show_border=True,
+        height=DEFAULT_HEIGHT, tab_content=False, tab_multiplier=1.0
+    ):
+        """
+        A collapsible QWidget
+        :param [<QWidget:parent>] The parent widget
+        :param [<str:title>] The title for this widget
+        :param [<bool:collapsed>] If True then the widget will be collapsed
+        :param [<bool:show_border>] If True then the widget border will be shown
+        :param [<int:height>] The height of the clickable section
+        :param [<bool:tab_content>] Should child widgets be indented?
+        :param [<float:tab_multiplier>] Multiplier applied to the tab width
+        """
         super(QCollapsibleWidget, self).__init__()
         parent.addWidget(self)
 
@@ -137,10 +149,18 @@ class QCollapsibleWidget(QtWidgets.QWidget):
         QtCore.QObject.connect(self._q_title_frame, QtCore.SIGNAL("clicked()"), self.toggleCollapsed)
 
     def set_title(self, title):
+        """
+        Sets the title
+        :param <str:title> The title for the widget
+        """
         self._title = title
         self._q_title_frame._set_title(title)
 
     def addLayout(self, layout):
+        """
+        Adds a child layout to this widget
+        :param <QLayout:layout> The layout to add
+        """
         self._q_content_layout.addLayout(layout)
 
     def addWidget(self, widget, to_title=False):
@@ -155,13 +175,22 @@ class QCollapsibleWidget(QtWidgets.QWidget):
             self._q_content_layout.addWidget(widget)
 
     def expand(self):
+        """
+        Expands this widget
+        """
         self._set_collapsed(False)
 
     def collapse(self):
+        """
+        Collapses this widget
+        """
         self._set_collapsed(True)
 
     @property
     def collapsed(self):
+        """
+        :return <bool:collapsed> Returns True if this widget is currently collapsed - else False
+        """
         return self._collapsed
 
     def _set_collapsed(self, collapsed):
@@ -174,5 +203,7 @@ class QCollapsibleWidget(QtWidgets.QWidget):
 
     @property
     def num_children(self):
-        """:return <int:num_children> The number of child widgets added to this widget"""
+        """
+        :return <int:num_children> The number of child widgets added to this widget
+        """
         return self.__num_children

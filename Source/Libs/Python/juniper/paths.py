@@ -7,12 +7,17 @@ import ctypes
 import ctypes.wintypes
 
 import juniper.utilities.json as json_utils
+import juniper.bootstrap
+
+
+python_path = juniper.bootstrap.python_path
 
 
 @functools.lru_cache()
 def root():
-    """Returns the path to the juniper as stored in the registry\n
-    :return <str:path> Registry path\n
+    """
+    Returns the path to the juniper as stored in the registry
+    :return <str:path> Registry path
     """
     return json_utils.get_property(os.path.join(os.getenv("APPDATA"), "juniper\\config.json"), "path")
 
@@ -20,6 +25,12 @@ def root():
 # --------------------------------------------------------------------------------------
 
 def get_override_path(filepath, override):
+    """
+    Gets a file path with an extra override type (Ie, "file.txt.override")
+    :param <str:filepath> The path to the file
+    :param <str:override> The override file type
+    :return <str:override_path> The override file path
+    """
     filename, _, filetype = filepath.rpartition(".")
     if(not filepath.endswith(f"{override}.{filetype}")):
         return f"{filename}.{override}.{filetype}"
@@ -27,9 +38,9 @@ def get_override_path(filepath, override):
 
 
 def __find_file(subdir, relative_path, override=None, plugin=None):
-    import juniper.plugins
+    import juniper.engine.types.plugin
     output = None
-    plugin = None if not plugin else juniper.plugins.PluginManager().find_plugin(plugin)
+    plugin = None if not plugin else juniper.engine.types.plugin.PluginManager().find_plugin(plugin)
 
     # Plugin + Override / Plugin - Override
     if(plugin):
@@ -57,36 +68,8 @@ def find_config(relative_path, override=None, plugin=None):
 def find_resource(relative_path, override=None, plugin=None):
     return __find_file("resources", relative_path, override=override, plugin=plugin)
 
-
 # --------------------------------------------------------------------------------------
 
-
-def python_exe_path():
-    """
-    Gets the path to the current host Python exe
-    We cannot rely on `sys.executable` as it will return the host application exe when using embedded Python (Ie, unreal.exe)
-    :return <str:path> The path to the exe if found - else None
-    """
-    output = None
-    check_dir = os.path.dirname(os.__file__)
-    while(not output and len(check_dir) > 3):
-        possible_exe_path = os.path.join(check_dir, "python.exe")
-        if(os.path.isfile(possible_exe_path)):
-            output = possible_exe_path
-        else:
-            check_dir = os.path.dirname(check_dir)
-    return output
-
-
-def site_packages_dir():
-    import juniper.utilities.versioning
-    return os.path.join(
-        juniper.paths.root(),
-        f"lib\\external\\python{juniper.utilities.versioning.python_version()}\\site-packages"
-    )
-
-
-# --------------------------------------------------------------------------------------
 
 def documents():
     """

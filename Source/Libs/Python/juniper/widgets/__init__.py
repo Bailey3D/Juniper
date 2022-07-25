@@ -11,7 +11,8 @@ QStandaloneApp = q_standalone_app.QStandaloneApp
 
 
 def get_application():
-    """Returns the QApplication instance - creates it if it has not been initialized
+    """
+    Returns the QApplication instance - creates it if it has not been initialized
     :return <QApplication:out> The QApplication instance"""
     output = QtWidgets.QApplication.instance()
     if(not output):
@@ -23,7 +24,8 @@ def get_application():
 
 @juniper.decorators.virtual_method
 def initialize_dcc_window_parenting(widget):
-    """Used for certain DCC applications where a widget needs to be parented
+    """
+    Used for certain DCC applications where a widget needs to be parented
     to a main window in a specific way
     :param <QWidget:widget> The widget to parent
     """
@@ -43,7 +45,8 @@ def _initialize_dcc_window_parenting(widget):
 
 @juniper.decorators.virtual_method
 def get_dcc_main_window():
-    """Gets the main QMainWindow object for the current host DCC application
+    """
+    Gets the main QMainWindow object for the current host DCC application
     :return <QMainWindow:main_window> The main window object if found - else None
     """
     get_application()  # by default just ensure the app is created
@@ -84,7 +87,8 @@ def _get_dcc_main_window():
 # ---------------------------------------------------------------
 
 def get_dcc_hwnd():
-    """Attempts to find the HWND for the current DCC
+    """
+    Attempts to find the HWND for the current DCC
     :return <int:hwnd> The window handle
     """
     q_main_window = get_dcc_main_window()
@@ -97,7 +101,8 @@ def get_dcc_hwnd():
 
 
 def create_dialog(*args, **kwargs):
-    """Creates a dialog widget containing instances of all input child widget classes
+    """
+    Creates a dialog widget containing instances of all input child widget classes
     :param <[class]:args> Array containing all classes that should be added to the dialog
     :return <QDialog:dialog> The created dialog
     """

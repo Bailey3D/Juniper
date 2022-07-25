@@ -82,6 +82,7 @@ class TypeWrapperManager(object, metaclass=Singleton):
 
 class TypeWrapper(object):
     __manager__ = TypeWrapperManager
+
     def __init__(self, native_object):
         """
         Wrapper class for a type from the current DCC application (Ie, Node in 3DS Max, Actor in Unreal)

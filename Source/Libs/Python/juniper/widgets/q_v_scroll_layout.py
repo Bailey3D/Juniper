@@ -2,8 +2,11 @@ from qtpy import QtWidgets, QtCore
 
 
 class QVScrollLayout(QtWidgets.QVBoxLayout):
-    """A scrollable version of QVBoxLayout"""
     def __init__(self, show_scroll_handles=True):
+        """
+        A scrollable version of QVBoxLayout
+        :param [<bool:show_scroll_handles>] If True then scroll handles will be shown
+        """
         super(QVScrollLayout, self).__init__()
         self.show_scroll_handles = show_scroll_handles
 
