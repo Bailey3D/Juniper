@@ -1,13 +1,14 @@
 """
 """
 import os
+import json
 from collections import OrderedDict
 from qtpy import QtWidgets, QtGui, QtCore
 
 import juniper
 import juniper.decorators
+import juniper.engine
 import juniper.logging
-import juniper.types.framework.script
 import juniper.types.framework.singleton
 import juniper.types.math.color
 import juniper.utilities.json as json_utils
@@ -22,10 +23,16 @@ groups_colour = juniper.types.math.color.Color(0.0, 0.0, 0.0, 0.05)
 
 
 def juniper_tree_user_config_path():
-    return os.path.join(
+    output = os.path.join(
         juniper.paths.root(),
         "Cached\\UserConfig\\juniper_tree.json"
     )
+
+    if(not os.path.isfile(output)):
+        with open(output, "w") as f:
+            json.dump({}, f)
+
+    return output
 
 
 class JuniperTree(object):
@@ -52,7 +59,7 @@ class JuniperTree(object):
             close_event=self.closeEvent
         )
 
-        all_macros = juniper.types.framework.script.ScriptManager().get_all_of_type("tool")
+        all_macros = juniper.engine.JuniperEngine().tools
 
         # sort into categories alphabetically (juniper first)
         macros_categories = {}

@@ -3,7 +3,30 @@ import os
 import functools
 
 import juniper.engine
+import juniper.types.framework.singleton
 import juniper.utilities.string
+
+
+class ScriptManager(object, metaclass=juniper.types.framework.singleton.Singleton):
+    def __init__(self):
+        self.__script_cache = []
+
+    def register(self, script):
+        """
+        Registers a script
+        """
+        self.__script_cache.append(script)
+
+    def find_from_path(self, script_path):
+        """
+        Searches through all registered scripts and returns an existing script that matches the input path
+        :param <str:script_path> The path to the target script
+        :return <Script:script> The script if found - else None
+        """
+        for i in self.__script_cache:
+            if(i.path == script_path):
+                return i
+        return None
 
 
 class Script(object):
@@ -12,7 +35,22 @@ class Script(object):
         Barebones class for a script - used during the bootstrap phase
         This is overriden in `juniper.engine.types.script` for a version including more features
         """
+        ScriptManager().register(self)
         self.path = script_path.lower()
+
+    def __new__(cls, script_path):
+        """
+        Cache to avoid duplicates - and also avoid garbace collection for scripts bound
+        to other actions
+        """
+        possible_cached = ScriptManager().find_from_path(script_path)
+        if(possible_cached):
+            output = possible_cached
+        else:
+            output = super().__new__(cls)
+            output.__init__(script_path)
+            ScriptManager().register(output)
+        return output
 
     def __eq__(self, other):
         if(type(other) == type(self)):
@@ -44,24 +82,10 @@ class Script(object):
     def run(self):
         """
         Runs this script in the current context
+        :return <bool:success> True if the script was ran - else False
         """
-        # TODO! Replace this with a per implementation override
-        # we don't want maxscript poluting the base workspace!
-        if(self.file_type == ".ms"):
-            import pymxs
-            with open(self.path, "r") as f:
-                file_lines = f.read()
-                pymxs.runtime.execute(file_lines)
-
-        else:
-            globals_ = globals()
-            if(os.path.isfile(self.path)):
-                import juniper_globals
-                globals_["__file__"] = self.path
-                globals_["__package__"] = os.path.dirname(self.path)
-                globals_["__name__"] = "__main__"
-                juniper_globals.set("__juniper_exec_file_path__", self.path)
-                exec(open(self.path).read(), globals_)
+        success = juniper.engine.JuniperEngine().run_file(self.path)
+        return success
 
     def sort_key(self):
         """
@@ -207,7 +231,7 @@ class Script(object):
             module_root = self.path.lower().split("source")[0]
             for i in os.listdir(module_root):
                 if(i.endswith(".jplugin")):
-                    parent_module_name = i.split(".")[0].capitalize()  # TODO! Friendly name
+                    parent_module_name = i.split(".")[0]
                     parent_module_name = juniper.utilities.string.snake_to_name(parent_module_name)
                     parent_module_name = parent_module_name.rstrip()
                     break

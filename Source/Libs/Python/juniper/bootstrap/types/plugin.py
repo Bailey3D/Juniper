@@ -15,7 +15,7 @@ class Plugin(object):
         self.jplugin_path = jplugin_path
 
     def __bool__(self):
-        # TODO! Add in checks for whether plugin is enabled in the current context
+        # TODO~ Add in a way to enable/disable certain host implementations
         return True
 
     @property

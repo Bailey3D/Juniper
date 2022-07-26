@@ -6,7 +6,6 @@ import textwrap
 import juniper
 import juniper.engine
 import juniper.engine.types.plugin
-import juniper.types.framework.script
 import juniper.types.framework.singleton
 import juniper.utilities.string as string_utils
 import juniper.widgets.q_menu_wrapper
@@ -49,9 +48,6 @@ class JuniperMenu(metaclass=juniper.types.framework.singleton.Singleton):
         ]
 
         if(juniper.program_context in self.supported_hosts):
-            #self.menu_object = juniper.widgets.q_menu_wrapper.QMenuWrapper("juniper", "Juniper")
-            #self.menu = self.menu_object.menu_object
-            #self.menus = [self.menu]
             self.menus = []
 
             engine = juniper.engine.JuniperEngine()
@@ -113,7 +109,6 @@ class JuniperMenu(metaclass=juniper.types.framework.singleton.Singleton):
         :param <Macro:macro> The macro to add
         """
         action = None
-
         if(self.program_context not in ["unreal", "blender"]):
             action = parent.addAction(macro.display_name)
             action.triggered.connect(macro.run)
@@ -135,6 +130,8 @@ class JuniperMenu(metaclass=juniper.types.framework.singleton.Singleton):
                 script = juniper.engine.JuniperEngine().find_tool("{macro.name}")
                 if(script):
                     script.run()
+                else:
+                    print({macro.name})
             """)
             action.set_string_command(
                 unreal.ToolMenuStringCommandType.PYTHON,

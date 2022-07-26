@@ -28,3 +28,15 @@ class Max(juniper.engine.JuniperEngine):
 
     def on_shutdown(self):
         pass
+
+    def run_file(self, file_path):
+        """
+        Override for `run_file` to add in support for maxscript
+        """
+        if(file_path.endswith(".ms")):
+            import pymxs
+            with open(file_path, "r") as f:
+                file_lines = f.read()
+                pymxs.runtime.execute(file_lines)
+            return True
+        return super().run_file(file_path)

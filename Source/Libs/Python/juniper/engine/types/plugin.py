@@ -1,6 +1,6 @@
 import juniper.paths
+import juniper.engine.types.script
 import juniper.types.framework.singleton
-from juniper.types.framework import script
 import juniper.utilities.string as string_utils
 
 import functools
@@ -81,19 +81,6 @@ class PluginManager(object, metaclass=juniper.types.framework.singleton.Singleto
             if(i.name == plugin_name):
                 return i
         return None
-
-    @property
-    def force_single_menu(self):
-        """
-        Checks for the "force_single_menu" property in the current host plugin
-        This is useful for applications in which we should only have 1 menu entry
-        :return <bool:force> True if we are forcing a single menu - else False
-        """
-        current_host_plugin = self.current_host_plugin
-        if(current_host_plugin):
-            if("force_single_menu" in current_host_plugin.plugin_metadata):
-                return current_host_plugin.plugin_metadata["force_single_menu"]
-        return False
 
 
 class Plugin(object):
@@ -211,140 +198,6 @@ class Plugin(object):
         return self.get_file("Config", relative_path, override=override, require_override=require_override)
 
     # ---------------------------------------------------------------------
-
-    @property
-    def integration_type(self):
-        """
-        Gets the mode for how tools from this plugin are shown
-        Options include:
-        - integrated, for build into the top level juniper menu
-        - standalone, for a separate menu all together
-        - separate, for a submenu with the plugins name
-        :return <str:integration_type> The mode of the menu
-        """
-        if(self.name == "juniper"):
-            return "integrated"
-
-        output = "separate"
-        if(os.path.isfile(self.jplugin_path)):
-            with open(self.jplugin_path, "r") as f:
-                json_data = json.load(f)
-            if("integration_type" in json_data):
-                value = json_data["integration_type"].lower()
-                if(value in ("integrated", "standalone")):
-                    output = value
-
-        if(PluginManager().force_single_menu and output == "standalone"):
-            output = "separate"
-
-        return output
-
-    # ---------------------------------------------------------------------
-
-    def __get_scripts(self, script_type, index=None):
-        """
-        Gets scripts from a given source directory
-        :param <str:script_type> The type of script / the subdirectory to search
-        :param [<int:index>] The index to get (Ie, 0, 1, 2) if None then the root is gotten
-        """
-        output = []
-
-        if(index is None):
-            # If None then just get the base '__startup__.py' file
-            base_startup_script = os.path.join(self.root, f"Source\\{script_type}\\__{script_type}__.py")
-            if(os.path.isfile(base_startup_script)):
-                output.append(base_startup_script)
-        else:
-            # Else we want all scripts in the target tier folder
-            startup_scripts_dir = os.path.join(self.root, f"Source\\{script_type}\\{index}")
-            if(os.path.isdir(startup_scripts_dir)):
-                for i in glob.glob(startup_scripts_dir + "\\**\\*.*", recursive=True):
-                    if(i.endswith(".py")):
-                        output.append(i)
-                    elif(i.endswith(".ms") and juniper.program_context == "max"):
-                        output.append(i)
-        return output
-
-    def startup_scripts(self, index=None, current_host_only=True):
-        """
-        Gets all scripts of a given type for this plugin
-        :param [<int:index>] The target index - if None then the base script is returned (Ie, `__startup__.py`)
-        :param [<bool:current_host_only>] Only return scripts which are enabled in the current host?
-        :return [<[str]:paths>] The paths to all scripts
-        """
-        output = []
-        all_scripts = self.__get_scripts("Startup", index=index)
-        if(current_host_only):
-            for i in all_scripts:
-                this_script = script.Script(i)
-                this_script_supported_hosts = this_script.supported_hosts
-                if(not this_script_supported_hosts or juniper.program_context in this_script_supported_hosts):
-                    output.append(i)
-        return output
-
-    def install_scripts(self, index=None):
-        """
-        Gets all startup scripts for this plugin
-        :param [<int:index>] The target index - if None then the base script is returned (Ie, `__install__.py`)
-        :param [<bool:current_host_only>] Only return scripts which are enabled in the current host?
-        :return [<[str]:paths>] The paths to all scripts
-        """
-        return self.__get_scripts("Install", index=index)
-
-    # ---------------------------------------------------------------------
-
-    def initialize_macros(self):
-        """
-        Initializes all macros in this plugin
-        :return <[Macro]:macros> All macros registered for this plugin
-        """
-        output = []
-        if(self.enabled):
-            tools_root_dir = os.path.join(self.root, "Source\\Tools")
-            for file in glob.iglob(tools_root_dir + "\\**\\*.*", recursive=True):
-                if(file.endswith((".ms", ".py", ".toolptr"))):
-                    new_script = script.Script(file, plugin_name=self.name)
-                    if(new_script.type == "tool" and new_script.is_supported_in_current_host):
-                        output.append(new_script)
-                    else:
-                        script.ScriptManager().unregister(new_script)
-
-        return output
-
-    @property
-    def core_macros(self):
-        """
-        :return <[Macro]:macros> All core macros
-        """
-        output = []
-        for i in script.ScriptManager():
-            if(i.type == "tool" and i.plugin_name == self.name and i.is_core):
-                output.append(i)
-        return output
-
-    @property
-    def macros(self):
-        """
-        :return <[Macro]:macros> All macros (excluding core macros)
-        """
-        output = []
-        for i in script.ScriptManager():
-            if(i.type == "tool" and i.plugin_name == self.name and not i.is_core):
-                output.append(i)
-        return sorted(output, key=lambda x: x.category)
-
-    def initialize_libraries(self):
-        """
-        Adds the Python libs for this plugin to sys.path
-        """
-        sys.path.append(os.path.join(self.root, "Source\\Libs\\Python"))
-
-    @property
-    def is_host_plugin(self):
-        """
-        :return <bool:is_host> True if this is a host plugin - else False
-        """
-        return "\\juniperhosts\\" in self.root.lower()
 
 
 # TODO~ Plugin Creator

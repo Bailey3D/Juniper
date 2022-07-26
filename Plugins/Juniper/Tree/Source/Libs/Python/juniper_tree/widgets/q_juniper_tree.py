@@ -1,10 +1,10 @@
 from qtpy import QtWidgets, QtCore
 
+import juniper.engine
 from juniper.widgets import q_v_scroll_layout
 
 from juniper_tree.widgets import q_tree_group
 from juniper_tree.config_manager import ConfigManager
-from juniper.types.framework.script import ScriptManager
 
 
 class QJuniperTreeWidget(QtWidgets.QWidget):
@@ -97,7 +97,7 @@ class QJuniperTreeWidget(QtWidgets.QWidget):
 
         macros_to_add = []
 
-        for macro in ScriptManager.get_all_of_type("tool"):
+        for macro in juniper.engine.JuniperEngine().tools:
             if(any((
                 search_string in macro.display_name.lower(),
                 search_string in macro.name.lower(),

@@ -158,7 +158,8 @@ class JuniperEngine(object):
     def create_bootstrap_file(self, destination_path):
         """
         Creates a bootstrap path for the given program context - which is used to hook to Juniper startup in a given host application
-        TODO! Support for overriding how the bootstrap is called (Ie, Blender and Painter require specific function boilerplate)
+        This is just the boilerplate class for bootstrapping. Depending on the host application the `bootstrap_call_lines` method
+        may need to be overriden (some applications require a certain file / function setup to initialize plugins)
         :param <str:destination_path> The path to the bootstrap file
         """
         # 1) Boulerplate arguments (startup + context)
@@ -176,7 +177,6 @@ class JuniperEngine(object):
 
         # 3) Boilerplate code for calling bootstrap
         file_lines += [x + "\n" for x in self.bootstrap_call_lines()]
-        #file_lines += "Bootstrap()"  # TODO!
 
         # 4) Create
         if(not os.path.isdir(os.path.dirname(destination_path))):
@@ -193,50 +193,6 @@ class JuniperEngine(object):
         return ["Bootstrap()", ]
 
     # -------------------------------------------------------------------
-
-    @property
-    def scripts(self):
-        """
-        :return <[Script]:scripts> All available scripts in the current context
-        """
-        output = []
-
-        # host implementation scripts
-        import juniper.engine.types.script
-        if(self.program_context != "python"):
-            host_root = os.path.join(
-                self.workspace_root,
-                "Source\\Hosts",
-                self.program_context,
-                "Source\\Scripts"
-            )
-            for i in glob.iglob(host_root + "\\**\\*.*"):
-                script = juniper.engine.types.script.Script(i)
-                if(script):
-                    output.append(script)
-
-        # Note: No core scripts. The base Juniper workspace should not rely on scripts during startup.
-
-        for plugin in self.plugins:
-            for s in plugin.scripts:
-                if(s.is_enabled_in_host(self.program_context)):
-                    output.append(s)
-        return output
-
-    @property
-    def tools(self):
-        """
-        :return <[Script]:tools> All available tools in the current context
-        """
-        output = []
-
-        # Note: No core / host tools. The base implementations should be empty.
-
-        for plugin in self.plugins:
-            for s in plugin.tools:
-                if(s.is_enabled_in_host(self.program_context)):
-                    output.append(s)
-        return output
 
     @property
     def plugins(self):
@@ -288,6 +244,69 @@ class JuniperEngine(object):
 
     # -------------------------------------------------------------------
 
+    def run_file(self, file_path):
+        """
+        Runs a script file in the current application
+        Note: Override this in host applications to run bespoke file types as required
+        :param <str:file_path> The path to the file to run
+        :return <bool:success> True if the file was ran - else False
+        """
+        import juniper_globals
+
+        if(os.path.isfile(file_path) and file_path.lower().endswith(".py")):
+            globals_ = globals()
+            globals_["__file__"] = file_path
+            globals_["__package__"] = os.path.dirname(file_path)
+            globals_["__name__"] = "__main__"
+            juniper_globals.set("__juniper_exec_file_path__", file_path)
+            exec(open(file_path).read(), globals_)
+            return True
+        return False
+
+    @property
+    def scripts(self):
+        """
+        :return <[Script]:scripts> All available scripts in the current context
+        """
+        output = []
+
+        # host implementation scripts
+        import juniper.engine.types.script
+        if(self.program_context != "python"):
+            host_root = os.path.join(
+                self.workspace_root,
+                "Source\\Hosts",
+                self.program_context,
+                "Source\\Scripts"
+            )
+            for i in glob.iglob(host_root + "\\**\\*.*"):
+                script = juniper.engine.types.script.Script(i)
+                if(script):
+                    output.append(script)
+
+        # Note: No core scripts. The base Juniper workspace should not rely on scripts during startup.
+
+        for plugin in self.plugins:
+            for s in plugin.scripts:
+                if(s.is_enabled_in_host(self.program_context)):
+                    output.append(s)
+        return output
+
+    @property
+    def tools(self):
+        """
+        :return <[Script]:tools> All available tools in the current context
+        """
+        output = []
+
+        # Note: No core / host tools. The base implementations should be empty.
+
+        for plugin in self.plugins:
+            for s in plugin.tools:
+                if(s.is_enabled_in_host(self.program_context)):
+                    output.append(s)
+        return output
+
     def find_tool(self, tool_name):
         """
         Finds a tool by its name
@@ -295,7 +314,7 @@ class JuniperEngine(object):
         :return <Script:tool> The tool if found - else None
         """
         for i in self.tools:
-            if(i.file_name == tool_name):
+            if(i.name == tool_name):
                 return i
         return None
 

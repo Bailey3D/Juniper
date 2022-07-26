@@ -1,4 +1,4 @@
-import sys
+'''import sys
 sys.argv.append("juniper:install=true")
 sys.argv.append("juniper:startup=true")
 sys.argv.append("juniper:program_context=python")
@@ -17,3 +17,6 @@ for i in juniper.engine.JuniperEngine().supported_hosts:
     engine = juniper.engine.JuniperEngine()
     print(engine)
     engine.shutdown()
+'''
+import juniper
+print("Done")
