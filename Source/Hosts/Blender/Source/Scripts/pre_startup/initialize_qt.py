@@ -1,5 +1,6 @@
 """
 :type script
+:desc Binds the Qt event system to the blender event system
 :callbacks [pre_startup]
 """
 import bpy

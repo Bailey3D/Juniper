@@ -289,13 +289,12 @@ def startup(program_context):
     """
     Runs the startup process for juniper
     """
-    #program_context = "blender"
     if(program_context != "python"):
         sys.path.append(os.path.join(root(), "Source\\Libs\\python"))
         hosts_dir = os.path.join(root(), "Source\\Hosts")
         for i in os.listdir(hosts_dir):
             if(i.lower() == program_context):
-                plugin_path = os.path.join(hosts_dir, i, "Source\\__plugin__.py")
+                plugin_path = os.path.join(hosts_dir, i, "__host__.py")
                 from importlib.machinery import SourceFileLoader
                 juniper_engine_module = SourceFileLoader(
                     "juniper.engine_override",

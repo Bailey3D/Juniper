@@ -7,10 +7,6 @@ import ctypes
 import ctypes.wintypes
 
 import juniper.utilities.json as json_utils
-import juniper.bootstrap
-
-
-python_path = juniper.bootstrap.python_path
 
 
 @functools.lru_cache()

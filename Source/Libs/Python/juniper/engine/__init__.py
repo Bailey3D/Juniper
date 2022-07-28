@@ -78,7 +78,13 @@ class JuniperEngine(object):
         import juniper
         importlib.reload(juniper)
 
-        # 3) Initialize plugins
+        # 3a) Initialize modules
+        for module in self.modules:
+            # module libraries should be within a stub `juniper` directory
+            # as they are considered an extension of juniper - not standalone.
+            juniper.__path__.append(os.path.join(module.root, "Source\\Libs\\Python\\juniper"))
+
+        # 3b) Initialize plugins
         for i in self.plugins:
             sys.path.append(os.path.join(i.root, "Source\\Libs\\Python"))
 
@@ -89,10 +95,35 @@ class JuniperEngine(object):
         setattr(juniper, "log", self.log)
         juniper_globals.set("log", self.log)
 
+        # Run pre-startup
+        self.on_pre_startup()
+        for i in self.plugins:
+            pass  # TODO! Broadcast pre-startup to plugins
+        for i in self.modules:
+            i.on_pre_startup()
+
+        # Run startup
+        self.on_startup()
+        for i in self.plugins:
+            pass  # TODO! Broadcast startup to plugins
+        for i in self.modules:
+            i.on_startup()
+        self.broadcast("pre_startup")
+
+        # Run post-startup
+        self.on_post_startup()
+        for i in self.plugins:
+            pass  # TODO! Broadcast post-startup to plugins
+        for i in self.modules:
+            i.on_post_startup()
+        self.broadcast("startup")
+
         # 5) Run startup scripts for all plugins
         self.on_startup()
-        self.broadcast("pre_startup")
-        self.broadcast("startup")
+        for i in self.plugins:
+            pass
+        for i in self.modules:
+            i.on_startup()
         self.broadcast("post_startup")
 
     def __bootstrap__(self):
@@ -103,8 +134,8 @@ class JuniperEngine(object):
         # ..
 
         # 2) Run bootstrap updates (pip packages)
-        updater_source_path = os.path.join(self.workspace_root, "Source\\libs\\python\\juniper\\bootstrap\\updater.py")
-        updater_module = SourceFileLoader("juniper.bootstrap.updater", updater_source_path).load_module()
+        updater_source_path = os.path.join(self.workspace_root, "Source\\libs\\python\\juniper\\engine\\bootstrap\\updater.py")
+        updater_module = SourceFileLoader("juniper.engine.bootstrap.updater", updater_source_path).load_module()
         updater = updater_module.Updater(self)
         updater.run()
 
@@ -135,9 +166,21 @@ class JuniperEngine(object):
 
     # -------------------------------------------------------------------
 
+    def on_pre_startup(self):
+        """
+        Overrideable pre-startup method for host implementations
+        """
+        pass
+
     def on_startup(self):
         """
         Overrideable startup method for host implementations
+        """
+        pass
+
+    def on_post_startup(self):
+        """
+        Overrideable post-startup method for host implementations
         """
         pass
 
@@ -170,7 +213,7 @@ class JuniperEngine(object):
 
         # 2) Add source lines in the bootstrap module
         bootstrap_source_lines = []
-        bootstrap_module_path = os.path.join(self.workspace_root, "Source\\Libs\\Python\\juniper\\engine\\bootstrap.py")
+        bootstrap_module_path = os.path.join(self.workspace_root, "Source\\Libs\\Python\\juniper\\engine\\bootstrap\\__init__.py")
         with open(bootstrap_module_path, "r") as f:
             bootstrap_source_lines = f.readlines()
         file_lines += bootstrap_source_lines
@@ -199,25 +242,32 @@ class JuniperEngine(object):
         """
         :return <[Plugin]:plugins> Returns all registered plugins
         """
-        import juniper.bootstrap.types.plugin
+        import juniper.engine.bootstrap.types.plugin
 
         output = []
-        for i in self.plugin_paths:
-            plugin = juniper.bootstrap.types.plugin.Plugin(i)
+        for i in glob.glob(self.workspace_root + "\\Plugins\\**\\*.jplugin", recursive=True):
+            plugin = juniper.engine.bootstrap.types.plugin.Plugin(i)
             if(plugin):
                 output.append(plugin)
 
         return output
 
     @property
-    def plugin_paths(self):
+    def modules(self):
         """
-        :return <[str]:paths> The paths to all found .jplugin files
+        :return <[Module]:modules> Returns all registered modules
         """
+        import juniper.engine.types.module
         output = []
-        for i in glob.glob(self.workspace_root + "\\Plugins\\**\\*.jplugin", recursive=True):
-            output.append(i)
+        module_paths = [x for x in glob.glob(self.workspace_root + "\\Source\\Modules\\**\\__module__.py", recursive=True)]
+        for module_path in module_paths:
+            module_class = juniper.engine.types.module.ModuleManager().get_module_class(module_path)
+            if(module_class is not None):
+                module_instance = module_class()
+                output.append(module_instance)
         return output
+
+    # -------------------------------------------------------------------
 
     def broadcast(self, callback_name):
         """
@@ -287,9 +337,17 @@ class JuniperEngine(object):
         # Note: No core scripts. The base Juniper workspace should not rely on scripts during startup.
 
         for plugin in self.plugins:
-            for s in plugin.scripts:
-                if(s.is_enabled_in_host(self.program_context)):
-                    output.append(s)
+            for i in glob.iglob(plugin.root + "\\Source\\Scripts\\**\\*.*", recursive=True):
+                script = juniper.engine.types.script.Script(i)
+                if(script and script.get("type") == "script"):
+                    output.append(script)
+
+        for module in self.modules:
+            for i in glob.iglob(module.root + "\\Source\\Scripts\\**\\*.*", recursive=True):
+                script = juniper.engine.types.script.Script(i)
+                if(script and script.get("type") == "script"):
+                    output.append(script)
+
         return output
 
     @property
@@ -297,14 +355,23 @@ class JuniperEngine(object):
         """
         :return <[Script]:tools> All available tools in the current context
         """
+        import juniper.engine.types.script
         output = []
 
         # Note: No core / host tools. The base implementations should be empty.
 
         for plugin in self.plugins:
-            for s in plugin.tools:
-                if(s.is_enabled_in_host(self.program_context)):
-                    output.append(s)
+            for i in glob.iglob(plugin.root + "\\Source\\Tools\\**\\*.*", recursive=True):
+                script = juniper.engine.types.script.Script(i)
+                if(script and script.get("type") == "tool"):
+                    output.append(script)
+
+        for module in self.modules:
+            for i in glob.iglob(module.root + "\\Source\\Tools\\**\\*.*", recursive=True):
+                script = juniper.engine.types.script.Script(i)
+                if(script and script.get("type") == "tool"):
+                    output.append(script)
+
         return output
 
     def find_tool(self, tool_name):
@@ -315,6 +382,17 @@ class JuniperEngine(object):
         """
         for i in self.tools:
             if(i.name == tool_name):
+                return i
+        return None
+
+    def find_script(self, script_name):
+        """
+        Finds a script by its name
+        :param <str:name> The name of the script
+        :return <Script:tool> The script if found - else None
+        """
+        for i in self.scripts:
+            if(i.name == script_name):
                 return i
         return None
 
@@ -400,6 +478,10 @@ class JuniperEngine(object):
 
     # -------------------------------------------------------------------
 
+    @property
+    def name(self):
+        return self.__class__.__name__
+
     @staticmethod
     def get_program_context():
         """
@@ -421,8 +503,8 @@ class JuniperEngine(object):
     @property
     @functools.lru_cache()
     def log(self):
-        import juniper.logging
-        return juniper.logging.Log(plugin="Juniper")
+        import juniper.engine.logging
+        return juniper.engine.logging.Log(plugin="Juniper")
 
     @staticmethod
     @functools.lru_cache()

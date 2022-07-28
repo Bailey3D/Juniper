@@ -61,7 +61,7 @@ class Script(object):
         return hash(self.path) + hash(Script)
 
     def __bool__(self):
-        return len(self.metadata) > 0
+        return len(self.metadata) > 0 and self.is_enabled_in_host(juniper.engine.JuniperEngine().program_context)
 
     # ---------------------------------------------------------------------
 

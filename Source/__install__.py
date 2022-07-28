@@ -1,0 +1,27 @@
+"""
+:type installer
+:desc Installs Juniper for all known hosts
+"""
+import sys
+
+import juniper
+import juniper.engine
+import juniper.engine.bootstrap
+
+
+# Startup in Python context to get all hosts
+sys.argv.append("juniper:install=true")
+sys.argv.append("juniper:startup=true")
+sys.argv.append("juniper:program_context=python")
+juniper.engine.JuniperEngine().shutdown()
+
+# Loop all hosts and install
+for i in juniper.engine.JuniperEngine().supported_hosts:
+    print(f"Juniper: Installing For Host {i}")
+    sys.argv.append("juniper:install=true")
+    sys.argv.append("juniper:startup=false")
+    sys.argv.append(f"juniper:program_context={i}")
+    bootstrap = juniper.engine.bootstrap.Bootstrap()
+    engine = juniper.engine.JuniperEngine()
+    print(engine.name)
+    engine.shutdown()

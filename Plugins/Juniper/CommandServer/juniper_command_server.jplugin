@@ -1,5 +1,0 @@
-{
-    "integration_type":"integrated",
-    "description": "Inbuilt plugin which initializes a command server for cross-host communication",
-    "internal": true
-}
