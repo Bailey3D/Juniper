@@ -217,6 +217,7 @@ class JuniperEngine(object):
         with open(bootstrap_module_path, "r") as f:
             bootstrap_source_lines = f.readlines()
         file_lines += bootstrap_source_lines
+        file_lines += "\n"  # fix for missing newlines at the end of bootstrap files
 
         # 3) Boilerplate code for calling bootstrap
         file_lines += [x + "\n" for x in self.bootstrap_call_lines()]
