@@ -29,6 +29,8 @@ def juniper_tree_user_config_path():
     )
 
     if(not os.path.isfile(output)):
+        if(not os.path.isdir(os.path.dirname(output))):
+            os.makedirs(os.path.dirname(output))
         with open(output, "w") as f:
             json.dump({}, f)
 

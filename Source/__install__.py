@@ -4,15 +4,17 @@
 """
 import sys
 
+# Startup in Python context to get all hosts
+sys.argv.append("juniper:install=true")
+sys.argv.append("juniper:startup=true")
+sys.argv.append("juniper:program_context=python")
+
+
 import juniper
 import juniper.engine
 import juniper.engine.bootstrap
 
 
-# Startup in Python context to get all hosts
-sys.argv.append("juniper:install=true")
-sys.argv.append("juniper:startup=true")
-sys.argv.append("juniper:program_context=python")
 juniper.engine.JuniperEngine().shutdown()
 
 # Loop all hosts and install

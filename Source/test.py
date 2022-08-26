@@ -1,5 +1,5 @@
-import juniper.engine
+import juniper.utilities.network
 
 
-i = juniper.engine.JuniperEngine().find_script("install")
-print(i)
+for i in range(20):
+    print(juniper.utilities.network.ping("www.google.com", timeout=1))
