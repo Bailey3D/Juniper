@@ -79,14 +79,25 @@ class JuniperEngine(object):
         importlib.reload(juniper)
 
         # 3a) Initialize modules
-        for module in self.modules:
-            # module libraries should be within a stub `juniper` directory
-            # as they are considered an extension of juniper - not standalone.
-            juniper.__path__.append(os.path.join(module.root, "Source\\Libs\\Python\\juniper"))
+        # module libraries should be within a stub `juniper` directory
+        # as they are considered an extension of juniper - not standalone.
+        import juniper.engine.types.module
+        modules = []
+        module_paths = [x for x in glob.glob(self.workspace_root + "\\Source\\Modules\\**\\__module__.py", recursive=True)]
+        for module_path in module_paths:
+            module_class = juniper.engine.types.module.ModuleManager().get_module_class(module_path)
+            if(module_class is not None):
+                module_instance = module_class()
+                modules.append(module_instance)
+                juniper.__path__.append(os.path.join(module_instance.root, "Source\\Libs\\Python\\juniper"))
 
-        # 3b) Initialize plugins
+        # 3b) Initialize plugins / plugin modules
         for i in self.plugins:
             sys.path.append(os.path.join(i.root, "Source\\Libs\\Python"))
+            python_module = i.python_module
+            for module in i.modules:
+                if(python_module):
+                    python_module.__path__.append(os.path.join(module.root, "Source\\Libs\\Python", i.name))
 
         # 4) Initialize globals
         import juniper_globals
@@ -259,14 +270,7 @@ class JuniperEngine(object):
         :return <[Module]:modules> Returns all registered modules
         """
         import juniper.engine.types.module
-        output = []
-        module_paths = [x for x in glob.glob(self.workspace_root + "\\Source\\Modules\\**\\__module__.py", recursive=True)]
-        for module_path in module_paths:
-            module_class = juniper.engine.types.module.ModuleManager().get_module_class(module_path)
-            if(module_class is not None):
-                module_instance = module_class()
-                output.append(module_instance)
-        return output
+        return [x for x in juniper.engine.types.module.ModuleManager()]
 
     # -------------------------------------------------------------------
 

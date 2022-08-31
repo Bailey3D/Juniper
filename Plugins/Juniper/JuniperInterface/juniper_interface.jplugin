@@ -1,0 +1,4 @@
+{
+    "integration_type":"integrated",
+    "description": "Plugin containing submodules for the base Juniper interface in various host applications"
+}

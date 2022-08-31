@@ -1,5 +1,14 @@
-import juniper.utilities.network
+import juniper
+import juniper.paths
+
+import os
+import git
 
 
-for i in range(20):
-    print(juniper.utilities.network.ping("www.google.com", timeout=1))
+print("Done")
+'''dir_ = os.path.join(juniper.paths.root(), "Cached\\GitTest")
+print(dir_)
+
+gd = "https://github.com/Juniper3d/Juniper"
+a = git.Repo.clone_from(gd, dir_)
+print("Done!")'''

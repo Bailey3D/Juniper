@@ -1,5 +1,6 @@
 import functools
 import glob
+import importlib
 import json
 import os
 
@@ -60,3 +61,24 @@ class Plugin(object):
     @property
     def is_host_plugin(self):
         return "\\juniperhosts\\" in self.jplugin_path.lower()
+
+    @property
+    def modules(self):
+        import juniper.engine.types.module
+        output = []
+        module_paths = [x for x in glob.glob(self.root + "\\Source\\Modules\\**\\__module__.py", recursive=True)]
+        for module_path in module_paths:
+            module_class = juniper.engine.types.module.ModuleManager().get_module_class(module_path)
+            if(module_class is not None):
+                module_instance = module_class()
+                output.append(module_instance)
+        return output
+
+    @property
+    def python_module(self):
+        try:
+            output = importlib.import_module(self.name)
+            return output
+        except Exception:
+            pass
+        return None

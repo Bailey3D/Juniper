@@ -84,7 +84,7 @@ class QMenuWrapper(object):
 
         class blender_menu(bpy.types.Menu):
             bl_label = "Juniper"
-            bl_idname = "juniper.menu"
+            bl_idname = "juniper_interface.menu"
 
             def draw(self_, context):
                 layout = self_.layout
