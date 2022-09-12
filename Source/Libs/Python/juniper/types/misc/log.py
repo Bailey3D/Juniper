@@ -17,7 +17,7 @@ class _Colours(object):
 
 class log_class(object):
 
-    def __init__(self, context="InDev"):
+    def __init__(self, context="Juniper"):
         self.context = context
 
     def _ensure_context(self, context):

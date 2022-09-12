@@ -1,5 +1,4 @@
-import indev
-
+import juniper.types.misc.log
 import juniper.engine.logging.log_manager
 
 
@@ -16,7 +15,7 @@ class _LogEntry(object):
         traceback=False,
         traceback_stack=None,
         persistent=False,
-        log_func=indev.log.info
+        log_func=juniper.types.misc.log.log.info
     ):
         self.log_text = log_text
         self.log_type = log_type
@@ -30,7 +29,7 @@ class _LogEntry(object):
 
 class Log(object):
     def __init__(self, plugin="Juniper"):
-        self.indev_log = indev._log.log_class(context=plugin)
+        self.juniper_log = juniper.types.misc.log.log_class(context=plugin)
         self.plugin = plugin
 
         self._held_entries = []
@@ -191,7 +190,7 @@ class Log(object):
             context=context,
             traceback=traceback,
             traceback_stack=traceback_stack,
-            log_func=self.indev_log.error,
+            log_func=self.juniper_log.error,
             persistent=persistent
         )
 
@@ -203,7 +202,7 @@ class Log(object):
             context=context,
             traceback=traceback,
             traceback_stack=traceback_stack,
-            log_func=self.indev_log.warning,
+            log_func=self.juniper_log.warning,
             persistent=persistent
         )
 
@@ -215,7 +214,7 @@ class Log(object):
             context=context,
             traceback=False,
             traceback_stack=None,
-            log_func=self.indev_log.info,
+            log_func=self.juniper_log.info,
             persistent=persistent
         )
 
@@ -227,6 +226,6 @@ class Log(object):
             context=context,
             traceback=False,
             traceback_stack=None,
-            log_func=self.indev_log.info,
+            log_func=self.juniper_log.info,
             persistent=persistent
         )

@@ -1,5 +1,6 @@
 class _DelegateManager(object):
     __instance__ = None
+
     def __init__(self):
         self._delegates = {}
 
@@ -54,9 +55,9 @@ if(_DelegateManager.__instance__ is None):
     _DelegateManager.__instance__ = _DelegateManager()
 DelegateManager = _DelegateManager.__instance__
 
-# -------------------------------------------------------------------------
 
 class _DelegateDecoratorWrapper(object):
+
     def __init__(self, func):
         self.func = func
         self.delegate = DelegateManager.create(func)
@@ -82,6 +83,5 @@ def delegate(func):
     """Decorator used for setting a function as a delegate"""
     return _DelegateDecoratorWrapper(func).wrapper
 
-# -------------------------------------------------------------------------
 
 bind = DelegateManager.bind
