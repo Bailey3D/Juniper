@@ -11,12 +11,12 @@ class QLogHolder(QtWidgets.QWidget):
         """
         Container class / widget used for displaying / holding log entries
         """
-        super(QLogHolder, self).__init__(parent=qt_utils.get_dcc_main_window())
+        super(QLogHolder, self).__init__(parent=qt_utils.get_main_window())
 
         self.setWindowFlags(QtCore.Qt.Tool | QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        qt_utils.initialize_dcc_window_parenting(self)
+        qt_utils.initialize_host_window_parenting(self)
 
         self.children = []
 
@@ -100,7 +100,7 @@ class QLogHolder(QtWidgets.QWidget):
         """
         if(not self.__have_cached_parent_hwnd_data):
             self.__dwmapi = ctypes.WinDLL("dwmapi")
-            self.__parent_hwnd = qt_utils.get_dcc_hwnd()
+            self.__parent_hwnd = qt_utils.get_host_hwnd()
             self.__hwnd_cache = HWND(self.__parent_hwnd)
             self.__have_cached_parent_hwnd_data = True
             self.__dword_frame_bounds = DWORD(9)  # DMWA_EXTENDED_FRAME_BOUNDS

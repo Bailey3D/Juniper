@@ -23,17 +23,17 @@ def get_application():
 # ---------------------------------------------------------------
 
 @juniper.decorators.virtual_method
-def initialize_dcc_window_parenting(widget):
+def initialize_host_window_parenting(widget):
     """
-    Used for certain DCC applications where a widget needs to be parented
+    Used for certain host applications where a widget needs to be parented
     to a main window in a specific way
     :param <QWidget:widget> The widget to parent
     """
     pass
 
 
-@initialize_dcc_window_parenting.override("unreal")
-def _initialize_dcc_window_parenting(widget):
+@initialize_host_window_parenting.override("unreal")
+def _initialize_host_window_parenting(widget):
     import unreal
     unreal.parent_external_window_to_slate(
         widget.winId(),
@@ -44,54 +44,54 @@ def _initialize_dcc_window_parenting(widget):
 # ---------------------------------------------------------------
 
 @juniper.decorators.virtual_method
-def get_dcc_main_window():
+def get_main_window():
     """
-    Gets the main QMainWindow object for the current host DCC application
+    Gets the main QMainWindow object for the current host application
     :return <QMainWindow:main_window> The main window object if found - else None
     """
     get_application()  # by default just ensure the app is created
     return None
 
 
-@get_dcc_main_window.override("python")
-def _get_dcc_main_window():
+@get_main_window.override("python")
+def _get_main_window():
     app = get_application()
     if(hasattr(app, "main_window")):
         return app.main_window
 
 
-@get_dcc_main_window.override("max")
-def _get_dcc_main_window():
+@get_main_window.override("max")
+def _get_main_window():
     import qtmax
     return qtmax.GetQMaxMainWindow()
 
 
-@get_dcc_main_window.override("designer")
-def _get_dcc_main_window():
+@get_main_window.override("designer")
+def _get_main_window():
     import sd.juniper.instance
     return sd.juniper.instance.get_main_qt_window()
 
 
-@get_dcc_main_window.override("houdini")
-def _get_dcc_main_window():
+@get_main_window.override("houdini")
+def _get_main_window():
     import hou
     return hou.qt.mainWindow()
 
 
-@get_dcc_main_window.override("painter")
-def _get_dcc_main_window():
+@get_main_window.override("painter")
+def _get_main_window():
     import substance_painter.ui
     return substance_painter.ui.get_main_window()
 
 
 # ---------------------------------------------------------------
 
-def get_dcc_hwnd():
+def get_host_hwnd():
     """
-    Attempts to find the HWND for the current DCC
+    Attempts to find the HWND for the current host application
     :return <int:hwnd> The window handle
     """
-    q_main_window = get_dcc_main_window()
+    q_main_window = get_main_window()
     if(not q_main_window):
         import ctypes
         user32 = ctypes.windll.user32
@@ -107,13 +107,13 @@ def create_dialog(*args, **kwargs):
     :return <QDialog:dialog> The created dialog
     """
     title = kwargs["title"] if "title" in kwargs and kwargs["title"] else "Dialog"
-    dialog = QtWidgets.QDialog(parent=get_dcc_main_window())
+    dialog = QtWidgets.QDialog(parent=get_main_window())
     dialog.setWindowTitle(title)
     dialog_layout = QtWidgets.QVBoxLayout()
     dialog.setLayout(dialog_layout)
     for i in args:
         i_inst = i()
         dialog_layout.addWidget(i_inst)
-    initialize_dcc_window_parenting(dialog)
+    initialize_host_window_parenting(dialog)
     dialog.show()
     return dialog

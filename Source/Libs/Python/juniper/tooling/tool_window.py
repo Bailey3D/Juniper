@@ -14,4 +14,4 @@ class ToolWindow(tool_widget_base.ToolWidgetBase):
         :param [<bool:uic>] When true a .ui file will be searched for from `__class__.__name__ + __file__` of the outermost class
         """
         super(ToolWindow, self).__init__(parent=parent, title=title, horizontal=horizontal, uic=uic)
-        juniper.widgets.initialize_dcc_window_parenting(self)
+        juniper.widgets.initialize_host_window_parenting(self)

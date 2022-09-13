@@ -1,5 +1,5 @@
 """
-Wrappers / helpers for Dock Widgets in the different DCC Contexts
+Wrappers / helpers for Dock Widgets in the different host Contexts
 """
 from qtpy import QtWidgets, QtCore
 
@@ -21,7 +21,7 @@ def create_dock_widget(
     :param [<str:stylesheet>] Stylesheet override for this widget
     :param [<function:close_event>] Optional override function called on this dock's close event
     """
-    main_window = juniper.widgets.get_dcc_main_window()
+    main_window = juniper.widgets.get_main_window()
     output = _new_dock_widget(
         child_widget,
         identifier=identifier,
@@ -75,7 +75,7 @@ def create_dock_widget(
     # for non Qt based applications we still render the widget
     # just as a floating dock instead
     output.show()
-    juniper.widgets.initialize_dcc_window_parenting(output)
+    juniper.widgets.initialize_host_window_parenting(output)
 
     return output
 

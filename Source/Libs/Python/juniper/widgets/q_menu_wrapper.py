@@ -1,5 +1,5 @@
 """
-DCC Specific menu object.
+Host application specific menu object.
 - For applications which use Qt this will wrap QMenu
 - For other programs which we are able to wrap, this will wrap the program specific object
 - For programs which have no exposure, this will be empty / logicless
@@ -84,7 +84,7 @@ class QMenuWrapper(object):
 
         class blender_menu(bpy.types.Menu):
             bl_label = "Juniper"
-            bl_idname = "juniper_interface.menu"
+            bl_idname = "jinterface.menu"
 
             def draw(self_, context):
                 layout = self_.layout

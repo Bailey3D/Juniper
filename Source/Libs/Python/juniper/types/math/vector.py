@@ -149,7 +149,7 @@ class _VectorType(object):
     @property
     def native_object(self):
         """
-        Gets a version of this as the native type for the current DCC
+        Gets a version of this as the native type for the current host application
 
         Note:   When overriding this in child classes the `get_native_object` method must be defined
                 in the class body just so we have access to an instance of the function to override

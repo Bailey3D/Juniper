@@ -9,7 +9,7 @@ class LogManager(object, metaclass=juniper.types.framework.singleton.Singleton):
         Manager class used for various logging tasks
         """
         self._q_log_holder = None
-        self.main_window = qt_utils.get_dcc_main_window()
+        self.main_window = qt_utils.get_main_window()
 
     @property
     def log_holder_widget(self):
@@ -44,7 +44,7 @@ class LogManager(object, metaclass=juniper.types.framework.singleton.Singleton):
         """Updates the log holder widget to be in the bottom right of the main window"""
         dwmapi = ctypes.WinDLL("dwmapi")
 
-        hwnd = qt_utils.get_dcc_hwnd()
+        hwnd = qt_utils.get_host_hwnd()
         rect = RECT()
         DMWA_EXTENDED_FRAME_BOUNDS = 9
         dwmapi.DwmGetWindowAttribute(

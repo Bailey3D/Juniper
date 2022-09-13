@@ -5,6 +5,6 @@ Juniper
    :align: center
    :height: 200px
 
-Juniper is a unified scripting framework for use across a variety of applications - primarily DCC apps.
+Juniper is a unified scripting framework for use across a variety of applications.
 
 The framework aims to be easily configurable and extendible.

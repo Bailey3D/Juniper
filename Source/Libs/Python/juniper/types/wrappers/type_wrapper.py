@@ -1,7 +1,7 @@
 """
 Contains base class implementations for Type Wrappers
 
-Type wrappers are used to wrap native object types from various DCC applications into a common Juniper type.
+Type wrappers are used to wrap native object types from various host applications into a common Juniper type.
 Each wrapper includes a base class for functionality, and a manager class for caching and retrieving initialized wrapper objects.
 """
 import juniper.decorators
@@ -85,7 +85,7 @@ class TypeWrapper(object):
 
     def __init__(self, native_object):
         """
-        Wrapper class for a type from the current DCC application (Ie, Node in 3DS Max, Actor in Unreal)
+        Wrapper class for a type from the current host application (Ie, Node in 3DS Max, Actor in Unreal)
 
         An explicit manager class can be used for caching by setting the `__manager__` property to the class
         in the main class body

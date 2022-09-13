@@ -42,7 +42,7 @@ class Color(object):
     @property
     def native_object(self):
         """
-        Gets a version of this as the native type for the current DCC
+        Gets a version of this as the native type for the current host application
         :return <value:native_type> The native type where possible - else None
         """
         return self.get_native_object()

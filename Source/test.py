@@ -1,20 +1,4 @@
-'''import juniper.widgets
-import ctypes
-from qtpy import QtWidgets
-
-user32 = ctypes.windll.user32
-
-print(user32.DisableProcessWindowsGhosting())
-
-
-app = juniper.widgets.get_application()
-w = QtWidgets.QWidget()
-w.show()
-
-while 1:
-        pass
-'''
-import os
+'''import os
 import inspect
 
 import juniper
@@ -36,3 +20,7 @@ host_override_path = os.path.join(
 
 print(host_override_path)
 print(os.path.isfile(host_override_path))
+'''
+import juniper
+import tools_library.asset_library as a
+print(a)
