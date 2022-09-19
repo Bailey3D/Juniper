@@ -215,7 +215,7 @@ class MaterialWrapper(juniper.types.wrappers.type_wrapper.TypeWrapper):
 
             export_preset_resource = substance_painter.juniper.shelf.find_resource(export_preset_name, max_retries=4)
             if(export_preset_resource):
-                # TODO~: Should the exportParameters be stored in the .material file?
+                # Note: Should the exportParameters be stored in the .material file?
                 # will still need a way to set this from within Painter though
                 export_config = substance_painter.juniper.export_config.ExportConfig(
                     export_preset_resource.url(),
@@ -226,7 +226,7 @@ class MaterialWrapper(juniper.types.wrappers.type_wrapper.TypeWrapper):
 
                 for k, v in export_results.textures.items():
                     for fp in v:
-                        # TODO~: This is just the texture suffix, the metadata needs the actual parameter name
+                        # Note: This is just the texture suffix, the metadata needs the actual parameter name
                         texture_suffix = fp.split("_")[-1].split(".")[0]
                         self.__validate_exported_texture(texture_suffix, fp)
                 return True

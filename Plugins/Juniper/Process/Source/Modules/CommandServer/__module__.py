@@ -17,3 +17,7 @@ class CommandServer(juniper.engine.types.module.Module):
             juniper.widgets.get_application()  # command server uses Qt tick - ensure QApplication is initialized
             port = jprocess.command_server.listen_port(juniper.program_context)
             command_server.CommandServer(port)
+
+    def on_tick(self):
+        from jprocess.command_server import command_server
+        command_server.CommandServer().tick()

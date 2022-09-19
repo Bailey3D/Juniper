@@ -34,3 +34,7 @@ class Painter(juniper.engine.JuniperEngine):
             "def start_plugin():",
             "    Bootstrap()"
         ]
+
+    def get_main_window(self):
+        import substance_painter.ui
+        return substance_painter.ui.get_main_window()

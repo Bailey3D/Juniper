@@ -47,3 +47,7 @@ class Max(juniper.engine.JuniperEngine):
                 pymxs.runtime.execute(file_lines)
             return True
         return super().run_file(file_path)
+
+    def get_main_window(self):
+        import qtmax
+        return qtmax.GetQMaxMainWindow()

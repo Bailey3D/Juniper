@@ -4,6 +4,7 @@ import importlib
 import json
 import os
 
+import juniper
 import juniper.engine.types.script
 
 
@@ -16,8 +17,32 @@ class Plugin(object):
         self.jplugin_path = jplugin_path
 
     def __bool__(self):
-        # TODO~ Add in a way to enable/disable certain host implementations
+        # check if supported in the current host
+        if(not self.is_enabled_in_host()):
+            return False
+
         return True
+
+    # ------------------------------------------------------------------------------
+    
+    def on_tick(self):
+        """
+        Overrideable method called each tick
+        """
+        pass
+
+    # ------------------------------------------------------------------------------
+
+    def get(self, key):
+        """
+        Gets a key from the file metadata of this script
+        :param <str:key> The key to get
+        :return <str:value> The value as stored in the script
+        """
+        key = key.lower()
+        if(key in self.metadata):
+            return self.metadata[key]
+        return None
 
     @property
     @functools.lru_cache()
@@ -27,6 +52,8 @@ class Plugin(object):
         """
         with open(self.jplugin_path, "r") as f:
             return json.load(f)
+
+    # ------------------------------------------------------------------------------
 
     @property
     @functools.lru_cache()
@@ -82,3 +109,33 @@ class Plugin(object):
         except Exception:
             pass
         return None
+
+    # ------------------------------------------------------------------------------
+
+    def is_enabled_in_host(self, target_host=None):
+        """
+        Checks if this script is enabled in the current host
+        This checks against the `supported_hosts` and `unsupported_hosts` metadata keys
+        If neither are provided, we return True
+        :param <str:target_host> The name of the host to check
+        :return <bool:enabled> True if enabled - else False
+        """
+        if(not target_host):
+            target_host = juniper.program_context or "python"
+        target_host = target_host.lower()
+        supported_hosts = []
+        unsupported_hosts = []
+
+        if(self.get("supported_hosts")):
+            for i in self.get("supported_hosts"):
+                supported_hosts.append(i.lower())
+
+        if(self.get("unsupported_hosts")):
+            for i in self.get("unsupported_hosts"):
+                unsupported_hosts.append(i.lower())
+
+        if(target_host not in unsupported_hosts):
+            if(not supported_hosts or target_host in supported_hosts):
+                return True
+
+        return False

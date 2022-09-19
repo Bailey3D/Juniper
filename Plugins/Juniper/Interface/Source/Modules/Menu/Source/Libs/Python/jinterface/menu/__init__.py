@@ -1,6 +1,3 @@
-"""
-:todo~ Logic here is pretty messy and hard to follow. Need to abstract out some parts.
-"""
 import textwrap
 
 import juniper
@@ -8,14 +5,13 @@ import juniper.engine
 import juniper.engine.types.plugin
 import juniper.types.framework.singleton
 import juniper.utilities.string as string_utils
-import juniper.widgets.q_menu_wrapper
+import jinterface.menu.q_menu_wrapper
 
 
 class JuniperMenu(metaclass=juniper.types.framework.singleton.Singleton):
     def __init__(self):
         self.program_context = juniper.program_context
 
-        #
         self.supported_hosts = [
             "blender",
             "designer",
@@ -41,7 +37,7 @@ class JuniperMenu(metaclass=juniper.types.framework.singleton.Singleton):
                 menu_groups[top_level_group].append(i)
 
             for i in menu_groups:
-                menu_object = juniper.widgets.q_menu_wrapper.QMenuWrapper(i, i)
+                menu_object = jinterface.menu.q_menu_wrapper.QMenuWrapper(i, i)
                 menu = menu_object.menu_object
                 self.menus.append(menu)
 
@@ -94,8 +90,6 @@ class JuniperMenu(metaclass=juniper.types.framework.singleton.Singleton):
         elif(self.program_context == "blender"):
             pass  # TODO! Blender: Actions for blender menus
         elif(self.program_context == "unreal"):
-            # TODO~ There's some issue with the unreal menu builder which messes up the order of 
-            # adding actions
             import unreal
             action = unreal.ToolMenuEntry(
                 name=macro.display_name,

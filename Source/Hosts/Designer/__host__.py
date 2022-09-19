@@ -122,3 +122,7 @@ class Designer(juniper.engine.JuniperEngine):
 
             with open(designer_project_config_path, "w+") as f:
                 f.write(xml.etree.ElementTree.tostring(xml_config_root, encoding="unicode", method="xml"))
+
+    def get_main_window(self):
+        import sd.juniper.instance
+        return sd.juniper.instance.get_main_qt_window()

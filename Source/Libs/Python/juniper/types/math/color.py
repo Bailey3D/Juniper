@@ -1,11 +1,13 @@
 """
 Wrapper for a simple colour type
 """
+import juniper
+import juniper.types
 import juniper.decorators
 import juniper.math
 
 
-class Color(object):
+class Color(juniper.types.Object):
     def __init__(self, *args):
         """
         Base class for a colour type

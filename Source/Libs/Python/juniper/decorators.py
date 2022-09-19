@@ -30,7 +30,7 @@ def program_context(context):
 
     Example Usage
     ```
-    @juniper.decorators.program_context("unreal")
+    @juniper.decorators.program_context("host_name")
     def example_function():
         pass
     ```
@@ -56,7 +56,7 @@ def virtual_method(func):
     def some_method():
         print("Base implementation of this method - ran when there is no override")
 
-    @some_method.override("unreal"):
+    @some_method.override("host_name"):
     def __some_method():
         print("This will be overriden when ran from Unreal!")
     ```

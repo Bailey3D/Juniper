@@ -1,5 +1,6 @@
 from qtpy import QtWidgets
 
+import juniper.engine
 import juniper.decorators
 import juniper.widgets.q_standalone_app
 from juniper.widgets import q_collapsible_widget, q_v_scroll_layout, q_standalone_app
@@ -9,79 +10,9 @@ QCollapsibleWidget = q_collapsible_widget.QCollapsibleWidget
 QVScrollLayout = q_v_scroll_layout.QVScrollLayout
 QStandaloneApp = q_standalone_app.QStandaloneApp
 
-
-def get_application():
-    """
-    Returns the QApplication instance - creates it if it has not been initialized
-    :return <QApplication:out> The QApplication instance"""
-    output = QtWidgets.QApplication.instance()
-    if(not output):
-        return juniper.widgets.q_standalone_app.QStandaloneApp()
-    return output
-
-
-# ---------------------------------------------------------------
-
-@juniper.decorators.virtual_method
-def initialize_host_window_parenting(widget):
-    """
-    Used for certain host applications where a widget needs to be parented
-    to a main window in a specific way
-    :param <QWidget:widget> The widget to parent
-    """
-    pass
-
-
-@initialize_host_window_parenting.override("unreal")
-def _initialize_host_window_parenting(widget):
-    import unreal
-    unreal.parent_external_window_to_slate(
-        widget.winId(),
-        unreal.SlateParentWindowSearchMethod.ACTIVE_WINDOW
-    )
-
-
-# ---------------------------------------------------------------
-
-@juniper.decorators.virtual_method
-def get_main_window():
-    """
-    Gets the main QMainWindow object for the current host application
-    :return <QMainWindow:main_window> The main window object if found - else None
-    """
-    get_application()  # by default just ensure the app is created
-    return None
-
-
-@get_main_window.override("python")
-def _get_main_window():
-    app = get_application()
-    if(hasattr(app, "main_window")):
-        return app.main_window
-
-
-@get_main_window.override("max")
-def _get_main_window():
-    import qtmax
-    return qtmax.GetQMaxMainWindow()
-
-
-@get_main_window.override("designer")
-def _get_main_window():
-    import sd.juniper.instance
-    return sd.juniper.instance.get_main_qt_window()
-
-
-@get_main_window.override("houdini")
-def _get_main_window():
-    import hou
-    return hou.qt.mainWindow()
-
-
-@get_main_window.override("painter")
-def _get_main_window():
-    import substance_painter.ui
-    return substance_painter.ui.get_main_window()
+get_application = juniper.engine.JuniperEngine().get_qt_application
+initialize_host_window_parenting = juniper.engine.JuniperEngine().register_qt_widget
+get_main_window = juniper.engine.JuniperEngine().get_main_window
 
 
 # ---------------------------------------------------------------

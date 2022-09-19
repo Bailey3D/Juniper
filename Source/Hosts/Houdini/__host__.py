@@ -43,3 +43,7 @@ class Houdini(juniper.engine.JuniperEngine):
         with winreg.OpenKey(winreg.HKEY_CLASSES_ROOT, r'{}\shell\open\command'.format(class_root)) as key:
             command = winreg.QueryValueEx(key, '')[0]
             return shlex.split(command)[0]
+
+    def get_main_window(self):
+        import hou
+        return hou.qt.mainWindow()

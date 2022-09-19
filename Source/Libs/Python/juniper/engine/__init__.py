@@ -4,6 +4,7 @@ import importlib
 import json
 import os
 import sys
+from datetime import datetime
 from importlib.machinery import SourceFileLoader
 
 
@@ -13,6 +14,10 @@ class JuniperEngine(object):
         """
         Base singleton class used for the Juniper engine.
         """
+        # tick
+        self.delta_seconds = 0
+        self.time_cf = datetime.now()
+
         if(bootstrap):
             if("juniper:install=true" in sys.argv):
                 self.__install__()
@@ -137,6 +142,9 @@ class JuniperEngine(object):
             i.on_startup()
         self.broadcast("post_startup")
 
+        # 6) Start tick
+        self.initialize_tick()
+
     def __bootstrap__(self):
         """
         Run the bootstrap process for Juniper in the current program context
@@ -166,6 +174,39 @@ class JuniperEngine(object):
 
         self.on_shutdown()
         juniper_globals.set("juniper_engine", None)
+
+    # -------------------------------------------------------------------
+
+    def __tick__(self):
+        """
+        Runs the tick for Juniper
+        """
+        self.time_pf = self.time_cf
+        self.time_cf = datetime.now()
+
+        _delta = (self.time_cf - self.time_pf)
+        self.delta_seconds = _delta.seconds + _delta.microseconds / 1E6
+
+        for i in self.plugins:
+            i.on_tick()
+        for i in self.modules:
+            i.on_tick()
+        self.on_tick()
+
+    def initialize_tick(self):
+        """
+        Binds the tick command to the host application
+        Note: By default we use a Qt based QTimer - this may not work in all hosts
+        for those hosts this method should be overriden
+        """
+        from qtpy import QtCore
+        import juniper.widgets
+        app = juniper.widgets.get_application()
+        if(app):
+            timer = QtCore.QTimer()
+            timer.timeout.connect(self.__tick__)
+            timer.start(0)
+            self.__timer = timer
 
     # -------------------------------------------------------------------
 
@@ -204,6 +245,12 @@ class JuniperEngine(object):
     def on_shutdown(self):
         """
         Overrideable shutdown method for host implementations
+        """
+        pass
+
+    def on_tick(self):
+        """
+        Overrideable tick method call each update
         """
         pass
 
@@ -250,6 +297,7 @@ class JuniperEngine(object):
     # -------------------------------------------------------------------
 
     @property
+    @functools.lru_cache()
     def plugins(self):
         """
         :return <[Plugin]:plugins> Returns all registered plugins
@@ -265,6 +313,7 @@ class JuniperEngine(object):
         return output
 
     @property
+    @functools.lru_cache()
     def modules(self):
         """
         :return <[Module]:modules> Returns all registered modules
@@ -403,6 +452,38 @@ class JuniperEngine(object):
 
     # -------------------------------------------------------------------
 
+    def get_qt_application(self):
+        """
+        Returns the QApplication instance - creates it if it has not been initialized
+        :return <QApplication:out> The QApplication instance
+        """
+        from qtpy import QtWidgets
+        import juniper.widgets.q_standalone_app
+        output = QtWidgets.QApplication.instance()
+        if(not output):
+            return juniper.widgets.q_standalone_app.QStandaloneApp()
+        return output
+
+    def register_qt_widget(self, widget):
+        """
+        Used for certain host applications where a widget needs to be parented
+        to a main window in a specific way
+        :param <QWidget:widget> The widget to parent
+        """
+        pass
+
+    def get_main_window(self):
+        """
+        Gets the main QMainWindow object for the current host application
+        :return <QMainWindow:main_window> The main window object if found - else None
+        """
+        app = self.get_qt_application()  # by default just ensure the app is created
+        if(hasattr(app, "main_window")):
+            return app.main_window
+        return None
+
+    # -------------------------------------------------------------------
+
     @property
     def python_version(self):
         """
@@ -453,6 +534,15 @@ class JuniperEngine(object):
         """
         :return <str:dir> The root directory for the Juniper workspace
         """
+        juniper_config = os.path.join(os.getenv("APPDATA"), "juniper\\config.json")
+        if(os.path.isfile(juniper_config)):
+            with open(juniper_config, "r") as f:
+                try:
+                    root = json.load(f)["path"]
+                    if(os.path.isdir(root)):
+                        return root
+                except Exception:
+                    pass
         return os.path.abspath(os.path.join(os.path.dirname(__file__), "..\\..\\..\\..\\.."))
 
     @property

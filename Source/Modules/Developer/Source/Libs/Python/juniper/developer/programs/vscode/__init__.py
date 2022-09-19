@@ -35,8 +35,8 @@ def generate_code_workspace():
         "path": juniper.paths.root()
     })
 
-    # TODO~ Plugin sub-workspaces have been disabled as we cannot use the base code workspace settings when
-    #       running scripts from them. This results in the python.exe for the Juniper workspace not being found!
+    # Plugin sub-workspaces have been disabled as we cannot use the base code workspace settings when
+    # running scripts from them. This results in the python.exe for the Juniper workspace not being found!
     '''json_data["folders"].append({
         "name": "Plugins (All)",
         "path": os.path.join(juniper.paths.root(), "Plugins")

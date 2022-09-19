@@ -4,6 +4,7 @@ Currently only a single project is supported at a time.
 """
 import json
 import os
+import unreal
 
 import juniper.engine
 
@@ -24,7 +25,7 @@ class Unreal(juniper.engine.JuniperEngine):
     def on_install(self):
         """
         Installs Juniper bootstrap to a target unreal project
-        TODO~ Support for multiple unreal projects at once
+        TODO! UProject wrapper class, find the current uproject from the current python instance
         """
         import juniper.utilities.filemgr
 
@@ -79,6 +80,28 @@ class Unreal(juniper.engine.JuniperEngine):
                             "\n" + python_plugin_lines + "\n" + startup_script_string
                         )
                     f.write(ini_data)
+
+    def on_shutdown(self):
+        unreal.unregister_slate_post_tick_callback(self.slate_tick_handle)
+        unreal.unregister_python_shutdown_callback(self.engine_shutdown_handle)        
+
+    def initialize_tick(self):
+        import unreal
+
+        def slate_tick(delta_seconds):
+            self.__tick__()
+
+        self.slate_tick_handle = unreal.register_slate_post_tick_callback(slate_tick)
+
+    def on_post_startup(self):
+        self.engine_shutdown_handle = unreal.register_python_shutdown_callback(self.on_shutdown)
+
+    def register_qt_widget(self, widget):
+        import unreal
+        unreal.parent_external_window_to_slate(
+            widget.winId(),
+            unreal.SlateParentWindowSearchMethod.ACTIVE_WINDOW
+        )
 
     # --------------------------------------------------------------------
 

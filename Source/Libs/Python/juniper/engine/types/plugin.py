@@ -7,10 +7,8 @@ import juniper.types.framework.singleton
 import juniper.utilities.string as string_utils
 
 import functools
-import glob
 import json
 import os
-import sys
 
 
 class PluginManager(object, metaclass=juniper.types.framework.singleton.Singleton):
@@ -18,7 +16,6 @@ class PluginManager(object, metaclass=juniper.types.framework.singleton.Singleto
         self.plugin_cache = []
 
         # Initialize all avaliable plugins
-        # TODO~ Add in a system to enable/disable plugins (with a GUI for user setting)
         plugins_root = os.path.join(juniper.paths.root(), "Plugins")
         for plugin_group in os.listdir(plugins_root):
             plugin_group_dir = os.path.join(plugins_root, plugin_group)
@@ -155,6 +152,14 @@ class Plugin(object):
 
     # ---------------------------------------------------------------------
 
+    def on_tick(self):
+        """
+        Overrideable method called each tick
+        """
+        pass
+
+    # ---------------------------------------------------------------------
+
     def get_file(self, subdir, relative_path, override=None, require_override=False):
         """
         Gets a file for the plugin - with optional overrides
@@ -199,82 +204,3 @@ class Plugin(object):
         :return <str:output> The file if found - else None
         """
         return self.get_file("Config", relative_path, override=override, require_override=require_override)
-
-    # ---------------------------------------------------------------------
-
-
-# TODO~ Plugin Creator
-'''
-class ModuleCreator(object):
-    def __init__(self, module_name, module_display_name, integration_type="standalone"):
-        """
-        Helper class used to create a Juniper Module
-        :param <str:module_name> The code name of the module (Ie, "tools_library")
-        :param <str:module_display_name> The display name of the module (Ie, "Tools Library")
-        :param [<str:integration_type>] How are tools from this module integrated into Juniper?
-        """
-        self.module_name = module_name
-        self.module_display_name = module_display_name
-        self.integration_type = integration_type
-
-    @property
-    def integration_types(self):
-        """
-        :return <[str]:integration_types> All vaild integration types
-        """
-        return (
-            "Integrated",
-            "Standalone",
-            "Separate"
-        )
-
-    @property
-    def jmodule_root(self):
-        """
-        :return <str:root> The root directory of this module
-        """
-        return os.path.join(juniper.paths.root(), "modules", self.module_display_name)
-
-    @property
-    def jmodule_path(self):
-        """
-        :return <str:path> The path to the module.jmodule file
-        """
-        return os.path.join(self.jmodule_root, self.module_name + ".jmodule")
-
-    @property
-    def jmodule_data(self):
-        """
-        :return <dict:data> The data that should be contained in the .jmodule file
-        """
-        return {
-            "integration_type": self.integration_type
-        }
-
-    def create(self):
-        """
-        Creates all stub files for this juniper module
-        """
-        if(self.module_name):
-            output_root = self.jmodule_root
-            jmodule_path = self.jmodule_path
-
-            paths = [
-                f"{output_root}\\bin\\common\\.empty",
-                f"{output_root}\\config\\common\\.empty",
-                f"{output_root}\\lib\\python\\{self.module_name}\\__init__.py",
-                f"{output_root}\\resources\\common\\.empty",
-                f"{output_root}\\scripts\\common\\.empty",
-                f"{output_root}\\shelves\\.empty"
-            ]
-
-            for i in paths:
-                if(not os.path.isfile(i)):
-                    os.makedirs(os.path.dirname(i))
-                    with open(i, "w") as f:
-                        f.write("")
-
-            if(not os.path.isfile(jmodule_path)):
-                with open(jmodule_path, "w") as f:
-                    json.dump(self.jmodule_data, f, sort_keys=True)
-'''

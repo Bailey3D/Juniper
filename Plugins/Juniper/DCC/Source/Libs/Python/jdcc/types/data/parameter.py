@@ -1,6 +1,8 @@
 import functools
 from enum import Enum
 
+import juniper
+import juniper.types
 import juniper.types.framework.singleton
 
 
@@ -21,7 +23,7 @@ class ParameterTypes(Enum):
     texture = 10
 
 
-class ParameterManager(object, metaclass=juniper.types.framework.singleton.Singleton):
+class ParameterManager(juniper.types.Manager, metaclass=juniper.types.framework.singleton.Singleton):
     """
     Singleton manager class for parameters
     """
@@ -50,7 +52,7 @@ class ParameterManager(object, metaclass=juniper.types.framework.singleton.Singl
         return ParameterTypes["unknown"]
 
 
-class Parameter(object):
+class Parameter(juniper.types.Object):
     def __init__(self, name="", description="", value="", default="", min="", max="", group=""):
         """
         Class for a generic parameter type

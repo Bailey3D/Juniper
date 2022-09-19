@@ -3,10 +3,12 @@ Wrapper for a simple vector type
 """
 import math
 
+import juniper
+import juniper.types
 import juniper.decorators
 
 
-class _VectorType(object):
+class _VectorType(juniper.types.Object):
     def __init__(self, *args):
         """
         Base class for a Vector type

@@ -2,8 +2,11 @@ import uuid
 import hashlib
 import secrets
 
+import juniper
+import juniper.types
 
-class Guid(object):
+
+class Guid(juniper.types.Object):
     def __init__(self, seed=None, guid=None):
         """
         Generates a random guid string

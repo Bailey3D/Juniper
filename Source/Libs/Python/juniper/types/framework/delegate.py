@@ -47,7 +47,6 @@ class _DelegateManager(object):
         def broadcast(self, *args, **kwargs):
             """Broadcast this delegates methods"""
             for i in self.child_methods:
-                # TODO: Arguments
                 i()
 
 

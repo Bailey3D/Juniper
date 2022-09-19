@@ -1,26 +1,38 @@
-'''import os
-import inspect
-
+'''import sys
 import juniper
-import juniper.engine
+import juniper.engine.types.core.function as f
 
 
-je = juniper.engine.JuniperEngine()
-pc = je.program_context
+class B(object):
+    def __init__(self) -> None:
+        super().__init__()
 
-host_root = os.path.join(
-    je.workspace_root,
-    "Source\\Hosts",
-    je.name
-)
-host_override_path = os.path.join(
-    host_root,
-    "Source\\Libs\\Python\\overrides.py"
-)
+    @f.function()
+    def some_function(self):
+        print(self)
+        print("This is in A")
 
-print(host_override_path)
-print(os.path.isfile(host_override_path))
-'''
-import juniper
-import tools_library.asset_library as a
-print(a)
+    @some_function.override(host="python")
+    def some_function(self):
+        print("This is in B")
+
+    #@some_function.override(host="peython")
+    #def some_function(self):
+    #    print("This is in C")
+
+    def something(self):
+        pass
+
+
+b = B()
+b.some_function()
+print(b.some_function)
+
+
+#juniper.cast()'''
+
+
+'''import juniper.types.math.vector as v
+
+a = v.Vector3(0, 1, 2)
+print(a)'''

@@ -4,11 +4,13 @@ Contains base class implementations for Type Wrappers
 Type wrappers are used to wrap native object types from various host applications into a common Juniper type.
 Each wrapper includes a base class for functionality, and a manager class for caching and retrieving initialized wrapper objects.
 """
+import juniper
+import juniper.types
 import juniper.decorators
 from juniper.types.framework.singleton import Singleton
 
 
-class TypeWrapperManager(object, metaclass=Singleton):
+class TypeWrapperManager(juniper.types.Manager, metaclass=Singleton):
     __instance__ = None
 
     def __init__(self):
@@ -80,7 +82,7 @@ class TypeWrapperManager(object, metaclass=Singleton):
             self.__stored_objects_native_objects_cache.pop(possible_index)
 
 
-class TypeWrapper(object):
+class TypeWrapper(juniper.types.Object):
     __manager__ = TypeWrapperManager
 
     def __init__(self, native_object):

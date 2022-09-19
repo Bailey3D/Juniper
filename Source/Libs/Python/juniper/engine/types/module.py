@@ -58,15 +58,33 @@ class Module(object):
         return output
 
     def on_pre_startup(self):
+        """
+        Overrideable method called during the Juniper pre startup stage
+        """
         pass
 
     def on_startup(self):
+        """
+        Overrideable method called during the Juniper main startup stage
+        """
         pass
 
     def on_post_startup(self):
+        """
+        Overrideable method called during the Juniper post startup stage
+        """
         pass
 
     def on_shutdown(self):
+        """
+        Overrideable method called during the Juniper shutdown stage
+        """
+        pass
+
+    def on_tick(self):
+        """
+        Overrideable method called each Juniper tick
+        """
         pass
 
     # ----------------------------------------------------------

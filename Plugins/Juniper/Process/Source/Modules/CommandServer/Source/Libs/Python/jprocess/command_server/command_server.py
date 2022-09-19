@@ -1,10 +1,10 @@
 import contextlib
 import os
-from qtpy import QtWidgets, QtCore
 import select
 import socket
 
 import juniper
+import juniper.engine
 import juniper.decorators
 import juniper.types.framework.singleton
 import juniper.paths
@@ -75,8 +75,6 @@ class CommandServer(metaclass=juniper.types.framework.singleton.Singleton):
         else:
             juniper.log.warning("Unable to initialize listen server for the current program.", traceback=False)
 
-        self.bind_tick()
-
     def close(self):
         """
         Close the listen server
@@ -84,39 +82,6 @@ class CommandServer(metaclass=juniper.types.framework.singleton.Singleton):
         self.server_socket.close()
 
     # ----------------------------------------------------------------
-
-    @juniper.decorators.virtual_method
-    def bind_tick(self):
-        """
-        Bind the tick command to update with the host application
-        """
-        if(QtWidgets.QApplication.instance()):
-            if(self.port):
-                timer_ = QtCore.QTimer()
-                timer_.timeout.connect(self.tick)
-                timer_.start(20)
-                self.tick_timer = timer_
-
-    @bind_tick.override("unreal")
-    def _bind_tick(self):
-        import unreal
-
-        def slate_tick(delta_seconds):
-            """Function bound to unreal's slate tick"""
-            self.tick()
-
-        def engine_shutdown():
-            """Called when unreal shuts down"""
-            unreal.unregister_slate_post_tick_callback(slate_tick_handle)
-            unreal.unregister_python_shutdown_callback(engine_shutdown_handle)
-
-        slate_tick_handle = unreal.register_slate_post_tick_callback(slate_tick)
-        engine_shutdown_handle = unreal.register_python_shutdown_callback(engine_shutdown)
-
-    @bind_tick.override("python")
-    def _bind_tick(self):
-        # Do not tick the command server if running a standalone python.
-        pass
 
     def tick(self):
         """
