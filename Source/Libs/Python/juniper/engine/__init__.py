@@ -199,14 +199,15 @@ class JuniperEngine(object):
         Note: By default we use a Qt based QTimer - this may not work in all hosts
         for those hosts this method should be overriden
         """
-        from qtpy import QtCore
-        import juniper.widgets
-        app = juniper.widgets.get_application()
-        if(app):
-            timer = QtCore.QTimer()
-            timer.timeout.connect(self.__tick__)
-            timer.start(0)
-            self.__timer = timer
+        if("juniper:tick=false" not in sys.argv):
+            from qtpy import QtCore
+            import juniper.widgets
+            app = juniper.widgets.get_application()
+            if(app):
+                timer = QtCore.QTimer()
+                timer.timeout.connect(self.__tick__)
+                timer.start(0)
+                self.__timer = timer
 
     # -------------------------------------------------------------------
 

@@ -21,33 +21,11 @@ class Designer(juniper.engine.JuniperEngine):
         """
         Installs the Juniper bootstrap to Substance Designer
         """
-        # 1) Make target project directory
-        if(not os.path.isdir(self.local_sbsprj_dir)):
-            os.makedirs(self.local_sbsprj_dir)
-
-        # 3) Copy to startup dir
-        local_sbsprj_scripts_dir = os.path.join(self.local_sbsprj_dir, "scripts")
-        local_sbsprj_script_path = os.path.join(local_sbsprj_scripts_dir, "__startup__.py")
-        self.create_bootstrap_file(local_sbsprj_script_path)
-
-        # 2) Read template sbsprj lines
-        shelf_lines = []
-        with open(self.sbsprj_template_path, "r") as f:
-            shelf_lines = f.readlines()
-
-        # Inline replace the data to point to the current juniper location
-        # Note: This will need to be updated whenever Juniper is moved
-        for i in range(len(shelf_lines)):
-            line = shelf_lines[i]
-            if("$(PLUGINS_DIR)" in line):
-                shelf_lines[i] = line.replace("$(PLUGINS_DIR)", local_sbsprj_scripts_dir)
-            if("$(PROJECT_NAME)" in line):
-                shelf_lines[i] = line.replace("$(PROJECT_NAME)", "Juniper")
-
-        with open(self.local_sbsprj_path, "w+") as f:
-            f.writelines(shelf_lines)
-
-        self.add_sbsprj(self.local_sbsprj_path)
+        bootstrap_path = os.path.join(
+            juniper.paths.documents(),
+            "Allegorithmic\\Substance Designer\\python\\sduserplugins\\__juniper_startup__.py"
+        )
+        self.create_bootstrap_file(bootstrap_path)
 
     def bootstrap_call_lines(self):
         """

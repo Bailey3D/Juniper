@@ -4,7 +4,6 @@ Currently only a single project is supported at a time.
 """
 import json
 import os
-import unreal
 
 import juniper.engine
 
@@ -82,8 +81,12 @@ class Unreal(juniper.engine.JuniperEngine):
                     f.write(ini_data)
 
     def on_shutdown(self):
-        unreal.unregister_slate_post_tick_callback(self.slate_tick_handle)
-        unreal.unregister_python_shutdown_callback(self.engine_shutdown_handle)        
+        try:
+            import unreal
+            unreal.unregister_slate_post_tick_callback(self.slate_tick_handle)
+            unreal.unregister_python_shutdown_callback(self.engine_shutdown_handle)        
+        except Exception:
+            pass
 
     def initialize_tick(self):
         import unreal
@@ -94,6 +97,7 @@ class Unreal(juniper.engine.JuniperEngine):
         self.slate_tick_handle = unreal.register_slate_post_tick_callback(slate_tick)
 
     def on_post_startup(self):
+        import unreal
         self.engine_shutdown_handle = unreal.register_python_shutdown_callback(self.on_shutdown)
 
     def register_qt_widget(self, widget):

@@ -7,6 +7,7 @@ import sys
 # Startup in Python context to get all hosts
 sys.argv.append("juniper:install=true")
 sys.argv.append("juniper:startup=true")
+sys.argv.append("juniper:tick=false")
 sys.argv.append("juniper:program_context=python")
 
 
@@ -22,6 +23,7 @@ for i in juniper.engine.JuniperEngine().supported_hosts:
     print(f"Juniper: Installing For Host {i}")
     sys.argv.append("juniper:install=true")
     sys.argv.append("juniper:startup=false")
+    sys.argv.append("juniper:tick=false")
     sys.argv.append(f"juniper:program_context={i}")
     bootstrap = juniper.engine.bootstrap.Bootstrap()
     engine = juniper.engine.JuniperEngine()

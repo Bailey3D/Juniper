@@ -214,4 +214,5 @@ def remove_read_only(path):
     Removes the read only flag from a file
     :param <str:path> The path to edit
     """
-    os.chmod(path, stat.S_IWRITE)
+    if(os.path.isfile(path) or os.path.isdir(path)):
+        os.chmod(path, stat.S_IWRITE)
