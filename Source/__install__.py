@@ -27,5 +27,5 @@ for i in juniper.engine.JuniperEngine().supported_hosts:
     sys.argv.append(f"juniper:program_context={i}")
     bootstrap = juniper.engine.bootstrap.Bootstrap()
     engine = juniper.engine.JuniperEngine()
-    print(engine.name)
     engine.shutdown()
+    print("---")

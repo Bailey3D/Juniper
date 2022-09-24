@@ -1,14 +1,19 @@
-from qtpy import QtWidgets
-
 from juniper.widgets import q_collapsible_widget
 
 
 class QHubGroup(q_collapsible_widget.QCollapsibleWidget):
     def __init__(self, title, parent=None, tint=None, tab_content=True):
-        super(QHubGroup, self).__init__(parent=parent, title=title, collapsed=True, tint=tint, show_border=True, tab_content=tab_content, tab_multiplier=1.0)
+        super(QHubGroup, self).__init__(
+            parent=parent,
+            title=title,
+            collapsed=True,
+            tint=tint,
+            show_border=True,
+            tab_content=tab_content,
+            tab_multiplier=1.0
+        )
 
         self.__child_groups = {}
-        self.__children = []
 
     def add_group(self, group_name):
         """Adds a child group to this hub group

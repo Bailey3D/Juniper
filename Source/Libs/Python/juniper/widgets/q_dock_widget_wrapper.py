@@ -1,6 +1,6 @@
 """
 Wrappers / helpers for Dock Widgets in the different host Contexts
-TODO! Move this to use overrides per host implementation
+TODO! Host: Move this to use overrides per host implementation
 """
 from qtpy import QtWidgets, QtCore
 

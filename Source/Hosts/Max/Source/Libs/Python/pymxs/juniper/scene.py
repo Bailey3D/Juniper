@@ -29,7 +29,8 @@ def name():
 
 
 def clone(nodes, deep_clone=True, instance=False, copy=True, reference=False, select_copies=False):
-    """Clones an object or an array of objects
+    """
+    Clones an object or an array of objects
     :param <[node]|node:nodes> An array of nodes, or a single node
     """
     copies = []
@@ -86,7 +87,8 @@ def clone(nodes, deep_clone=True, instance=False, copy=True, reference=False, se
 
 
 def pick_node(position, get_inode=False):
-    """Picks a node in the viewport from a viewport position
+    """
+    Picks a node in the viewport from a viewport position
     :param <[float]:position> Fractional [0..1] position in the viewport to pick
     :return <INode:node> Picked node - None if nothing was picked
     """
@@ -108,7 +110,8 @@ def pick_node(position, get_inode=False):
 
 
 def hit_test_face(inode, position):
-    """Takes an input node and viewport position and returns the face ID that is hit
+    """
+    Takes an input node and viewport position and returns the face ID that is hit
     :param <INode:inode> The inode to work on
     :param <[int]:position> Screen position to test at
     :return <int:face_id> ID of the face hit, None if nothing was hit

@@ -33,7 +33,6 @@ class AssetInterface(object):
         """
         :return <str:path> Absolute path to the asset
         """
-        # TODO?: Relative / local path mapping may be useful?
         return self.__asset_path
 
     @property
@@ -63,10 +62,6 @@ class AssetInterface(object):
         Saves the asset if it is dirty
         :param [<bool:force>] Should we force save even if the asset isn't dirty? This will force the revision guid to update.
         """
-        # TODO~: Keys beginning with "#" should be excluded
-        #       as they are only used for local parameters
-        # ..
-
         if(self.dirty or force):
             self.set_metadata_key("revision_guid", str(juniper.types.misc.guid.Guid()))
             if(not os.path.isdir(os.path.dirname(self.asset_path))):

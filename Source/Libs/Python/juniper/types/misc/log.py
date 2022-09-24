@@ -1,17 +1,15 @@
-import os
 import sys
-import inspect
 import traceback as traceback_
 
 
 class _Colours(object):
-    RED   = "\033[1;31m"
+    RED = "\033[1;31m"
     YELLOW = "\033[33m"
-    BLUE  = "\033[1;34m"
-    CYAN  = "\033[1;36m"
+    BLUE = "\033[1;34m"
+    CYAN = "\033[1;36m"
     GREEN = "\033[0;32m"
     RESET = "\033[0;0m"
-    BOLD    = "\033[;1m"
+    BOLD = "\033[;1m"
     REVERSE = "\033[;7m"
 
 

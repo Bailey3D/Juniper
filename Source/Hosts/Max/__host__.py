@@ -7,15 +7,8 @@ import juniper.engine
 
 
 class Max(juniper.engine.JuniperEngine):
-    def on_startup(self):
-        """
-        Adds the `pymxs.juniper` package to `pymxs.__path__`
-        """
-        import pymxs
-        pymxs.__path__.append(os.path.join(
-            self.workspace_root,
-            "Source\\Hosts\\Max\\Source\\Libs\\Python\\pymxs"
-        ))
+    def get_host_module_names(self):
+        return ("pymxs",)
 
     def on_install(self):
         """

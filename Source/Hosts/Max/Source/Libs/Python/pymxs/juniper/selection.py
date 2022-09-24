@@ -2,7 +2,8 @@ import pymxs
 
 
 def get_or_pick_selection():
-    """Returns the current node selection if something is selected, else prompts the user to pick nodes
+    """
+    Returns the current node selection if something is selected, else prompts the user to pick nodes
     :return <[node]:nodes> Node selection
     """
     output = []

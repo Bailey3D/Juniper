@@ -9,22 +9,13 @@ import juniper.engine
 
 
 class Unreal(juniper.engine.JuniperEngine):
-    def on_startup(self):
-        """
-        Adds the `unreal.juniper` module to `unreal.__path__`
-        """
-        import unreal
-        if(not hasattr(unreal, "__path__")):
-            unreal.__path__ = []
-        unreal.__path__.append(os.path.join(
-            self.workspace_root,
-            "Source\\Hosts\\Unreal\\Source\\Libs\\Python\\unreal"
-        ))
+    def get_host_module_names(self):
+        return ("unreal",)
 
     def on_install(self):
         """
         Installs Juniper bootstrap to a target unreal project
-        TODO! UProject wrapper class, find the current uproject from the current python instance
+        :TODO~ UProject wrapper class, find the current uproject from the current python instance
         """
         import juniper.utilities.filemgr
 

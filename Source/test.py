@@ -36,3 +36,6 @@ print(b.some_function)
 
 a = v.Vector3(0, 1, 2)
 print(a)'''
+
+import juniper
+print("ok")

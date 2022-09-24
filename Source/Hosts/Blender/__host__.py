@@ -7,15 +7,8 @@ import juniper.engine
 
 
 class Blender(juniper.engine.JuniperEngine):
-    def on_pre_startup(self):
-        """
-        Adds the base `bpy.juniper` library to `bpy.__path__`
-        """
-        import bpy
-        bpy.__path__.append(os.path.join(
-            self.workspace_root,
-            "Source\\Hosts\\Blender\\Source\\Libs\\Python\\bpy"
-        ))
+    def get_host_module_names(self):
+        return ("bpy",)
 
     def on_install(self):
         """
@@ -28,11 +21,6 @@ class Blender(juniper.engine.JuniperEngine):
             if(os.path.isdir(blender_sub_dir) and (i.replace(".", "").isdigit())):
                 startup_folder = os.path.join(blender_sub_dir, "scripts\\startup")
                 self.create_bootstrap_file(os.path.join(startup_folder, "__juniper_startup__.py"))
-
-    def on_shutdown(self):
-        pass
-
-    # ---------------------------------------------------------
 
     @property
     def python_path(self):

@@ -50,8 +50,6 @@ class QJuniperTreeWidget(QtWidgets.QWidget):
         self.content_layout.setSpacing(0)
         self.content_layout_outer.addLayout(self.content_layout)
 
-        # TODO?: Menu buttons
-
         # Search box
         self.q_search_list = QtWidgets.QListWidget()
         self.search_list_max_entries_visible = 16

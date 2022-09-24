@@ -9,20 +9,13 @@ import juniper.engine
 
 
 class Houdini(juniper.engine.JuniperEngine):
-    def on_pre_startup(self):
-        """
-        Adds the `hou.juniper` package to the `hou.__path__`
-        """
-        import hou
-        hou.__path__.append(os.path.join(
-            self.workspace_root,
-            "Source\\Hosts\\Houdini\\Source\\Libs\\Python\\hou"
-        ))
+    def get_host_module_names(self):
+        return ("hou",)
 
     def on_install(self):
         """
         Installs the Juniper bootstrap to Houdini.
-        TODO? This overrides the pythonrc.py file - which is destructive. Swap out?
+        :TODO! This overrides the pythonrc.py file - which is destructive. Swap out?
         """
         try:
             hip_exe_path = self.__get_default_windows_app('.hip').lower()
@@ -36,6 +29,10 @@ class Houdini(juniper.engine.JuniperEngine):
         except Exception:
             juniper.log.error("Failed to initialize Houdini juniper environment.", silent=True)
 
+    def get_main_window(self):
+        import hou
+        return hou.qt.mainWindow()
+
     # ----------------------------------------------------------------------
 
     def __get_default_windows_app(self, suffix):
@@ -43,7 +40,3 @@ class Houdini(juniper.engine.JuniperEngine):
         with winreg.OpenKey(winreg.HKEY_CLASSES_ROOT, r'{}\shell\open\command'.format(class_root)) as key:
             command = winreg.QueryValueEx(key, '')[0]
             return shlex.split(command)[0]
-
-    def get_main_window(self):
-        import hou
-        return hou.qt.mainWindow()

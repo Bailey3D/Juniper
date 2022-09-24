@@ -88,7 +88,7 @@ class JuniperMenu(metaclass=juniper.types.framework.singleton.Singleton):
             action.triggered.connect(macro.run)
             action.setToolTip(macro.summary)
         elif(self.program_context == "blender"):
-            pass  # TODO! Blender: Actions for blender menus
+            pass  # TODO! ToolsMenu: Blender: Actions for blender menus
         elif(self.program_context == "unreal"):
             import unreal
             action = unreal.ToolMenuEntry(
@@ -117,7 +117,7 @@ class JuniperMenu(metaclass=juniper.types.framework.singleton.Singleton):
         :param [<dict:branches>] Current branches dict
         :param [<[Macros]:macros>] The macros to add
         """
-        if(self.program_context == "blender"):  # TODO!
+        if(self.program_context == "blender"):  # TODO! ToolsMenu: Blender
             return {"_menu": parent}
         if(not branches):
             branches = {"_menu": parent}

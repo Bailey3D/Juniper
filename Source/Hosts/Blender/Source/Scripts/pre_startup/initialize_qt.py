@@ -2,6 +2,7 @@
 :type script
 :desc Binds the Qt event system to the blender event system
 :callbacks [pre_startup]
+:TODO! Move this to the engine override tick
 """
 import bpy
 from qtpy import QtCore

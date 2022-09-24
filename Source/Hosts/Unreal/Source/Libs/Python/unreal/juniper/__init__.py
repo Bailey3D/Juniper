@@ -1,5 +1,4 @@
 import os
-import socket
 
 import juniper
 import juniper.utilities.json as json_utils

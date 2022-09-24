@@ -24,7 +24,7 @@ class Plugin(object):
         return True
 
     # ------------------------------------------------------------------------------
-    
+
     def on_tick(self):
         """
         Overrideable method called each tick
@@ -84,10 +84,6 @@ class Plugin(object):
             if(script and script.get("type") == "tool"):
                 output.append(script)
         return output
-
-    @property
-    def is_host_plugin(self):
-        return "\\juniperhosts\\" in self.jplugin_path.lower()
 
     @property
     def modules(self):

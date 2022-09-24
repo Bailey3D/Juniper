@@ -7,14 +7,8 @@ import juniper.engine
 
 
 class Painter(juniper.engine.JuniperEngine):
-    def on_startup(self):
-        """
-        Adds the `substance_painter.juniper` module to `substance_painter.__path__`
-        """
-        import substance_painter
-        substance_painter.__path__.append(
-            os.path.join(self.workspace_root, "Source\\Hosts\\Painter\\Source\\Libs\\Python\\substance_painter")
-        )
+    def get_host_module_names(self):
+        return ("substance_painter",)
 
     def on_install(self):
         """

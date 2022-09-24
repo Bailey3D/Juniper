@@ -1,5 +1,5 @@
 """
-TODO! Replace this with the version in bootstrap and merge contents
+TODO! Engine: Replace this with the version in bootstrap and merge contents
 """
 import juniper.paths
 import juniper.engine.types.script
@@ -33,34 +33,15 @@ class PluginManager(object, metaclass=juniper.types.framework.singleton.Singleto
         # 2) Juniper plugins should always come after host plugins so any worksplace additions are initialized
         # 3) All other plugins should come last
         juniper_plugins = []
-        juniper_host_plugins = []
         other_plugins = []
 
         for i in self.plugin_cache:
-            if("\\juniperhosts\\" in i.root.lower()):
-                juniper_host_plugins.append(i)
-            elif("\\juniper\\" in i.root.lower()):
+            if("\\juniper\\" in i.root.lower()):
                 juniper_plugins.append(i)
             else:
                 other_plugins.append(i)
 
-        self.plugin_cache = juniper_host_plugins + juniper_plugins + other_plugins
-
-        # Add all plugin python roots to the `__path__` for this module so they can be accessed via `juniper.plugins.plugin_name`
-        '''for i in self.plugin_cache:
-            sys.modules[__name__].__path__.append(
-                os.path.join(i.root, "Source\\Libs\\Python")
-            )'''
-
-    @property
-    def current_host_plugin(self):
-        """
-        :return <Plugin:host> The current host plugin (Ie, max, designer, etc)
-        """
-        for i in self.plugin_cache:
-            if("\\juniperhosts\\" in i.root.lower() and i.enabled):
-                return i
-        return None
+        self.plugin_cache = juniper_plugins + other_plugins
 
     def __iter__(self):
         """
@@ -184,23 +165,3 @@ class Plugin(object):
         if(os.path.isfile(abs_path)):
             return abs_path
         return None
-
-    def get_resource(self, relative_path, override=None, require_override=False):
-        """
-        Gets a resource for the plugin - with optional overrides
-        :param <str:relative_path> The relative path for the file
-        :param [<str:override>] Optional override for the file (Ie, "some_file.designer.txt")
-        :param [<bool:require_override>] Is the override required? Or may we fallback to the non-overriden version
-        :return <str:output> The file if found - else None
-        """
-        return self.get_file("Resources", relative_path, override=override, require_override=require_override)
-
-    def get_config(self, relative_path, override=None, require_override=False):
-        """
-        Gets a config for the plugin - with optional overrides
-        :param <str:relative_path> The relative path for the file
-        :param [<str:override>] Optional override for the file (Ie, "some_file.designer.txt")
-        :param [<bool:require_override>] Is the override required? Or may we fallback to the non-overriden version
-        :return <str:output> The file if found - else None
-        """
-        return self.get_file("Config", relative_path, override=override, require_override=require_override)

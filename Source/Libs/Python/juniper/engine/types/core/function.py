@@ -1,5 +1,4 @@
-# TODO!! Complete
-# TODO! fix self issue
+# TODO!! Complete implementation. Fix the `self` issue
 import functools
 import inspect
 import weakref
@@ -78,8 +77,8 @@ class Function(object):
         return self.__overriding
 
     def __call__(self, *args, **kwargs):
-        # TODO! Delegates
-        # TODO! Validity checks
+        # TODO! Engine: Delegates
+        # TODO! Engine: Validity checks
         # overrides
         if(self.__override):
             self.__override(*args, **kwargs)

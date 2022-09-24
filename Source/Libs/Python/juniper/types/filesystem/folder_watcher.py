@@ -121,6 +121,6 @@ class FileWatcher(juniper.types.Object):
     def __process_queue(queue_):
         while True:
             if(not queue_.empty()):
-                event = queue_.get()
+                queue_.get()
             else:
                 time.sleep(1)

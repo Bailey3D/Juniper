@@ -37,7 +37,7 @@ class GeometryWrapper(juniper.types.wrappers.type_wrapper.TypeWrapper):
         Multiple types can be used for wrapping depending on the implementation, for example:
         :wraps <max:SelectionSetWrapper> Used for treating the contents as a single entity
         :wraps <max:NodeWrapper> Used for treating a single node as an entity
-        :wraps <max:LayerWrapper> used for treating a layer as an entity (TODO~: Implement LayerWrapper)
+        :wraps <max:LayerWrapper> used for treating a layer as an entity
         :wraps <designer:FBXResource> Used to treat an imported FBX as an entity
         :wraps <painter:SceneWrapper> Treats the mesh in the scene as an entity
         :wraps <unreal:UStaticMesh> Treats the static mesh actor as an entity

@@ -111,17 +111,37 @@ class JuniperEngine(object):
         setattr(juniper, "log", self.log)
         juniper_globals.set("log", self.log)
 
+        # Link internal libraries before startup
+        if(self.__class__.__name__ != JuniperEngine.__name__):
+            for host_module_name in self.get_host_module_names():
+                module = importlib.import_module(host_module_name)
+                lib_dirs = []
+                if(not hasattr(module, "__path__")):
+                    module.__path__ = []
+
+                lib_dirs.append(os.path.join(
+                    self.workspace_root,
+                    f"Source\\Hosts\\{self.__class__.__name__}\\Source\\Libs\\Python\\{host_module_name}"
+                ))
+                for i in self.plugins:
+                    lib_dirs.append(os.path.join(i.root, f"Source\\Libs\\Python\\{host_module_name}"))
+                for i in self.modules:
+                    lib_dirs.append(os.path.join(i.root, f"Source\\Libs\\Python\\{host_module_name}"))
+                for i in lib_dirs:
+                    if(os.path.isdir(i)):
+                        module.__path__.append(i)
+
         # Run pre-startup
         self.on_pre_startup()
         for i in self.plugins:
-            pass  # TODO! Broadcast pre-startup to plugins
+            pass  # TODO! Startup: Broadcast pre-startup to plugins
         for i in self.modules:
             i.on_pre_startup()
 
         # Run startup
         self.on_startup()
         for i in self.plugins:
-            pass  # TODO! Broadcast startup to plugins
+            pass  # TODO! Startup: Broadcast startup to plugins
         for i in self.modules:
             i.on_startup()
         self.broadcast("pre_startup")
@@ -129,7 +149,7 @@ class JuniperEngine(object):
         # Run post-startup
         self.on_post_startup()
         for i in self.plugins:
-            pass  # TODO! Broadcast post-startup to plugins
+            pass  # TODO! Startup: Broadcast post-startup to plugins
         for i in self.modules:
             i.on_post_startup()
         self.broadcast("startup")
@@ -254,6 +274,12 @@ class JuniperEngine(object):
         Overrideable tick method call each update
         """
         pass
+
+    def get_host_module_names(self):
+        """
+        Overrideable method for retrieving the names of all inbuilt modules for the current host context
+        """
+        return []
 
     # -------------------------------------------------------------------
 
@@ -634,12 +660,3 @@ class JuniperEngine(object):
             self.workspace_root,
             f"Cached\\PyCache\\Python{self.python_version_major}{self.python_version_minor}\\site-packages"
         )
-
-    def core_library_paths(self):
-        """
-        :return <[str]:dirs> The directories to all core/required python libraries
-        """
-        output = []
-        output.append(os.path.join(self.workspace_root, "Source\\Libs\\python"))
-        output.append(self.site_packages_dir)
-        return output

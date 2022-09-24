@@ -91,7 +91,7 @@ class QMenuWrapper(object):
                 layout.operator("object.select_all", text="Select").action = "TOGGLE"
 
         def draw_item(self_, context):
-            layout = self_.layout
+            self_.layout
             self_.layout.menu(blender_menu.bl_idname)
 
         bpy.utils.register_class(blender_menu)
@@ -118,5 +118,5 @@ class QMenuWrapper(object):
 
     @add_separator.override("blender")
     def _add_separator(self):
-        # TODO! Blender: Implement separators for blender
+        # TODO! ToolsMenu: Blender: Implement separators for blender
         pass

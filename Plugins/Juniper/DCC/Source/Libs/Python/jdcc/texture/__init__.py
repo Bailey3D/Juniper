@@ -1,4 +1,10 @@
 # TODO~: Implementation
+# compression_method
+# hash(hash_size)
+# texture_type
+# uses_srgb
+# parameter_name
+# import_asset
 import juniper.types.wrappers.type_wrapper
 
 
@@ -17,10 +23,3 @@ class TextureWrapper(juniper.types.wrappers.type_wrapper.TypeWrapper):
         :param [<str:asset_path>] Path to a real texture (Ie, .tga, .png) - if we're wrapping this then native_object should be left blank
         """
         super().__init__(native_object)
-
-        #compression_method
-        #hash(hash_size)
-        #texture_type
-        #uses_srgb
-        #parameter_name
-        #import_asset

@@ -58,8 +58,6 @@ def add_shelf(shelf_name, shelf_root):
         juniper.paths.root(),
         "Cached\\Programs\\Designer\\juniper.sbsprj"
     )
-    print("Doing an add shelf")
-    print(juniper_sbsprj_path)
 
     xml_sbsprj_tree = xml.etree.ElementTree.parse(juniper_sbsprj_path)
     xml_sbsprj_root = xml_sbsprj_tree.getroot()

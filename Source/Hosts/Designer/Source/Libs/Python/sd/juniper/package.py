@@ -10,7 +10,8 @@ ui_manager = application.getQtForPythonUIMgr()
 
 
 def current():
-    """Attempt to find the currently opened designer package
+    """
+    Attempt to find the currently opened designer package
     :return <sdsbspackage:package> The currently opened package - None if no package is open
     """
     current_graph = ui_manager.getCurrentGraph()
@@ -20,7 +21,8 @@ def current():
 
 
 def _ensure_package(package):
-    """Ensures that we have a package to work on. If the input is None then we default to the current package
+    """
+    Ensures that we have a package to work on. If the input is None then we default to the current package
     :param <sdsbspackage:package> Target package - if None we will return the currently opened package
     :return <sdsbspackage:output> Either the input package or currently opened one
     """
@@ -30,7 +32,8 @@ def _ensure_package(package):
 
 
 def get_path(package=None):
-    """Returns the file path to an input package
+    """
+    Returns the file path to an input package
     :param <sdsbspackage:package> The package to get the path for - if None we use the current package
     """
     package = _ensure_package(package)
@@ -40,7 +43,8 @@ def get_path(package=None):
 
 
 def get_name(package=None):
-    """Returns the name of a package
+    """
+    Returns the name of a package
     :param <sdsbspackage:package> The package to get the name of - if None we use the current package
     """
     package = _ensure_package(package)
@@ -50,7 +54,8 @@ def get_name(package=None):
 
 
 def load(sbs_path):
-    """Loads an SBS from its path
+    """
+    Loads an SBS from its path
     :param <str:sbs_path> Absolute path to the SBS file
     """
     if((os.path.isfile(sbs_path)) and (sbs_path.endswith(".sbs"))):
@@ -64,7 +69,8 @@ def load(sbs_path):
 
 
 def child_graphs(package=None):
-    """Gets all of the child graphs from a package
+    """
+    Gets all of the child graphs from a package
     :param <sdsbspackage:package> Target package - if None then defaults to the current graph
     :return <[sdsbsgraph]:graphs> List of all child graphs
     """
@@ -77,7 +83,8 @@ def child_graphs(package=None):
 
 
 def show_in_explorer(package=None):
-    """Takes an input package and opens the export directory in explorer
+    """
+    Takes an input package and opens the export directory in explorer
     :param <sdsbspackage:package> The package to show - if None the current package is used
     """
     package = _ensure_package(package)
