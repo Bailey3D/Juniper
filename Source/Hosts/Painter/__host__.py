@@ -32,3 +32,9 @@ class Painter(juniper.engine.JuniperEngine):
     def get_main_window(self):
         import substance_painter.ui
         return substance_painter.ui.get_main_window()
+
+    def create_qt_dock_widget(self, child_widget, identifier="", title="Dock"):
+        import substance_painter.ui
+        output = substance_painter.ui.add_dock_widget(child_widget)
+        output.setWindowTitle(title)
+        return output

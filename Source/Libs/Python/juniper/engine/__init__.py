@@ -134,14 +134,14 @@ class JuniperEngine(object):
         # Run pre-startup
         self.on_pre_startup()
         for i in self.plugins:
-            pass  # TODO! Startup: Broadcast pre-startup to plugins
+            i.on_pre_startup()
         for i in self.modules:
             i.on_pre_startup()
 
         # Run startup
         self.on_startup()
         for i in self.plugins:
-            pass  # TODO! Startup: Broadcast startup to plugins
+            i.on_startup()
         for i in self.modules:
             i.on_startup()
         self.broadcast("pre_startup")
@@ -149,7 +149,7 @@ class JuniperEngine(object):
         # Run post-startup
         self.on_post_startup()
         for i in self.plugins:
-            pass  # TODO! Startup: Broadcast post-startup to plugins
+            i.on_post_startup()
         for i in self.modules:
             i.on_post_startup()
         self.broadcast("startup")
@@ -498,6 +498,20 @@ class JuniperEngine(object):
         :param <QWidget:widget> The widget to parent
         """
         pass
+
+    def create_qt_dock_widget(self, child_widget, identifier="", title="Dock"):
+        """
+        Creates a dock widget in the current host application
+        Note: This method should be overriden for hosts which use unique methods of creating dock widgets
+        :param <QWidget:child_widget> The child widget for this dock - or central widget
+        :param [<str:identifier>] Code identifier for this widget
+        :param [<str:title>] The tile for this dock widget
+        :return <QWidget:dock> The dock widget
+        """
+        from qtpy import QtWidgets
+        output = QtWidgets.QDockWidget()
+        output.setWidget(child_widget)
+        return output
 
     def get_main_window(self):
         """

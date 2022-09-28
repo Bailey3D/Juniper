@@ -15,7 +15,7 @@ class Houdini(juniper.engine.JuniperEngine):
     def on_install(self):
         """
         Installs the Juniper bootstrap to Houdini.
-        :TODO! This overrides the pythonrc.py file - which is destructive. Swap out?
+        :TODO~ This overrides the pythonrc.py file - which is destructive. Swap out?
         """
         try:
             hip_exe_path = self.__get_default_windows_app('.hip').lower()

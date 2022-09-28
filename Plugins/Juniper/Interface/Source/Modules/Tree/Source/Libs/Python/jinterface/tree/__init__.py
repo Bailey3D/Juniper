@@ -10,6 +10,7 @@ import juniper.engine.logging
 import juniper.types.framework.singleton
 import juniper.types.math.color
 import juniper.utilities.json as json_utils
+import juniper.widgets
 import juniper.widgets.q_dock_widget_wrapper
 
 from jinterface.tree.widgets import q_juniper_tree
@@ -167,6 +168,7 @@ class JuniperTreeManager(object, metaclass=juniper.types.framework.singleton.Sin
         return output
 
     def create_tree(self, force=False):
+        juniper.widgets.get_application()  # make sure a QApplication is available
         if(force or self.is_enabled):
             self.juniper_tree = JuniperTree()
         return self.juniper_tree

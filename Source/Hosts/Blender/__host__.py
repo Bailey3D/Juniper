@@ -38,3 +38,12 @@ class Blender(juniper.engine.JuniperEngine):
             else:
                 check_dir = os.path.dirname(check_dir)
         return output
+
+    def on_post_startup(self):
+        from qtpy import QtCore
+        self.qt_event_loop = QtCore.QEventLoop()
+
+    def on_tick(self):
+        import juniper.widgets
+        self.qt_event_loop.processEvents()
+        juniper.widgets.get_application().sendPostedEvents(None, 0)

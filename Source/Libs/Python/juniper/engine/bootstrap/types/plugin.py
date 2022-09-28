@@ -31,6 +31,24 @@ class Plugin(object):
         """
         pass
 
+    def on_pre_startup(self):
+        """
+        Overrideable method called before startup
+        """
+        pass
+
+    def on_startup(self):
+        """
+        Overrideable method called during startup
+        """
+        pass
+
+    def on_post_startup(self):
+        """
+        Overrideable method called after startup
+        """
+        pass
+
     # ------------------------------------------------------------------------------
 
     def get(self, key):
