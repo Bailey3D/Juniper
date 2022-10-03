@@ -17,6 +17,7 @@ class JuniperEngine(object):
         # tick
         self.delta_seconds = 0
         self.time_cf = datetime.now()
+        self.called_post_startup = False
 
         if(bootstrap):
             if("juniper:install=true" in sys.argv):
@@ -137,6 +138,7 @@ class JuniperEngine(object):
             i.on_pre_startup()
         for i in self.modules:
             i.on_pre_startup()
+        self.broadcast("pre_startup")
 
         # Run startup
         self.on_startup()
@@ -144,23 +146,10 @@ class JuniperEngine(object):
             i.on_startup()
         for i in self.modules:
             i.on_startup()
-        self.broadcast("pre_startup")
-
-        # Run post-startup
-        self.on_post_startup()
-        for i in self.plugins:
-            i.on_post_startup()
-        for i in self.modules:
-            i.on_post_startup()
         self.broadcast("startup")
 
-        # 5) Run startup scripts for all plugins
-        self.on_startup()
-        for i in self.plugins:
-            pass
-        for i in self.modules:
-            i.on_startup()
-        self.broadcast("post_startup")
+        if(self.program_context == "python"):
+            self.__post_startup__()
 
         # 6) Start tick
         self.initialize_tick()
@@ -195,12 +184,24 @@ class JuniperEngine(object):
         self.on_shutdown()
         juniper_globals.set("juniper_engine", None)
 
+    def __post_startup__(self):
+        self.on_post_startup()
+        for i in self.plugins:
+            i.on_post_startup()
+        for i in self.modules:
+            i.on_post_startup()
+        self.broadcast("post_startup")
+
     # -------------------------------------------------------------------
 
     def __tick__(self):
         """
         Runs the tick for Juniper
         """
+        if(not self.called_post_startup):
+            self.__post_startup__()
+            self.called_post_startup = True
+
         self.time_pf = self.time_cf
         self.time_cf = datetime.now()
 
@@ -329,11 +330,11 @@ class JuniperEngine(object):
         """
         :return <[Plugin]:plugins> Returns all registered plugins
         """
-        import juniper.engine.bootstrap.types.plugin
+        import juniper.engine.types.plugin
 
         output = []
         for i in glob.glob(self.workspace_root + "\\Plugins\\**\\*.jplugin", recursive=True):
-            plugin = juniper.engine.bootstrap.types.plugin.Plugin(i)
+            plugin = juniper.engine.types.plugin.Plugin(i)
             if(plugin):
                 output.append(plugin)
 

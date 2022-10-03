@@ -1,5 +1,5 @@
 """
-:type startup
+:type script
 :callbacks [startup]
 :desc Initializes the JuniperHub application in the system tray
 """
