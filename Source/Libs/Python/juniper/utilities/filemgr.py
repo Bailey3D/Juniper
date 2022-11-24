@@ -17,14 +17,6 @@ import juniper.widgets
 kernel32 = ctypes.WinDLL('kernel32')
 
 
-def remove_readonly(src):
-    """
-    Remove the read only flag froma path
-    :param <str:src> Source file/directory
-    """
-    os.chmod(src, stat.S_IWRITE)
-
-
 def resolve_path(target):
     """
     Return the real path for an input path
@@ -214,5 +206,10 @@ def remove_read_only(path):
     Removes the read only flag from a file
     :param <str:path> The path to edit
     """
-    if(os.path.isfile(path) or os.path.isdir(path)):
+    if(os.path.isfile(path)):
         os.chmod(path, stat.S_IWRITE)
+    elif(os.path.isdir(path)):
+        for root, dirs, files in os.walk(path):
+            for fname in files:
+                fp = os.path.join(root, fname)
+                os.chmod(fp, stat.S_IWRITE)

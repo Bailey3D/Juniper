@@ -19,7 +19,7 @@ def friendly_to_code(input_, preserve_case=False):
     """
     output = input_ if preserve_case else input_.lower()
     output = output.rstrip(" ")
-    for i in "!?£$%^&*(),.#":
+    for i in "!?£$%^&*(),.#/\\":
         output = output.replace(i, "")
     for i in " -":
         output = output.replace(i, "_")
@@ -65,3 +65,62 @@ def truncate(string, max_chars, do_ellipsis=False):
     if(do_ellipsis and has_changed):
         string += ".."
     return string
+
+
+def remove_prefix(value, prefix):
+    """
+    Remove a prefix from a string
+    :param <str:value> The string to alter
+    :param <str:prefix> The prefix to remove
+    :return <str:new> The new string with the prefix removed
+    """
+    if(value.startswith(prefix)):
+        return value[len(prefix):]
+    return value
+
+
+def ensure_prefix(value, prefix):
+    """
+    Checks the input string to see if it has a prefix - adds it if it doesn't
+    :param <str:value> The string to check
+    :param <str:prefix> The prefix to validate
+    :return <str:new> The new string
+    """
+    if not value.startswith(prefix):
+        value = prefix + value
+    return value
+
+
+def remove_suffix(value, suffix):
+    """
+    Remove a suffix from a string
+    :param <str:suffix> The suffix to remove
+    :return <str:new> The new string with the suffix removed
+    """
+    if(value.endswith(suffix)):
+        return value[:-len(suffix)]
+    return value
+
+
+def ensure_suffix(value, suffix):
+    """
+    Checks the input string to see if it has a suffix - adds it if it doesn't
+    :param <str:value> The string to check
+    :param <str:suffix> The suffix to validate
+    :return <str:new> The new string
+    """
+    if not value.endswith(suffix):
+        value = suffix + value
+    return value
+
+
+def remove_prefix_and_suffix(value, prefix, suffix):
+    """
+    Remove a prefix and suffix from an input string
+    :param <str:prefix> The prefix to remove
+    :param <str:suffix> The suffix to remove
+    :return <str:new> The new string
+    """
+    output = remove_prefix(value, prefix)
+    output = remove_suffix(output, suffix)
+    return output

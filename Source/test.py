@@ -1,41 +1,22 @@
-'''import sys
+#import juniper
+#import juniper.tooling
+import ctypes
+import subprocess
+import os
 import juniper
-import juniper.engine.types.core.function as f
 
+'''dumpbin = "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/dumpbin.exe"
 
-class B(object):
-    def __init__(self) -> None:
-        super().__init__()
+target_dll = "D:/programs/Programs/Substance Painter/usd_ms.dll"
 
-    @f.function()
-    def some_function(self):
-        print(self)
-        print("This is in A")
+print(f"\"{dumpbin}\" /EXPORTS \"{target_dll}\"")
+#subprocess.run(f"\"{dumpbin}\" /EXPORTS \"{target_dll}\"")
 
-    @some_function.override(host="python")
-    def some_function(self):
-        print("This is in B")
+the_dll = ctypes.WinDLL(target_dll)
+print(the_dll)
+#the_dll.substanceLinkerGetEnginesList.restype = int
+#print(the_dll.substanceLinkerGetEnginesList())'''
+fp = "D:\\documents\\Desktop\\sbs_light_industrial_large.spp"
 
-    #@some_function.override(host="peython")
-    #def some_function(self):
-    #    print("This is in C")
-
-    def something(self):
-        pass
-
-
-b = B()
-b.some_function()
-print(b.some_function)
-
-
-#juniper.cast()'''
-
-
-'''import juniper.types.math.vector as v
-
-a = v.Vector3(0, 1, 2)
-print(a)'''
-
-import juniper
-print("ok")
+#import juniper.dcc
+#print(juniper.dcc)

@@ -3,7 +3,7 @@
 :group Core
 :category Core
 :summary Open the current Juniper git repo in the browser
-:icon icons\\programs\\other\\git.png
+:icon icons\\programs\\git.png
 """
 import os
 import json

@@ -20,6 +20,12 @@ class _VectorType(juniper.types.Object):
 
     # -----------------------------------------------------
 
+    def __hash__(self):
+        output = f"{self.__class__}"
+        for i in self._data:
+            output += f"-{i}"
+        return hash(output)
+
     def __repr__(self):
         return f"{type(self).__name__}{tuple(self._data)}"
 
@@ -97,6 +103,14 @@ class _VectorType(juniper.types.Object):
 
     def __abs__(self):
         return self.__class__(*(abs(x) for x in self))
+
+    def __eq__(self, other):
+        if(isinstance(other, self.__class__)):
+            for a, b in zip(self, other):
+                if(a != b):
+                    return False
+            return True
+        return False
 
     # -----------------------------------------------------
 
@@ -274,6 +288,18 @@ class _VectorType(juniper.types.Object):
             return sum(a * b for a, b in zip(self, other))
         else:
             return NotImplementedError
+
+    def almost_equal(self, other, tolerance):
+        """
+        Checks if this vector is almost equal to another
+        :param <Vector:other> The other vector - must be the same type
+        :param <float:tolerance> The maximum deviation
+        :return <bool:output> True if the vectors are almost equal - else False
+        """
+        for a, b in zip(self, other):
+            if(not math.isclose(a, b, abs_tol=tolerance)):
+                return False
+        return True
 
 
 class Vector2(_VectorType):

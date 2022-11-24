@@ -1,4 +1,5 @@
 import os
+import pathlib
 
 
 def set_path_file_type(filepath, filetype):
@@ -35,4 +36,20 @@ def sanitize_path(filepath):
     :return <str:output> The sanitized path
     """
     output = filepath.replace("/", "\\")
+    return output
+
+
+def is_valid_path(path):
+    """
+    Checks if a path is valid (aka whether it could exist - not if it does)
+    :param <str:path> The path to check (this can be a directory or a file)
+    :return <bool:validity> True if this path is valid - else False
+    """
+    output = False
+    if(path.encode("utf-8").decode("utf-8", "ignore") == path):
+        try:
+            pathlib.Path(path).resolve()
+            output = True
+        except Exception:
+            pass
     return output
