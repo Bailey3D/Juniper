@@ -1,4 +1,4 @@
-from juniper.widgets import q_collapsible_widget
+from juniper.runtime.widgets import q_collapsible_widget
 
 
 class QHubGroup(q_collapsible_widget.QCollapsibleWidget):

@@ -22,6 +22,8 @@ class JuniperEngine(object):
         if(bootstrap):
             if("juniper:install=true" in sys.argv):
                 self.__install__()
+            elif("juniper:uninstall=true" in sys.argv):
+                self.__uninstall__()
             if("juniper:startup=true" in sys.argv):
                 self.__bootstrap__()
 
@@ -56,9 +58,13 @@ class JuniperEngine(object):
         """
         Uninstalls juniper from the current machine
         """
-        # 1) Remove from appdata
-        if(os.path.isfile(self.juniper_config_path)):
-            os.remove(self.juniper_config_path)
+        with open(self.juniper_config_path, "r") as f:
+            json_data = json.load(f)
+
+        json_data.pop("path", 0)
+
+        with open(self.juniper_config_path, "w") as f:
+            json.dump(json_data, f)
 
     def __startup__(self):
         """
@@ -132,6 +138,10 @@ class JuniperEngine(object):
                     if(os.path.isdir(i)):
                         module.__path__.append(i)
 
+        # Juniper override system
+        import juniper.engine.override
+        juniper.engine.override.JuniperImportHook()
+
         # Run pre-startup
         self.on_pre_startup()
         for i in self.plugins:
@@ -162,8 +172,8 @@ class JuniperEngine(object):
         # ..
 
         # 2) Run bootstrap updates (pip packages)
-        updater_source_path = os.path.join(self.workspace_root, "Source\\libs\\python\\juniper\\engine\\bootstrap\\updater.py")
-        updater_module = SourceFileLoader("juniper.engine.bootstrap.updater", updater_source_path).load_module()
+        updater_source_path = os.path.join(self.workspace_root, "Source\\libs\\python\\juniper\\bootstrap\\updater.py")
+        updater_module = SourceFileLoader("juniper.bootstrap.updater", updater_source_path).load_module()
         updater = updater_module.Updater(self)
         updater.run()
 
@@ -222,8 +232,8 @@ class JuniperEngine(object):
         """
         if("juniper:tick=false" not in sys.argv):
             from qtpy import QtCore
-            import juniper.widgets
-            app = juniper.widgets.get_application()
+            import juniper.runtime.widgets
+            app = juniper.runtime.widgets.get_application()
             if(app):
                 timer = QtCore.QTimer()
                 timer.timeout.connect(self.__tick__)
@@ -299,7 +309,7 @@ class JuniperEngine(object):
 
         # 2) Add source lines in the bootstrap module
         bootstrap_source_lines = []
-        bootstrap_module_path = os.path.join(self.workspace_root, "Source\\Libs\\Python\\juniper\\engine\\bootstrap\\__init__.py")
+        bootstrap_module_path = os.path.join(self.workspace_root, "Source\\Libs\\Python\\juniper\\bootstrap\\__init__.py")
         with open(bootstrap_module_path, "r") as f:
             bootstrap_source_lines = f.readlines()
         file_lines += bootstrap_source_lines
@@ -486,10 +496,10 @@ class JuniperEngine(object):
         :return <QApplication:out> The QApplication instance
         """
         from qtpy import QtWidgets
-        import juniper.widgets.q_standalone_app
+        import juniper.runtime.widgets.q_standalone_app
         output = QtWidgets.QApplication.instance()
         if(not output):
-            return juniper.widgets.q_standalone_app.QStandaloneApp()
+            return juniper.runtime.widgets.q_standalone_app.QStandaloneApp()
         return output
 
     def register_qt_widget(self, widget):

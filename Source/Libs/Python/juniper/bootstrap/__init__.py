@@ -39,7 +39,7 @@ class Bootstrap(object):
         :return <str:dir> The root directory for Juniper
         """
         if("juniper:install=true" in sys.argv):
-            return os.path.abspath(os.path.dirname(__file__) + "\\..\\..\\..\\..\\..\\..")
+            return os.path.abspath(os.path.dirname(__file__) + "\\..\\..\\..\\..\\..")
         juniper_config = os.path.join(os.getenv("APPDATA"), "juniper\\config.json")
         with open(juniper_config, "r") as f:
             return json.load(f)["path"]

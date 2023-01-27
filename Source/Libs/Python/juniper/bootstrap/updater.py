@@ -43,7 +43,7 @@ class Updater(object):
             cmd = f""""{python_path_resolved}" "{pip_whl_path}/pip" install setuptools -t {site_packages_dir}""".replace("\\", "/")
             _ = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
 
-            # TODO~ Updater: We need a way to prompt the user of an error on pip install
+            # TODO~ Juniper Engine: Updater - We need a way to prompt the user of an error on pip install
             cmd = f""""{python_path_resolved}" "{pip_whl_path}/pip" install -r "{requirements_txt_path_resolved}" -t "{site_packages_dir}" """
             cmd = cmd.replace("\\", "/")
             _ = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)

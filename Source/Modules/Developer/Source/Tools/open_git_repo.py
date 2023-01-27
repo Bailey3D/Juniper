@@ -11,7 +11,7 @@ import json
 import juniper
 
 
-with open(os.path.join(juniper.paths.root(), "Config\\juniper.json"), "r") as j:
+with open(os.path.join(juniper.engine.paths.root(), "Config\\juniper.json"), "r") as j:
     json_data = json.load(j)
     url = json_data["url"]
     os.system("start \"\" " + url)

@@ -14,8 +14,9 @@ class Painter(juniper.engine.JuniperEngine):
         """
         Installs the Juniper bootstrap to Substance Painter startup
         """
+        import juniper.utilities.os.windows.paths
         bootstrap_path = os.path.join(
-            juniper.paths.documents(),
+            juniper.utilities.os.windows.paths.documents(),
             "Allegorithmic\\Substance Painter\\python", "startup\\__juniper_startup__.py"
         )
         self.create_bootstrap_file(bootstrap_path)

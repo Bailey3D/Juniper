@@ -4,26 +4,26 @@ from collections import OrderedDict
 from qtpy import QtWidgets, QtGui, QtCore
 
 import juniper
-import juniper.decorators
+import juniper.engine.decorators
 import juniper.engine
 import juniper.engine.logging
-import juniper.types.framework.singleton
-import juniper.types.math.color
+import juniper.runtime.types.framework.singleton
+import juniper.runtime.types.math.color
 import juniper.utilities.json as json_utils
-import juniper.widgets
-import juniper.widgets.q_dock_widget_wrapper
+import juniper.runtime.widgets
+import juniper.runtime.widgets.q_dock_widget_wrapper
 
 from juniper.interface.tree.widgets import q_juniper_tree
 from juniper.interface.tree.config_manager import ConfigManager
 
 
 log = juniper.engine.logging.Log(plugin="Juniper Tree")
-groups_colour = juniper.types.math.color.Color(0.0, 0.0, 0.0, 0.05)
+groups_colour = juniper.runtime.types.math.color.Color(0.0, 0.0, 0.0, 0.05)
 
 
 def juniper_tree_user_config_path():
     output = os.path.join(
-        juniper.paths.root(),
+        juniper.engine.paths.root(),
         "Cached\\UserConfig\\juniper_tree.json"
     )
 
@@ -49,7 +49,7 @@ class JuniperTree(object):
         )
 
         self.q_juniper_tree_widget = q_juniper_tree.QJuniperTreeWidget()
-        self.q_juniper_tree = juniper.widgets.q_dock_widget_wrapper.create_dock_widget(
+        self.q_juniper_tree = juniper.runtime.widgets.q_dock_widget_wrapper.create_dock_widget(
             self.q_juniper_tree_widget,
             identifier="juniper.juniper_tree",
             title="Juniper Tree",
@@ -154,7 +154,7 @@ class JuniperTree(object):
         )
 
 
-class JuniperTreeManager(object, metaclass=juniper.types.framework.singleton.Singleton):
+class JuniperTreeManager(object, metaclass=juniper.runtime.types.framework.singleton.Singleton):
     def __init__(self):
         self.juniper_tree = None
 
@@ -168,7 +168,7 @@ class JuniperTreeManager(object, metaclass=juniper.types.framework.singleton.Sin
         return output
 
     def create_tree(self, force=False):
-        juniper.widgets.get_application()  # make sure a QApplication is available
+        juniper.runtime.widgets.get_application()  # make sure a QApplication is available
         if(force or self.is_enabled):
             self.juniper_tree = JuniperTree()
         return self.juniper_tree

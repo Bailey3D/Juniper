@@ -1,6 +1,6 @@
-import juniper.paths
+import juniper.engine.paths
 import juniper.engine.types.script
-import juniper.types.framework.singleton
+import juniper.runtime.types.framework.singleton
 import juniper.utilities.string as string_utils
 
 import functools
@@ -10,12 +10,12 @@ import json
 import os
 
 
-class PluginManager(object, metaclass=juniper.types.framework.singleton.Singleton):
+class PluginManager(object, metaclass=juniper.runtime.types.framework.singleton.Singleton):
     def __init__(self):
         self.plugin_cache = []
 
         # Initialize all avaliable plugins
-        plugins_root = os.path.join(juniper.paths.root(), "Plugins")
+        plugins_root = os.path.join(juniper.engine.paths.root(), "Plugins")
         for plugin_group in os.listdir(plugins_root):
             plugin_group_dir = os.path.join(plugins_root, plugin_group)
             if(os.path.isdir(plugin_group_dir)):

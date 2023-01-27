@@ -13,7 +13,7 @@ sys.argv.append("juniper:program_context=python")
 
 import juniper
 import juniper.engine
-import juniper.engine.bootstrap
+import juniper.bootstrap
 
 
 juniper.engine.JuniperEngine().shutdown()
@@ -25,7 +25,7 @@ for i in juniper.engine.JuniperEngine().supported_hosts:
     sys.argv.append("juniper:startup=false")
     sys.argv.append("juniper:tick=false")
     sys.argv.append(f"juniper:program_context={i}")
-    bootstrap = juniper.engine.bootstrap.Bootstrap()
+    bootstrap = juniper.bootstrap.Bootstrap()
     engine = juniper.engine.JuniperEngine()
     engine.shutdown()
     print("---")

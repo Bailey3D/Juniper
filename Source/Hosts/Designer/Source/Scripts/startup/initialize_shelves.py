@@ -6,7 +6,7 @@
 import os
 
 import juniper
-import juniper.paths
+import juniper.engine.paths
 import juniper.engine.types.plugin
 
 import sd.juniper

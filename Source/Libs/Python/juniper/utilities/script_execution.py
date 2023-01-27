@@ -4,7 +4,7 @@ Utility functions for executing various script/tool files
 import os
 from importlib.machinery import SourceFileLoader
 
-import juniper.paths
+import juniper.engine.paths
 import juniper.utilities.json as json_utils
 
 
@@ -15,7 +15,7 @@ def run_file(file_path, plugin=None):
     """
     # juniper relative path -> absolute path
     if(not os.path.isfile(file_path)):
-        file_path = os.path.join(juniper.paths.root(), file_path)
+        file_path = os.path.join(juniper.engine.paths.root(), file_path)
 
     elif(file_path.endswith(".ms")):
         import pymxs
@@ -29,9 +29,9 @@ def run_file(file_path, plugin=None):
         if(file_path.endswith(".toolptr")):
             file_path = json_utils.get_property(file_path, "path")
             if(plugin):
-                file_path = os.path.join(juniper.paths.get_module_root(plugin))
+                file_path = os.path.join(juniper.engine.paths.get_module_root(plugin))
             else:
-                file_path = os.path.join(juniper.paths.root(), file_path)
+                file_path = os.path.join(juniper.engine.paths.root(), file_path)
 
         if(os.path.isfile(file_path)):
             import juniper_globals

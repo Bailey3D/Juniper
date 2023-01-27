@@ -21,7 +21,7 @@ class Max(juniper.engine.JuniperEngine):
         """
 
         for i in range(2021, 2026):
-            if(os.path.isdir(juniper.paths.root())):
+            if(os.path.isdir(juniper.engine.paths.root())):
                 appdata_dir = os.path.join("c:\\users\\", os.getlogin(), f"appdata\\local\\autodesk\\3dsmax\\{i} - 64bit")
                 if(os.path.isdir(appdata_dir)):
                     startup_folder = os.path.join(appdata_dir, "ENU\\scripts\\startup")

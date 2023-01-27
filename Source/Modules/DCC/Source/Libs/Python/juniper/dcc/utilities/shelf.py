@@ -2,12 +2,12 @@ import os
 import xml.etree.ElementTree
 
 import juniper
-import juniper.decorators
-import juniper.paths
+import juniper.engine.decorators
+import juniper.engine.paths
 import juniper.utilities.xml as xml_utils
 
 
-@juniper.decorators.virtual_method
+@juniper.engine.decorators.virtual_method
 def add_shelf(shelf_name, shelf_root):
     """
     Adds a shelf to the current host application
@@ -20,7 +20,7 @@ def add_shelf(shelf_name, shelf_root):
 @add_shelf.override("designer")
 def add_shelf(shelf_name, shelf_root):
     juniper_sbsprj_path = os.path.join(
-        juniper.paths.root(),
+        juniper.engine.paths.root(),
         "Cached\\Programs\\Designer\\juniper.sbsprj"
     )
 

@@ -3,12 +3,12 @@ import subprocess
 
 import juniper.dcc.types.scene.node
 import juniper.dcc.types.scene.selection_set
-import juniper.decorators
+import juniper.engine.decorators
 import juniper.utilities.pathing
-import juniper.types.framework.singleton
+import juniper.runtime.types.framework.singleton
 
 
-class SceneManager(metaclass=juniper.types.framework.singleton.Singleton):
+class SceneManager(metaclass=juniper.runtime.types.framework.singleton.Singleton):
     def __init__(self):
         pass
 
@@ -16,7 +16,7 @@ class SceneManager(metaclass=juniper.types.framework.singleton.Singleton):
     def current_scene_path(self):
         return self.get_current_scene_path()
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def get_current_scene_path(self):
         raise NotImplementedError
 
@@ -75,7 +75,7 @@ class Scene(object):
             return self.__save()
         return False
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def __save(self):
         raise NotImplementedError
 
@@ -91,7 +91,7 @@ class Scene(object):
 
     # -----------------------------------------------------------
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def save_as(self, file_path):
         """
         Saves the current file as the input file path
@@ -101,7 +101,7 @@ class Scene(object):
 
     # -----------------------------------------------------------
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def open(self, force=True):
         """
         Opens this scene
@@ -143,7 +143,7 @@ class Scene(object):
         if(self.is_open):
             self.__close(force=force)
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def __close(self, force=True):
         raise NotImplementedError
 
@@ -164,7 +164,7 @@ class Scene(object):
         """
         return self.get_selection_sets()
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def get_selection_sets(self):
         raise NotImplementedError
 
@@ -200,7 +200,7 @@ class Scene(object):
                 return i
         return None
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def get_nodes(self):
         raise NotImplementedError
 
@@ -226,7 +226,7 @@ class Scene(object):
     def selection(self):
         return self.get_selection()
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def get_selection(self):
         raise NotImplementedError
 
@@ -247,7 +247,7 @@ class Scene(object):
             output.append(node)
         return output
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def clear_selection(self):
         """
         Clears the current node selection

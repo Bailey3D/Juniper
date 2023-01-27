@@ -5,7 +5,7 @@ from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 
 import juniper
-import juniper.types
+import juniper.runtime.types
 
 
 class _FileWatcher(PatternMatchingEventHandler):
@@ -41,7 +41,7 @@ class _FileWatcher(PatternMatchingEventHandler):
             self.__parent.on_any_event(event)
 
 
-class FileWatcher(juniper.types.Object):
+class FileWatcher(juniper.runtime.types.Object):
     def __init__(self, path, pattern="*"):
         """
         Generic file watcher class

@@ -1,17 +1,18 @@
 """
 Library containing filesystem based functions
 """
+import ctypes
+import filehash
 import os
 import pathlib
-import traceback as traceback_
 import stat
+import traceback as traceback_
 import _winapi
-import ctypes
 
 from qtpy import QtWidgets
 
 import juniper
-import juniper.widgets
+import juniper.runtime.widgets
 
 
 kernel32 = ctypes.WinDLL('kernel32')
@@ -71,7 +72,7 @@ def pick_folder(title="Pick Folder..", start="C:\\"):
     :param <str:start> Starting directory of the folder picker\n
     :return <str:path> The pack to the picked directory\n
     """
-    juniper.widgets.get_application()
+    juniper.runtime.widgets.get_application()
     file_dialog = QtWidgets.QFileDialog()
     open_dir = file_dialog.getExistingDirectory(
         None,
@@ -91,7 +92,7 @@ def pick_file(title="Pick File..", start="C:\\", file_types=""):
     :param <str:file_types> Standard windows file type constructor (Ie, "Text Files (*.txt), *.txt"\n
     :return <str:path> The path to the picked file\n
     """
-    juniper.widgets.get_application()
+    juniper.runtime.widgets.get_application()
     file_dialog = QtWidgets.QFileDialog()
     open_file = file_dialog.getOpenFileName(
         None,
@@ -110,7 +111,7 @@ def pick_files(title="Pick Files..", start="C:\\", file_types=""):
     :param <str:file_types> Standard windows file type constructor (Ie, "Text Files (*.txt), *.txt"\n
     :return <str:path> The path to the picked file\n
     """
-    juniper.widgets.get_application()
+    juniper.runtime.widgets.get_application()
     file_dialog = QtWidgets.QFileDialog()
     open_file = file_dialog.getOpenFileNames(
         None,
@@ -213,3 +214,18 @@ def remove_read_only(path):
             for fname in files:
                 fp = os.path.join(root, fname)
                 os.chmod(fp, stat.S_IWRITE)
+
+
+def checksum(file_path, chunk_size=4098):
+    """
+    Runs a checksum on the input file - using the adler32 algorithm
+    :param <str:file_path> The path to the file
+    :param [<int:chunk_size>] Chunk size in bytes
+    :return <str:checksum> The checksum of the file - "" if invalid
+    """
+    try:
+        # ~20% faster to not check if the file exists
+        output = filehash.FileHash("adler32", chunk_size=chunk_size).hash_file(file_path)
+        return output
+    except Exception:
+        return ""

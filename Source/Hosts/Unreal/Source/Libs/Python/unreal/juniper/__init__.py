@@ -9,7 +9,7 @@ def unreal_project_path():
     :return <str:path> Path to the .uproject\n
     """
     return json_utils.get_property(
-        os.path.join(juniper.paths.root(), "Cached\\UserConfig\\user_settings.json"),
+        os.path.join(juniper.engine.paths.root(), "Cached\\UserConfig\\user_settings.json"),
         "unreal_project_path"
     )
 

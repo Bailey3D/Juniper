@@ -3,11 +3,11 @@ import os
 import functools
 
 import juniper.engine
-import juniper.types.framework.singleton
+import juniper.runtime.types.framework.singleton
 import juniper.utilities.string
 
 
-class ScriptManager(object, metaclass=juniper.types.framework.singleton.Singleton):
+class ScriptManager(object, metaclass=juniper.runtime.types.framework.singleton.Singleton):
     def __init__(self):
         self.__script_cache = []
 

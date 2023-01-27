@@ -3,11 +3,11 @@ Utility functions for interacting with the viewport in the current DCC applicati
 """
 import juniper.dcc.types.node
 import juniper.dcc.types.scene
-import juniper.decorators
+import juniper.engine.decorators
 import juniper.utilities.array
 
 
-@juniper.decorators.virtual_method
+@juniper.engine.decorators.virtual_method
 def focus(*args):
     """
     Focuses a selection of nodes in the viewport

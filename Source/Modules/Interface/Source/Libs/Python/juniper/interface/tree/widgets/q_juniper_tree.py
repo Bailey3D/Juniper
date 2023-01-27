@@ -1,7 +1,7 @@
 from qtpy import QtWidgets, QtCore
 
 import juniper.engine
-from juniper.widgets import q_v_scroll_layout
+from juniper.runtime.widgets import q_v_scroll_layout
 
 from juniper.interface.tree.widgets import q_tree_group
 from juniper.interface.tree.config_manager import ConfigManager

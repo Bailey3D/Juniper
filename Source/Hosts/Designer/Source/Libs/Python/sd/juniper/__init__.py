@@ -2,8 +2,9 @@ import os
 import xml.etree.ElementTree
 
 import juniper
-import juniper.paths
+import juniper.engine.paths
 import juniper.dcc.utilities.shelf
+import juniper.utilities.os.windows.paths
 
 
 def add_sbsprj(sbsprj_path):
@@ -14,13 +15,13 @@ def add_sbsprj(sbsprj_path):
     if(os.path.isfile(sbsprj_path)):
         sbsprj_set = False
         designer_project_config_path = os.path.join(
-            juniper.paths.local_appdata(),
+            juniper.utilities.os.windows.paths.local_appdata(),
             "Adobe\\Adobe Substance 3D Designer\\default_configuration.sbscfg"
         )
 
         if(not os.path.isfile(designer_project_config_path)):
             designer_project_config_path = os.path.join(
-                juniper.paths.local_appdata(),
+                juniper.utilities.os.windows.paths.local_appdata(),
                 "Allegorithmic\\Substance Designer\\default_configuration.sbscfg"
             )
 

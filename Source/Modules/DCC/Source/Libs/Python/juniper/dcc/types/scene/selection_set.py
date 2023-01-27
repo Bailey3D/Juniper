@@ -1,13 +1,13 @@
 import juniper.dcc.types.scene.node
-import juniper.decorators
-import juniper.types.framework.singleton
+import juniper.engine.decorators
+import juniper.runtime.types.framework.singleton
 
 
-class SelectionSetManager(juniper.types.framework.singleton.Singleton):
+class SelectionSetManager(juniper.runtime.types.framework.singleton.Singleton):
     def __init__(self):
         pass
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def remove_empty_sets(self):
         """
         Deletes all selection sets which do not contain any Nodes
@@ -42,7 +42,7 @@ class SelectionSet(object):
         """
         return self.__get_native_object()
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def __get_native_object(self):
         raise NotImplementedError
 
@@ -72,7 +72,7 @@ class SelectionSet(object):
         self.set_name(value)
         self.__name = value
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def __set_name(self, value):
         raise NotImplementedError
 
@@ -89,7 +89,7 @@ class SelectionSet(object):
         """
         return self.__get_nodes()
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def __get_nodes(self):
         raise NotImplementedError
 
@@ -104,7 +104,7 @@ class SelectionSet(object):
 
     # ----------------------------------------------------------------
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def add_node(self, node):
         """
         Adds a node to this selection set
@@ -123,7 +123,7 @@ class SelectionSet(object):
 
     # ----------------------------------------------------------------
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def delete(self):
         """
         Deletes this selection set

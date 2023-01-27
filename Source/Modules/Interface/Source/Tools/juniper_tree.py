@@ -5,7 +5,7 @@
 :icon icons\\standard\\app_default.png
 """
 import juniper.interface.tree
-import juniper.widgets as qt_utils
+import juniper.runtime.widgets as qt_utils
 
 import juniper
 

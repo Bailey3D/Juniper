@@ -44,6 +44,6 @@ class Blender(juniper.engine.JuniperEngine):
         self.qt_event_loop = QtCore.QEventLoop()
 
     def on_tick(self):
-        import juniper.widgets
+        import juniper.runtime.widgets
         self.qt_event_loop.processEvents()
-        juniper.widgets.get_application().sendPostedEvents(None, 0)
+        juniper.runtime.widgets.get_application().sendPostedEvents(None, 0)

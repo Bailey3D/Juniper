@@ -2,12 +2,12 @@
 Wrapper for a simple colour type
 """
 import juniper
-import juniper.types
-import juniper.decorators
-import juniper.math
+import juniper.runtime.types
+import juniper.engine.decorators
+import juniper.utilities.math
 
 
-class Color(juniper.types.Object):
+class Color(juniper.runtime.types.Object):
     def __init__(self, *args):
         """
         Base class for a colour type
@@ -24,7 +24,7 @@ class Color(juniper.types.Object):
             self._data = (args[0], args[1], args[2], args[3])
         else:
             raise AttributeError
-        self._data = [juniper.math.saturate(x) for x in self._data]
+        self._data = [juniper.utilities.math.saturate(x) for x in self._data]
 
     def _from_hex_value(self, hex_value):
         """
@@ -49,11 +49,11 @@ class Color(juniper.types.Object):
         """
         return self.get_native_object()
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def get_native_object(self):
         raise NotImplementedError
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def _from_native_object(self, native_object):
         """
         Creates a new instance of this type from the input type
@@ -73,7 +73,7 @@ class Color(juniper.types.Object):
 
     @r.setter
     def r(self, value):
-        self._data[0] = juniper.math.saturate(value)
+        self._data[0] = juniper.utilities.math.saturate(value)
 
     @property
     def g(self):
@@ -81,7 +81,7 @@ class Color(juniper.types.Object):
 
     @g.setter
     def g(self, value):
-        self._data[1] = juniper.math.saturate(value)
+        self._data[1] = juniper.utilities.math.saturate(value)
 
     @property
     def b(self):
@@ -89,7 +89,7 @@ class Color(juniper.types.Object):
 
     @b.setter
     def b(self, value):
-        self._data[2] = juniper.math.saturate(value)
+        self._data[2] = juniper.utilities.math.saturate(value)
 
     @property
     def a(self):
@@ -97,7 +97,7 @@ class Color(juniper.types.Object):
 
     @a.setter
     def a(self, value):
-        self._data[3] = juniper.math.saturate(value)
+        self._data[3] = juniper.utilities.math.saturate(value)
 
     # ------------------------------------------------------------
 

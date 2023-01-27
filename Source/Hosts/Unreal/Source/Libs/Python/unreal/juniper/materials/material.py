@@ -2,7 +2,7 @@ import os
 import unreal
 
 import juniper
-import juniper.types.math.vector
+import juniper.runtime.types.math.vector
 
 
 def is_material_instance(material):
@@ -119,7 +119,7 @@ def get_vector_parameter(material, parameter_name):
     else:
         material_func = unreal.MaterialEditingLibrary.get_material_default_vector_parameter_value
     output = material_func(material, parameter_name)
-    return juniper.types.math.vector.Vector4(output.x, output.y, output.z, output.w)
+    return juniper.runtime.types.math.vector.Vector4(output.x, output.y, output.z, output.w)
 
 
 def get_vector_parameter_names(material):
@@ -138,7 +138,7 @@ def get_vector_parameters(material):
     output = {}
     for i in get_vector_parameter_names:
         unreal_value = get_vector_parameter(material)
-        output[i] = juniper.types.math.vector.Vector4(unreal_value.r, unreal_value.g, unreal_value.b, unreal_value.a)
+        output[i] = juniper.runtime.types.math.vector.Vector4(unreal_value.r, unreal_value.g, unreal_value.b, unreal_value.a)
     return output
 
 # --------------------------------------------------------------------
@@ -227,7 +227,7 @@ def set_parameter(material, parameter_name, parameter_value):
 
     if(type(parameter_value) in (float, int)):
         return set_float_parameter_value(material, parameter_name, parameter_value)
-    elif(isinstance(parameter_value, juniper.types.math.vector._VectorType)):
+    elif(isinstance(parameter_value, juniper.runtime.types.math.vector._VectorType)):
         return set_vector_parameter_value(material, parameter_name, parameter_value)
     elif(type(parameter_value) == bool):
         return set_bool_parameter_value(material, parameter_name, parameter_value)

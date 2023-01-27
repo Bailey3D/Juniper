@@ -1,4 +1,4 @@
-import juniper.types.misc.log
+import juniper.runtime.types.misc.log
 import juniper.engine.logging.log_manager
 
 
@@ -15,7 +15,7 @@ class _LogEntry(object):
         traceback=False,
         traceback_stack=None,
         persistent=False,
-        log_func=juniper.types.misc.log.log.info
+        log_func=juniper.runtime.types.misc.log.log.info
     ):
         self.log_text = log_text
         self.log_type = log_type
@@ -29,7 +29,7 @@ class _LogEntry(object):
 
 class Log(object):
     def __init__(self, plugin="Juniper"):
-        self.juniper_log = juniper.types.misc.log.log_class(context=plugin)
+        self.juniper_log = juniper.runtime.types.misc.log.log_class(context=plugin)
         self.plugin = plugin
 
         self._held_entries = []

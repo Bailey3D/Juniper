@@ -3,7 +3,7 @@ Wrappers / helpers for Dock Widgets in the different host Contexts
 """
 from qtpy import QtWidgets, QtCore
 
-import juniper.widgets
+import juniper.runtime.widgets
 import juniper.engine
 
 
@@ -22,7 +22,7 @@ def create_dock_widget(
     :param [<str:stylesheet>] Stylesheet override for this widget
     :param [<function:close_event>] Optional override function called on this dock's close event
     """
-    main_window = juniper.widgets.get_main_window()
+    main_window = juniper.runtime.widgets.get_main_window()
     output = juniper.engine.JuniperEngine().create_qt_dock_widget(
         child_widget,
         identifier=identifier,
@@ -76,6 +76,6 @@ def create_dock_widget(
     # for non Qt based applications we still render the widget
     # just as a floating dock instead
     output.show()
-    juniper.widgets.initialize_host_window_parenting(output)
+    juniper.runtime.widgets.initialize_host_window_parenting(output)
 
     return output

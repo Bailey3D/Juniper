@@ -1,4 +1,4 @@
-# TODO~ Complete implementation. Fix the `self` issue
+# TODO~ Juniper Engine: Complete implementation. Fix the `self` issue
 import functools
 import inspect
 import weakref
@@ -18,7 +18,6 @@ class Function(object):
 
         @functools.wraps(wraps)
         def __wraps__(*wrapped_args, **wrapped_kwargs):
-            print("Hi there")
             return wraps(*wrapped_args, **wrapped_kwargs)
         self.wraps = __wraps__
 
@@ -77,8 +76,8 @@ class Function(object):
         return self.__overriding
 
     def __call__(self, *args, **kwargs):
-        # TODO~ Engine: Delegates
-        # TODO~ Engine: Validity checks
+        # TODO~ Juniper Engine: Add support to bind delegates to Juniper functions
+        # TODO~ Juniper Engine: Validity checks
         # overrides
         if(self.__override):
             self.__override(*args, **kwargs)

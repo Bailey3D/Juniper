@@ -1,6 +1,6 @@
 import juniper.dcc.utilities.viewport
-import juniper.decorators
-import juniper.types.math.vector
+import juniper.engine.decorators
+import juniper.runtime.types.math.vector
 
 
 class Node(object):
@@ -16,7 +16,7 @@ class Node(object):
         """
         return self.get_name()
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def get_name(self):
         raise NotImplementedError
 
@@ -28,7 +28,7 @@ class Node(object):
 
     # ------------------------------------------------------
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def delete(self):
         """
         Delete this node
@@ -42,7 +42,7 @@ class Node(object):
 
     # ------------------------------------------------------
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def select(self):
         """
         Selects this object
@@ -57,7 +57,7 @@ class Node(object):
 
     # ------------------------------------------------------
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def deselect(self):
         """
         Deselect this object
@@ -79,7 +79,7 @@ class Node(object):
         """
         return self.get_is_visible()
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def get_is_visible(self):
         raise NotImplementedError
 
@@ -89,7 +89,7 @@ class Node(object):
 
     # ------------------------------------------------------
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def show(self):
         """
         Makes the current object visible
@@ -101,7 +101,7 @@ class Node(object):
         import pymxs
         pymxs.runtime.unhide(self.native_object)
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def hide(self):
         """
         Makes the current object hidden
@@ -149,16 +149,16 @@ class Node(object):
 
     # ------------------------------------------------------
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def get_position(self):
         raise NotImplementedError
 
     @get_position.override("max")
     def get_position(self):
         native_position = self.wraps.position
-        return juniper.types.math.vector.Vector3(native_position.x, native_position.y, native_position.z)
+        return juniper.runtime.types.math.vector.Vector3(native_position.x, native_position.y, native_position.z)
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def set_position(self, value):
         raise NotImplementedError
 
@@ -175,7 +175,7 @@ class Node(object):
 
     # ------------------------------------------------------
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def get_rotation(self):
         raise NotImplementedError
 
@@ -183,9 +183,9 @@ class Node(object):
     def get_position(self):
         import pymxs
         native_rotation = pymxs.ruintime.quatToEuler(self.wraps.rotation)
-        return juniper.types.math.vector.Vector3(native_rotation.x, native_rotation.y, native_rotation.z)
+        return juniper.runtime.types.math.vector.Vector3(native_rotation.x, native_rotation.y, native_rotation.z)
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def set_rotation(self, value):
         raise NotImplementedError
 
@@ -198,16 +198,16 @@ class Node(object):
 
     # ------------------------------------------------------
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def get_scale(self):
         raise NotImplementedError
 
     @get_scale.override("max")
     def get_position(self):
         native_scale = self.wraps.scale
-        return juniper.types.math.vector.Vector3(native_scale.x, native_scale.y, native_scale.z)
+        return juniper.runtime.types.math.vector.Vector3(native_scale.x, native_scale.y, native_scale.z)
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def set_scale(self, value):
         raise NotImplementedError
 

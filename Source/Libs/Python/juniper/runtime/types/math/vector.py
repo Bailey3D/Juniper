@@ -4,15 +4,15 @@ Wrapper for a simple vector type
 import math
 
 import juniper
-import juniper.types
-import juniper.decorators
+import juniper.runtime.types
 
 
-class _VectorType(juniper.types.Object):
+class _VectorType(juniper.runtime.types.Object):
     def __init__(self, *args):
         """
         Base class for a Vector type
         """
+        super(_VectorType, self).__init__()
         if(len(args) == 1):
             self._data = self._from_native_object(args[0])
         else:
@@ -174,11 +174,9 @@ class _VectorType(juniper.types.Object):
         """
         return self.get_native_object()
 
-    @juniper.decorators.virtual_method
     def get_native_object(self):
         raise NotImplementedError
 
-    @juniper.decorators.virtual_method
     def _from_native_object(self, native_object):
         """
         Creates a new instance of this type from the input type
@@ -306,27 +304,6 @@ class Vector2(_VectorType):
     def __init__(self, *args):
         super(Vector2, self).__init__(*args)
 
-    # -----------------------------------------------------
-
-    @juniper.decorators.virtual_method
-    def get_native_object(self):
-        raise NotImplementedError
-
-    @juniper.decorators.virtual_method
-    def _from_native_object(self, native_object):
-        raise NotImplementedError
-
-    @_from_native_object.override("max")
-    def __from_native_object(self, native_object):
-        return list((native_object.x, native_object.y))
-
-    @get_native_object.override("max")
-    def _get_native_object(self):
-        import pymxs
-        return pymxs.runtime.Point2(self.x, self.y)
-
-    # -----------------------------------------------------
-
 
 class Vector3(_VectorType):
     def __init__(self, *args):
@@ -347,57 +324,7 @@ class Vector3(_VectorType):
         else:
             return NotImplementedError
 
-    # -----------------------------------------------------
-
-    @juniper.decorators.virtual_method
-    def get_native_object(self):
-        raise NotImplementedError
-
-    @juniper.decorators.virtual_method
-    def _from_native_object(self, native_object):
-        raise NotImplementedError
-
-    @_from_native_object.override("max")
-    def __from_native_object(self, native_object):
-        return list((native_object.x, native_object.y, native_object.z))
-
-    @get_native_object.override("max")
-    def _get_native_object(self):
-        import pymxs
-        return pymxs.runtime.Point3(self.x, self.y, self.z)
-
-    # -----------------------------------------------------
-
-    @juniper.decorators.program_context("unreal")
-    def as_linear_color(self):
-        import unreal
-        return unreal.LinearColor(r=self.x, g=self.y, b=self.z, a=1.0)
-
 
 class Vector4(_VectorType):
     def __init__(self, *args):
         super(Vector4, self).__init__(*args)
-
-    # -----------------------------------------------------
-
-    @juniper.decorators.virtual_method
-    def get_native_object(self):
-        raise NotImplementedError
-
-    @juniper.decorators.virtual_method
-    def _from_native_object(self, native_object):
-        raise NotImplementedError
-
-    @_from_native_object.override("max")
-    def __from_native_object(self, native_object):
-        return list((native_object.x, native_object.y, native_object.z, native_object.w))
-
-    @get_native_object.override("max")
-    def _get_native_object(self):
-        import pymxs
-        return pymxs.runtime.Point4(self.x, self.y, self.z, self.w)
-
-    @juniper.decorators.program_context("unreal")
-    def as_linear_color(self):
-        import unreal
-        return unreal.LinearColor(r=self.x, g=self.y, b=self.z, a=self.w)

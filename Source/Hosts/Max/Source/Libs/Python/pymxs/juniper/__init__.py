@@ -1,7 +1,7 @@
-import juniper.decorators
+import juniper.engine.decorators
 
 
-@juniper.decorators.program_context("max")
+@juniper.engine.decorators.program_context("max")
 def get_maxscript_listener_hwnd():
     """Gets the window handle for the maxscript listener
     :return <int:hwnd> The window handle
@@ -10,14 +10,14 @@ def get_maxscript_listener_hwnd():
     return pymxs.runtime.windows.getchildhwnd(0, "MAXScript Listener")[0]
 
 
-@juniper.decorators.program_context("max")
+@juniper.engine.decorators.program_context("max")
 def open_listener():
     """Opens the maxscript listener"""
     import pymxs
     pymxs.runtime.actionMan.executeAction(0, "40472")
 
 
-@juniper.decorators.program_context("max")
+@juniper.engine.decorators.program_context("max")
 def close_listener():
     """Closes the maxscript listener"""
     import pymxs

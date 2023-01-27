@@ -1,22 +1,35 @@
-#import juniper
-#import juniper.tooling
-import ctypes
-import subprocess
-import os
 import juniper
 
-'''dumpbin = "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/dumpbin.exe"
+import juniper.runtime.types.math.vector
+import juniper.runtime.widgets
 
-target_dll = "D:/programs/Programs/Substance Painter/usd_ms.dll"
 
-print(f"\"{dumpbin}\" /EXPORTS \"{target_dll}\"")
-#subprocess.run(f"\"{dumpbin}\" /EXPORTS \"{target_dll}\"")
+result = juniper.runtime.widgets.query_user(
+    "Example",
+    "Description",
+    ("Yes", "No", "Cancel")
+)
 
-the_dll = ctypes.WinDLL(target_dll)
-print(the_dll)
-#the_dll.substanceLinkerGetEnginesList.restype = int
-#print(the_dll.substanceLinkerGetEnginesList())'''
-fp = "D:\\documents\\Desktop\\sbs_light_industrial_large.spp"
+print(result)
+import juniper.utilities.filemgr
+print(juniper.utilities.filemgr.checksum(r"Y:\Juniper3D (Workspace)\Binaries\Juniper\juniper_install.bat"))
 
-#import juniper.dcc
-#print(juniper.dcc)
+
+'''class Vector3(juniper.runtime.types.math.vector.Vector3):
+    #def some_function(self):
+    #    return 3333
+    #def example_function(self):
+    #    print("Heyo2")
+    pass
+
+
+v1 = Vector3(1.0, 2.0, 3.0)
+v2 = Vector3(4.0, 5.0, 6.0)
+print(v1.x)
+print(v1.get_native_object())
+#v1.example_function()
+#print(juniper.runtime.types.math.vector.Vector2)
+#print(v1 + v2)
+#print(v1)
+#print("-----")
+'''

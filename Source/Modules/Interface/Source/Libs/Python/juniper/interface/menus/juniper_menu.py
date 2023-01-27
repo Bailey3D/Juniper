@@ -3,12 +3,12 @@ import textwrap
 import juniper
 import juniper.engine
 import juniper.engine.types.plugin
-import juniper.types.framework.singleton
+import juniper.runtime.types.framework.singleton
 import juniper.utilities.string as string_utils
 import juniper.interface.menus.menu_wrapper
 
 
-class JuniperMenu(metaclass=juniper.types.framework.singleton.Singleton):
+class JuniperMenu(metaclass=juniper.runtime.types.framework.singleton.Singleton):
     def __init__(self):
         self.program_context = juniper.program_context
 
@@ -88,7 +88,7 @@ class JuniperMenu(metaclass=juniper.types.framework.singleton.Singleton):
             action.triggered.connect(macro.run)
             action.setToolTip(macro.summary)
         elif(self.program_context == "blender"):
-            pass  # TODO! ToolsMenu: Blender: Actions for blender menus
+            pass  # TODO! Juniper Menu: Blender Actions for blender menus
         elif(self.program_context == "unreal"):
             import unreal
             action = unreal.ToolMenuEntry(
@@ -117,7 +117,7 @@ class JuniperMenu(metaclass=juniper.types.framework.singleton.Singleton):
         :param [<dict:branches>] Current branches dict
         :param [<[Macros]:macros>] The macros to add
         """
-        if(self.program_context == "blender"):  # TODO! ToolsMenu: Blender
+        if(self.program_context == "blender"):  # TODO! Juniper Menu: Blender
             return {"_menu": parent}
         if(not branches):
             branches = {"_menu": parent}

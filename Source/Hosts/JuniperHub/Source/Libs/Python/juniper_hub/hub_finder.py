@@ -1,5 +1,5 @@
 import juniper
-import juniper.paths
+import juniper.engine.paths
 
 import ctypes
 import ctypes.wintypes
@@ -8,8 +8,8 @@ import sys
 
 
 def pythonw_path():
-    juniper_pythonw_exe_path = os.path.join(juniper.paths.root(), "Binaries\\Python\\Python37\\Pythonw.exe").lower()
-    juniper_pythonw_exe_path_upper = juniper_pythonw_exe_path.replace(os.path.dirname(juniper.paths.root()).lower() + "\\", "")
+    juniper_pythonw_exe_path = os.path.join(juniper.engine.paths.root(), "Binaries\\Python\\Python37\\Pythonw.exe").lower()
+    juniper_pythonw_exe_path_upper = juniper_pythonw_exe_path.replace(os.path.dirname(juniper.engine.paths.root()).lower() + "\\", "")
     return juniper_pythonw_exe_path_upper
 
 

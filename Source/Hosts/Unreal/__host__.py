@@ -15,7 +15,7 @@ class Unreal(juniper.engine.JuniperEngine):
     def on_install(self):
         """
         Installs Juniper bootstrap to a target unreal project
-        :TODO~ UProject wrapper class, find the current uproject from the current python instance
+        :TODO~ Juniper Engine: UProject wrapper class, find the current uproject from the current python instance
         """
         import juniper.utilities.filemgr
 

@@ -3,10 +3,10 @@ import hashlib
 import secrets
 
 import juniper
-import juniper.types
+import juniper.runtime.types
 
 
-class Guid(juniper.types.Object):
+class Guid(juniper.runtime.types.Object):
     def __init__(self, seed=None, guid=None):
         """
         Generates a random guid string

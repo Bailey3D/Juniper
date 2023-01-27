@@ -3,7 +3,8 @@ import sys
 from qtpy import QtWidgets, QtGui
 from scss import Scss
 
-import juniper.paths
+import juniper.engine.paths
+import juniper.engine.resources
 
 
 class QStandaloneApp(QtWidgets.QApplication):
@@ -13,7 +14,7 @@ class QStandaloneApp(QtWidgets.QApplication):
         """
         super(QStandaloneApp, self).__init__(sys.argv)
 
-        self.set_icon(os.path.join(juniper.paths.root(), "Resources\\Icons\\Standard\\app_default.png"))
+        self.set_icon(juniper.engine.resources.default_icon_path())
         self.apply_stylesheet()
 
     def set_icon(self, icon_path):
@@ -31,7 +32,7 @@ class QStandaloneApp(QtWidgets.QApplication):
         :param [<str:stylesheet_path>] Absolute path to the stylesheet to apply
         """
         if(not stylesheet_path):
-            stylesheet_path = os.path.join(juniper.paths.root(), "Config\\Styles\\standalone.scss")
+            stylesheet_path = os.path.join(juniper.engine.paths.root(), "Config\\Styles\\standalone.scss")
 
         self.setStyle(QtWidgets.QStyleFactory.create("fusion"))
         with open(stylesheet_path, "r") as f:

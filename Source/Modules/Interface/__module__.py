@@ -17,7 +17,7 @@ import juniper.engine.types.module
 class JuniperInterface(juniper.engine.types.module.Module):
     def on_startup(self):
         import juniper
-        import juniper.widgets
+        import juniper.runtime.widgets
 
         # Juniper Menus
         import juniper.interface.menus.juniper_menu
@@ -35,9 +35,8 @@ class JuniperInterface(juniper.engine.types.module.Module):
         from juniper.interface.command_server import command_server
 
         if(juniper.program_context not in ["python"]):
-            juniper.widgets.get_application()  # command server uses Qt tick - ensure QApplication is initialized
-            port = juniper.interface.command_server.listen_port(juniper.program_context)
-            command_server.CommandServer(port)
+            juniper.runtime.widgets.get_application()  # command server uses Qt tick - ensure QApplication is initialized
+            command_server.CommandServer()
 
     def on_post_startup(self):
         if(juniper.program_context == "max"):
@@ -47,7 +46,7 @@ class JuniperInterface(juniper.engine.types.module.Module):
             # process is complete.
             import pymxs
             import qtmax
-            pymxs.runtime.eval("global forceMenuRollout")
+            pymxs.runtime.execute("global forceMenuRollout")
             toolbar = qtmax.GetQMaxMainWindow().menuBar()
             for i in pymxs.runtime.g_juniperMenus:
                 toolbar.addMenu(i)

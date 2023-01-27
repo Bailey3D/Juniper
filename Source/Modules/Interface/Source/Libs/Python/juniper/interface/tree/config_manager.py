@@ -2,13 +2,13 @@ import os
 import functools
 
 import juniper.engine
-import juniper.types.framework.singleton
+import juniper.runtime.types.framework.singleton
 import juniper.engine.types.plugin
-import juniper.paths
+import juniper.engine.paths
 import juniper.utilities.json as json_utils
 
 
-class ConfigManager(object, metaclass=juniper.types.framework.singleton.Singleton):
+class ConfigManager(object, metaclass=juniper.runtime.types.framework.singleton.Singleton):
 
     def __init__(self):
         pass

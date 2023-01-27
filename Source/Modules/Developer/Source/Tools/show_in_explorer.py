@@ -7,7 +7,7 @@
 """
 import os
 
-import juniper.paths
+import juniper.engine.paths
 
 
-os.startfile(juniper.paths.root())
+os.startfile(juniper.engine.paths.root())

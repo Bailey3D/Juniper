@@ -7,7 +7,7 @@ Host application specific menu object.
 from qtpy import QtWidgets
 
 import juniper
-import juniper.decorators
+import juniper.engine.decorators
 
 
 class QMenuWrapper(object):
@@ -23,7 +23,7 @@ class QMenuWrapper(object):
         self.display_name = display_name
         self.__initialize_menu()
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def __initialize_menu(self):
         raise NotImplementedError
 
@@ -100,7 +100,7 @@ class QMenuWrapper(object):
 
     # ----------------------------------------------------------------
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def add_separator(self):
         """
         Add a separator to the menu
@@ -118,5 +118,5 @@ class QMenuWrapper(object):
 
     @add_separator.override("blender")
     def _add_separator(self):
-        # TODO! ToolsMenu: Blender: Implement separators for blender
+        # TODO! Juniper Menu: Blender: Implement separators for blender
         pass

@@ -4,11 +4,11 @@ import os
 import sys
 from importlib.machinery import SourceFileLoader
 
-import juniper.types.framework.singleton
+import juniper.runtime.types.framework.singleton
 import juniper.utilities.string
 
 
-class ModuleManager(object, metaclass=juniper.types.framework.singleton.Singleton):
+class ModuleManager(object, metaclass=juniper.runtime.types.framework.singleton.Singleton):
     def __init__(self):
         self.__registered_modules = []
 

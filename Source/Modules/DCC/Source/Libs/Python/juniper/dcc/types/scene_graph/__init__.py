@@ -1,4 +1,4 @@
-import juniper.decorators
+import juniper.engine.decorators
 import juniper.dcc.types.scene_graph.node
 
 
@@ -13,7 +13,7 @@ class SceneGraph(object):
         """
         return self.get_wraps
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def get_wraps(self):
         raise NotImplementedError
 
@@ -35,7 +35,7 @@ class SceneGraph(object):
         """
         pass
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def get_name(self):
         raise NotImplementedError
 
@@ -53,7 +53,7 @@ class SceneGraph(object):
 
     @property
     def outputs(self):
-        # TODO~
+        # TODO~ Juniper DCC: Output nodes
         pass
 
     # ---------------------------------------------------------------
@@ -65,7 +65,7 @@ class SceneGraph(object):
         """
         return self.get_selection()
 
-    @juniper.decorators.virtual_method
+    @juniper.engine.decorators.virtual_method
     def get_selection(self):
         raise NotImplementedError
 

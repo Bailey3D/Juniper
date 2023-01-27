@@ -8,7 +8,7 @@ def run_standalone(dialog_class, title=None, position=None):
     :param [<str:title>] Title of the dialog
     :return <QDialog:dialog> The created dialog, contains the child tool widget nested inside
     """
-    import juniper.widgets as qt_utils
+    import juniper.runtime.widgets as qt_utils
 
     program_context = juniper.program_context
 

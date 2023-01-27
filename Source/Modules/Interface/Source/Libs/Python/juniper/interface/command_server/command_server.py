@@ -5,10 +5,12 @@ import socket
 
 import juniper
 import juniper.engine
-import juniper.decorators
-import juniper.types.framework.singleton
-import juniper.paths
+import juniper.engine.decorators
+import juniper.runtime.types.framework.singleton
+import juniper.engine.paths
 import juniper_globals
+
+import juniper.interface.command_server
 
 
 def is_free(port):
@@ -26,13 +28,13 @@ def is_free(port):
     return False
 
 
-class CommandServer(metaclass=juniper.types.framework.singleton.Singleton):
-    def __init__(self, port):
+class CommandServer(metaclass=juniper.runtime.types.framework.singleton.Singleton):
+    def __init__(self):
         """
         A non-blocking listen server object
         :param <int:port> The port to bind this listen server to
         """
-        self.port = port
+        self.port = juniper.interface.command_server.listen_port(juniper.program_context)
 
         if(not self.port):
             juniper.log.error(

@@ -3,11 +3,11 @@ from qtpy import QtWidgets, QtGui, QtCore
 
 import juniper
 import juniper.engine
-import juniper.paths
-import juniper.types.framework.singleton
+import juniper.engine.paths
+import juniper.runtime.types.framework.singleton
 
 
-class JuniperHub(metaclass=juniper.types.framework.singleton.Singleton):
+class JuniperHub(metaclass=juniper.runtime.types.framework.singleton.Singleton):
     def __init__(self):
         self.parent_widget = QtWidgets.QWidget()
 
@@ -24,7 +24,7 @@ class JuniperHub(metaclass=juniper.types.framework.singleton.Singleton):
 
     @property
     def app_icon(self):
-        return QtGui.QIcon(os.path.join(juniper.paths.root(), "Resources\\Icons\\Standard\\app_default.ico"))
+        return QtGui.QIcon(os.path.join(juniper.engine.paths.root(), "Resources\\Icons\\Standard\\app_default.ico"))
 
     def on_activated(self, event):
         if(event == QtWidgets.QSystemTrayIcon.Trigger):

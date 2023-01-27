@@ -4,7 +4,7 @@ Library containing various helper functions for VSCode
 import json
 import os
 
-import juniper.paths
+import juniper.engine.paths
 import juniper.engine.types.plugin
 
 
@@ -12,14 +12,14 @@ def code_workspace_path():
     """
     :return <str:path> The path to the `Juniper.code-workspace` file
     """
-    return os.path.join(juniper.paths.root(), ".vscode\\Juniper.code-workspace")
+    return os.path.join(juniper.engine.paths.root(), ".vscode\\Juniper.code-workspace")
 
 
 def code_workspace_template_path():
     """
     :return <str:path> The path to the `code_workspace_template.json` config file
     """
-    return os.path.join(juniper.paths.root(), "Source\\Modules\\Developer\\Config\\code_workspace_template.json")
+    return os.path.join(juniper.engine.paths.root(), "Source\\Modules\\Developer\\Config\\code_workspace_template.json")
 
 
 def generate_code_workspace():
@@ -32,14 +32,14 @@ def generate_code_workspace():
     # Base juniper workspace
     json_data["folders"].append({
         "name": "Juniper",
-        "path": juniper.paths.root()
+        "path": juniper.engine.paths.root()
     })
 
     # Plugin sub-workspaces have been disabled as we cannot use the base code workspace settings when
     # running scripts from them. This results in the python.exe for the Juniper workspace not being found!
     '''json_data["folders"].append({
         "name": "Plugins (All)",
-        "path": os.path.join(juniper.paths.root(), "Plugins")
+        "path": os.path.join(juniper.engine.paths.root(), "Plugins")
     })
 
     for plugin in juniper.engine.types.plugin.PluginManager():
@@ -54,11 +54,11 @@ def generate_code_workspace():
 
     # Overriden python workspace settings
     json_data["settings"]["python.defaultInterpreterPath"] = os.path.join(
-        juniper.paths.root(), "Binaries\\Python\\Python37\\python.exe"
+        juniper.engine.paths.root(), "Binaries\\Python\\Python37\\python.exe"
     )
 
-    json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(juniper.paths.root(), "Source\\Libs\\Python"))
-    json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(juniper.paths.root(), "Cached\\PyCache\\Python37"))
+    json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(juniper.engine.paths.root(), "Source\\Libs\\Python"))
+    json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(juniper.engine.paths.root(), "Cached\\PyCache\\Python37"))
 
     for plugin in juniper.engine.types.plugin.PluginManager():
         json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(plugin.root, "Source\\Libs\\Python"))
