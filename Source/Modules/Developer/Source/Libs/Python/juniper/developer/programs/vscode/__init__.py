@@ -6,6 +6,7 @@ import os
 
 import juniper.engine.paths
 import juniper.engine.types.plugin
+import juniper.engine.types.module
 
 
 def code_workspace_path():
@@ -58,10 +59,13 @@ def generate_code_workspace():
     )
 
     json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(juniper.engine.paths.root(), "Source\\Libs\\Python"))
-    json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(juniper.engine.paths.root(), "Cached\\PyCache\\Python37"))
+    json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(juniper.engine.paths.root(), "Cached\\PyCache\\Python37\\site-packages"))
 
     for plugin in juniper.engine.types.plugin.PluginManager():
         json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(plugin.root, "Source\\Libs\\Python"))
+
+    for module in juniper.engine.types.module.ModuleManager():
+        json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(module.root, "Source\\Libs\\Python"))
 
     if(not os.path.isdir(os.path.dirname(code_workspace_path()))):
         os.makedirs(os.path.dirname(code_workspace_path()))

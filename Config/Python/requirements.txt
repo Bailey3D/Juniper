@@ -11,9 +11,5 @@ qtpy
 watchdog
 gitpython
 
-# documentation
-sphinx
-sphinx_rtd_theme
-
-# drive
-PyDrive
+# web scraping
+beautifulsoup4

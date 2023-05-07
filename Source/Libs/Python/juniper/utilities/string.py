@@ -1,3 +1,6 @@
+import re
+
+
 def snake_to_name(input):
     """
     Convert a snake_based string into a friendly name
@@ -124,3 +127,18 @@ def remove_prefix_and_suffix(value, prefix, suffix):
     output = remove_prefix(value, prefix)
     output = remove_suffix(output, suffix)
     return output
+
+
+def get_first_number_in_string(string):
+    """
+    Finds the first number stored in a string (int or float - whatever is first)
+    :param <str:string> The string to search
+    :return <number:output> The number if found - else None
+    """
+    match = re.search(r"[-+]?\d*\.?\d+", string)
+
+    if match:
+        number = match.group()
+        return float(number) if (".") in number else int(number)
+
+    return None
