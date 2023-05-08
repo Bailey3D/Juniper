@@ -2,7 +2,6 @@
     "folders": [
     ],
     "settings": {
-        "python.defaultInterpreterPath": "Y:\\Development\\Game\\tools\\Juniper\\bin\\common\\Python 3.7\\python.exe",
         "python.linting.enabled": true,
         "python.linting.flake8Enabled": true,
         "python.analysis.extraPaths": [
@@ -13,6 +12,7 @@
             "--ignore=E402",
             "--ignore=F814",
             "--ignore=F811",
+            "--ignore=E402",
             "--max-line-length=140",
             "--max-doc-length=160"
         ],

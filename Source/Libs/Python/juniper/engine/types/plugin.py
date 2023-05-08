@@ -14,8 +14,9 @@ class PluginManager(object, metaclass=juniper.runtime.types.framework.singleton.
     def __init__(self):
         self.plugin_cache = []
 
+        # TODO! This plugin loading logic should all be handled in JuniperEngine, can it be removed?
         # Initialize all avaliable plugins
-        plugins_root = os.path.join(juniper.engine.paths.root(), "Plugins")
+        '''plugins_root = os.path.join(juniper.engine.paths.root(), "Plugins")
         for plugin_group in os.listdir(plugins_root):
             plugin_group_dir = os.path.join(plugins_root, plugin_group)
             if(os.path.isdir(plugin_group_dir)):
@@ -40,7 +41,7 @@ class PluginManager(object, metaclass=juniper.runtime.types.framework.singleton.
             else:
                 other_plugins.append(i)
 
-        self.plugin_cache = juniper_plugins + other_plugins
+        self.plugin_cache = juniper_plugins + other_plugins'''
 
     def __iter__(self):
         """
@@ -62,10 +63,31 @@ class PluginManager(object, metaclass=juniper.runtime.types.framework.singleton.
                 return i
         return None
 
+    def register(self, plugin):
+        """
+        Registers a plugin
+        :param <Plugin:plugin> The plugin to register
+        """
+        if(plugin not in self.plugin_cache):
+            self.plugin_cache.append(plugin)
+
+        # reorder the list so Juniper plugins are always first
+        juniper_plugins = []
+        other_plugins = []
+
+        for i in self.plugin_cache:
+            if("\\juniper\\" in i.root.lower()):
+                juniper_plugins.append(i)
+            else:
+                other_plugins.append(i)
+
+        self.plugin_cache = juniper_plugins + other_plugins
+
 
 class Plugin(object):
     def __init__(self, jplugin_path):
         self.jplugin_path = jplugin_path
+        PluginManager().register(self)
 
     def __repr__(self):
         return f"Plugin(\"{self.jplugin_path}\")"

@@ -341,12 +341,25 @@ class JuniperEngine(object):
         :return <[Plugin]:plugins> Returns all registered plugins
         """
         import juniper.engine.types.plugin
+        search_directories = [os.path.join(self.workspace_root, "Plugins")]
 
+        # scan additional search directories (as stored in "/Cached/UserConfig/user_settings.json")
+        user_settings_path = os.path.join(self.workspace_root, "Cached\\UserConfig\\user_settings.json")
+        if(os.path.isfile(user_settings_path)):
+            try:
+                with open(user_settings_path, "r") as f:
+                    json_data = json.load(f)
+                search_directories += json_data["juniper"]["extra_plugin_search_directories"]
+            except Exception:
+                pass
+
+        # find all jplugin files in known directories
         output = []
-        for i in glob.glob(self.workspace_root + "\\Plugins\\**\\*.jplugin", recursive=True):
-            plugin = juniper.engine.types.plugin.Plugin(i)
-            if(plugin):
-                output.append(plugin)
+        for search_dir in search_directories:
+            for i in glob.glob(search_dir + "\\**\\*.jplugin", recursive=True):
+                plugin = juniper.engine.types.plugin.Plugin(i)
+                if(plugin):
+                    output.append(plugin)
 
         return output
 

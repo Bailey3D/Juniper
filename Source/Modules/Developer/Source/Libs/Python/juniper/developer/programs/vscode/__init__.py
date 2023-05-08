@@ -36,13 +36,6 @@ def generate_code_workspace():
         "path": juniper.engine.paths.root()
     })
 
-    # Plugin sub-workspaces have been disabled as we cannot use the base code workspace settings when
-    # running scripts from them. This results in the python.exe for the Juniper workspace not being found!
-    '''json_data["folders"].append({
-        "name": "Plugins (All)",
-        "path": os.path.join(juniper.engine.paths.root(), "Plugins")
-    })
-
     for plugin in juniper.engine.types.plugin.PluginManager():
         plugin_name = f"Plugin - {plugin.display_name}"
         if(plugin.internal):
@@ -51,15 +44,15 @@ def generate_code_workspace():
         json_data["folders"].append({
             "name": plugin_name,
             "path": plugin.root
-        })'''
+        })
 
     # Overriden python workspace settings
-    json_data["settings"]["python.defaultInterpreterPath"] = os.path.join(
-        juniper.engine.paths.root(), "Binaries\\Python\\Python37\\python.exe"
-    )
+    json_data["settings"]["python.defaultInterpreterPath"] = "${workspaceFolder:Juniper}\\Binaries\\Python\\Python37\\python.exe"
 
     json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(juniper.engine.paths.root(), "Source\\Libs\\Python"))
-    json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(juniper.engine.paths.root(), "Cached\\PyCache\\Python37\\site-packages"))
+    json_data["settings"]["python.analysis.extraPaths"].append(
+        os.path.join(juniper.engine.paths.root(), "Cached\\PyCache\\Python37\\site-packages")
+    )
 
     for plugin in juniper.engine.types.plugin.PluginManager():
         json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(plugin.root, "Source\\Libs\\Python"))
