@@ -37,9 +37,11 @@ def generate_code_workspace():
     })
 
     for plugin in juniper.engine.types.plugin.PluginManager():
-        plugin_name = f"Plugin - {plugin.display_name}"
+        plugin_name = f"{plugin.display_name}"
         if(plugin.internal):
-            plugin_name += " (Internal)"
+            plugin_name += " (Juniper Plugin)"
+        else:
+            plugin_name += " (Plugin)"
 
         json_data["folders"].append({
             "name": plugin_name,

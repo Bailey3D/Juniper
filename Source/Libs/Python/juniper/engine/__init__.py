@@ -1,6 +1,7 @@
 import functools
 import glob
 import importlib
+import importlib.util
 import json
 import os
 import sys
@@ -77,10 +78,20 @@ class JuniperEngine(object):
         if(self.program_context != "python"):
             sys.path.append(os.path.join(self.workspace_root, "Source\\Hosts", self.program_context, "Source\\Libs\\Python"))
 
-        sys.path.append(os.path.join(
+        site_packages_dir = os.path.join(
             self.workspace_root,
             f"Cached\\PyCache\\Python{self.python_version_major}{self.python_version_minor}\\site-packages"
-        ))
+        )
+        sys.path.append(site_packages_dir)
+
+        # Initialize PyWin32 at runtime - rather than running the post-install script
+        # this avoids having to install any files to the "C:/Windows/System32" directory
+        if(importlib.util.find_spec("win32")):
+            # additional paths (same as in `pywin32.pth`)
+            sys.path.append(os.path.join(site_packages_dir, "win32"))
+            sys.path.append(os.path.join(site_packages_dir, "win32\\lib"))
+            sys.path.append(os.path.join(site_packages_dir, "Pythonwin"))
+            import pywin32_bootstrap
 
         # 2) Refresh imports
         # We must reload the base module here as when we're in standalone Python mode

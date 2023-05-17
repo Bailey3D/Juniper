@@ -1,6 +1,7 @@
 # Juniper
 Cached/
 Plugins/*
+Source/test.py
 
 # Juniper - Force include inbuilt modules
 !Plugins/Juniper/

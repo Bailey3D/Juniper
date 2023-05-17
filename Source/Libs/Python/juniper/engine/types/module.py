@@ -57,6 +57,10 @@ class Module(object):
             ModuleManager().register(output)
         return output
 
+    @property
+    def name(self):
+        return str(self.__class__.__name__)
+
     def on_pre_startup(self):
         """
         Overrideable method called during the Juniper pre startup stage

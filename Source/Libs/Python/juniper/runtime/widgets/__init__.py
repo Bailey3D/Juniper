@@ -71,7 +71,9 @@ def query_user(title, description, options, type_=QtWidgets.QMessageBox.Informat
     mb.setText(description)
     mb.setWindowTitle(title)
 
-    # TODO! Juniper Runtime: More than 4 options in `query_user` dialog
+    if(len(options) > 4):
+        raise AttributeError(f"`options` parameter can only have a max of 4 options. Got {len(options)}!\n(This may be fixed in a later version.)")
+
     option_keys = [
         QtWidgets.QMessageBox.Yes,
         QtWidgets.QMessageBox.YesAll,

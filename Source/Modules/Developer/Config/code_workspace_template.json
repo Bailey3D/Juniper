@@ -40,6 +40,15 @@
             "**/node_modules",
             "**/binaries/Python37/**"
         ],
+
+        "todo-tree.general.tags": [
+            "TODO!",
+            "TODO~",
+            "TODO?",
+            "TEMP!",
+            "TEMP~"
+        ],
+
         "search.useIgnoreFiles": false,
     
         "search.exclude":{
