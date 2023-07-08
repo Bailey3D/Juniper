@@ -16,6 +16,11 @@ class Blender(juniper.engine.JuniperEngine):
         """
         blender_dir = "c:\\users\\" + os.getlogin() + "\\Appdata\\Roaming\\Blender Foundation\\Blender"
 
+        if(not os.path.isdir(blender_dir)):
+            # Blender is not installed
+            print(f"Skipping Host: Blender (Program is not installed)")
+            return
+
         for i in os.listdir(blender_dir):
             blender_sub_dir = os.path.join(blender_dir, i)
             if(os.path.isdir(blender_sub_dir) and (i.replace(".", "").isdigit())):
