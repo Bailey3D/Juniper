@@ -1,7 +1,7 @@
 import os
 import sys
 from qtpy import QtWidgets, QtGui
-from scss import Scss
+import sass
 
 import juniper.engine.paths
 import juniper.engine.resources
@@ -36,7 +36,8 @@ class QStandaloneApp(QtWidgets.QApplication):
 
         self.setStyle(QtWidgets.QStyleFactory.create("fusion"))
         with open(stylesheet_path, "r") as f:
-            self.setStyleSheet(Scss().compile(f.read()))
+            scss_compiled = sass.compile(string=f.read())
+            self.setStyleSheet(scss_compiled)
 
     @property
     def main_window(self):

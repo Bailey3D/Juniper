@@ -8,7 +8,7 @@ import sys
 
 
 def pythonw_path():
-    juniper_pythonw_exe_path = os.path.join(juniper.engine.paths.root(), "Binaries\\Python\\Python37\\Pythonw.exe").lower()
+    juniper_pythonw_exe_path = os.path.join(juniper.engine.paths.root(), "Binaries\\Python\\3.7\\Pythonw.exe").lower()
     juniper_pythonw_exe_path_upper = juniper_pythonw_exe_path.replace(os.path.dirname(juniper.engine.paths.root()).lower() + "\\", "")
     return juniper_pythonw_exe_path_upper
 

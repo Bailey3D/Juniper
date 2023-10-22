@@ -3,5 +3,5 @@
 :: Note: This is stored in the `Cached/UserConfig/user_settings.json` so will need redoing if the cache is wiped!
 :: Installs Juniper to the system and runs the requirements.txt
 cd "../../../"
-"Binaries/Python/Python37/python.exe" "Source/Scripts/Internal/add_plugin_search_directory.py"
+"Binaries/Python/3.7/python.exe" "Source/Scripts/Internal/add_plugin_search_directory.py"
 pause

@@ -38,7 +38,7 @@
     
         "todo-tree.filtering.excludeGlobs": [
             "**/node_modules",
-            "**/binaries/Python37/**"
+            "**/binaries/3.7/**"
         ],
 
         "todo-tree.general.tags": [

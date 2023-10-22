@@ -49,11 +49,11 @@ def generate_code_workspace():
         })
 
     # Overriden python workspace settings
-    json_data["settings"]["python.defaultInterpreterPath"] = "${workspaceFolder:Juniper}\\Binaries\\Python\\Python37\\python.exe"
+    json_data["settings"]["python.defaultInterpreterPath"] = "${workspaceFolder:Juniper}\\Binaries\\Python\\3.7\\python.exe"
 
     json_data["settings"]["python.analysis.extraPaths"].append(os.path.join(juniper.engine.paths.root(), "Source\\Libs\\Python"))
     json_data["settings"]["python.analysis.extraPaths"].append(
-        os.path.join(juniper.engine.paths.root(), "Cached\\PyCache\\Python37\\site-packages")
+        os.path.join(juniper.engine.paths.root(), "Cached\\PyCache\\3.7\\site-packages")
     )
 
     for plugin in juniper.engine.types.plugin.PluginManager():

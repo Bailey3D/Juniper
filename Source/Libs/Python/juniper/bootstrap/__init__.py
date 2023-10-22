@@ -20,7 +20,7 @@ class Bootstrap(object):
 
         sys.path.insert(0, os.path.join(self.workspace_root, "Source\\Libs\\Python"))
 
-        self.engine_override_class()
+        self.engine_override_class(bootstrap=True)
 
     @property
     def program_context(self):

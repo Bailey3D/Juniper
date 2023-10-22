@@ -1,6 +1,7 @@
 filehash
 flake8
-pyScss
+numpy
+libsass
 PILLOW
 ptvsd
 PySide2
@@ -13,3 +14,10 @@ gitpython
 
 # web scraping
 beautifulsoup4
+requests
+tqdm
+
+# Jupyter
+jupyter
+notebook
+matplotlib

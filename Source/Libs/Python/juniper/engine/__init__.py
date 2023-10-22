@@ -19,7 +19,6 @@ class JuniperEngine(object):
         self.delta_seconds = 0
         self.time_cf = datetime.now()
         self.called_post_startup = False
-
         if(bootstrap):
             if("juniper:install=true" in sys.argv):
                 self.__install__()
@@ -80,7 +79,7 @@ class JuniperEngine(object):
 
         site_packages_dir = os.path.join(
             self.workspace_root,
-            f"Cached\\PyCache\\Python{self.python_version_major}{self.python_version_minor}\\site-packages"
+            f"Cached\\PyCache\\Python{self.python_version_major}.{self.python_version_minor}\\site-packages"
         )
         sys.path.append(site_packages_dir)
 
@@ -566,21 +565,21 @@ class JuniperEngine(object):
         Return the python version (Major.Minor ONLY)
         :return <float:version> Formatted MAJOR.MINOR (Ie, 3.7)
         """
-        return float(f"{sys.version_info[0]}.{sys.version_info[1]}")
+        return float(f"{sys.version_info.major}.{sys.version_info.minor}")
 
     @property
     def python_version_major(self):
         """
         :return <int:major> Returns the python major version (Ie, 3)
         """
-        return int(str(self.python_version).split(".")[0])
+        return int(sys.version_info.major)
 
     @property
     def python_version_minor(self):
         """
         :return <int:minor> Returns the python minor version (Ie, 10)
         """
-        return int(str(self.python_version).split(".")[1])
+        return int(sys.version_info.minor)
 
     @property
     def python_path(self):
@@ -707,5 +706,5 @@ class JuniperEngine(object):
         """
         return os.path.join(
             self.workspace_root,
-            f"Cached\\PyCache\\Python{self.python_version_major}{self.python_version_minor}\\site-packages"
+            f"Cached\\PyCache\\Python{self.python_version_major}.{self.python_version_minor}\\site-packages"
         )
